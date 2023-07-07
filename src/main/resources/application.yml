@@ -21,3 +21,4 @@ spring:
       hibernate.format_sql: true
     generate-ddl: true
     database: mysql
+
