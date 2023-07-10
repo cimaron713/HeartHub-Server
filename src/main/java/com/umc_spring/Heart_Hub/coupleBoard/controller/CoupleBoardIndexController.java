@@ -1,31 +1,18 @@
 package com.umc_spring.Heart_Hub.coupleBoard.controller;
 
 import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
-import org.springframework.stereotype.Controller;
 
-import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardDto;
-import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardImageUploadDto;
-import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
-import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService_before;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 화면 연결
