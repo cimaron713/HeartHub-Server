@@ -1,7 +1,8 @@
 package com.umc_spring.Heart_Hub.board.model;
 
+import com.umc_spring.Heart_Hub.board.model.Board;
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
-import com.umc_spring.Heart_Hub.user.model.User;
+import com.umc_spring.Heart_Hub.user.User;
 import jakarta.persistence.*;
 
 @Entity
