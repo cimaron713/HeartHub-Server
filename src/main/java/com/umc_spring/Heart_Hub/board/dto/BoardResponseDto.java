@@ -15,10 +15,10 @@ public class BoardResponseDto {
     private User user;
 
 
-    public BoardResponseDto(Board entity){
-        this.boardId = entity.getBoardId();
-        this.content = entity.getContent();
-        this.status = entity.getStatus();
-        this.user = entity.getUser();
+    public BoardResponseDto(Board board){
+        this.boardId = board.getBoardId();
+        this.content = board.getContent();
+        this.status = board.getStatus();
+        this.user = board.getUser();
     }
 }
