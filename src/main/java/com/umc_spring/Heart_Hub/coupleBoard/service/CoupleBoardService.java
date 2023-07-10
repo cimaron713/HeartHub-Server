@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.coupleBoard.service;
+package com.umc_spring.Heart_Hub.coupleboard.service;
 
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardImageUploadDto;

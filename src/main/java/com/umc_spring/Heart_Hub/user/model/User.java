@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.user;
+package com.umc_spring.Heart_Hub.user.model;
 
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import jakarta.persistence.*;

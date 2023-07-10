@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.coupleBoard.repository;
+package com.umc_spring.Heart_Hub.coupleboard.repository;
 
 import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,13 +1,14 @@
-package com.umc_spring.Heart_Hub.coupleBoard.service;
+package com.umc_spring.Heart_Hub.coupleboard.service;
 
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardImageUploadDto;
-import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoard;
-import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
-import com.umc_spring.Heart_Hub.coupleBoard.repository.CoupleBoardRepository;
-import com.umc_spring.Heart_Hub.coupleBoard.repository.ImageRepository;
+import com.umc_spring.Heart_Hub.coupleboard.model.CoupleBoard;
+import com.umc_spring.Heart_Hub.coupleboard.model.CoupleBoardImage;
+import com.umc_spring.Heart_Hub.coupleboard.repository.CoupleBoardRepository;
+import com.umc_spring.Heart_Hub.coupleboard.repository.ImageRepository;
+import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
