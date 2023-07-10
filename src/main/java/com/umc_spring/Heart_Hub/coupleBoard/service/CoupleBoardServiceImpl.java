@@ -8,7 +8,6 @@ import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoard;
 import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
 import com.umc_spring.Heart_Hub.coupleBoard.repository.CoupleBoardRepository;
 import com.umc_spring.Heart_Hub.coupleBoard.repository.ImageRepository;
-import com.umc_spring.Heart_Hub.user.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

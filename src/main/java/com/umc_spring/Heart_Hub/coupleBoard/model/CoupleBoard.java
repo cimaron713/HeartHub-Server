@@ -1,14 +1,12 @@
 package com.umc_spring.Heart_Hub.coupleBoard.model;
 
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
-import com.umc_spring.Heart_Hub.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
