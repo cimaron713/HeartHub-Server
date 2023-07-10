@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.board.controller;
 
 import com.umc_spring.Heart_Hub.board.dto.BoardResponseDto;
+import com.umc_spring.Heart_Hub.board.dto.BoardRequestDto;
 import com.umc_spring.Heart_Hub.board.service.BoardService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
