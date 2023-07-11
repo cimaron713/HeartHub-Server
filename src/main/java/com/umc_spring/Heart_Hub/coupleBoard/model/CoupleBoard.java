@@ -52,5 +52,4 @@ public class CoupleBoard extends BaseEntity {
 ////            images.setCoupleBoard(this);
 ////        }
 //    }
-
 }
