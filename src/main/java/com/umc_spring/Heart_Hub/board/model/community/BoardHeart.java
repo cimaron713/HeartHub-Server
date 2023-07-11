@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.board.model;
+package com.umc_spring.Heart_Hub.board.model.community;
 
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;

@@ -1,18 +1,15 @@
-package com.umc_spring.Heart_Hub.board.service;
+package com.umc_spring.Heart_Hub.board.service.community;
 
-import com.umc_spring.Heart_Hub.board.dto.BoardRequestDto;
-import com.umc_spring.Heart_Hub.board.dto.BoardResponseDto;
-import com.umc_spring.Heart_Hub.board.model.Board;
-import com.umc_spring.Heart_Hub.board.repository.BoardRepository;
-import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardRequestDto;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardResponseDto;
+import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
