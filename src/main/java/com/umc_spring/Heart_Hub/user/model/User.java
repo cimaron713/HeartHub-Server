@@ -52,12 +52,13 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 1)
     private String marketingStatus;
 
-    //private LocalDateTime birth;
+    private LocalDateTime birth;
 
     @Column(nullable = false, length = 1)
     private String status;
 
     private Long mate;
+
 
     @ElementCollection(fetch = FetchType.EAGER) // 테이블 생성, 부모 Entity에 의해 관리.
     @Builder.Default

@@ -22,3 +22,11 @@ spring:
     generate-ddl: true
     database: mysql
 
+
+  servlet:
+    multipart:
+      enabled: true
+      location: C:\Users\USER\Study\fileupload\
+      max-request-size: 30MB
+      max-file-size: 10MB
+
