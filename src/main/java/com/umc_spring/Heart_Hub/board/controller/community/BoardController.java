@@ -21,8 +21,8 @@ public class BoardController {
 
     //게시글 작성
     @PostMapping("/articles/write")
-    public ResponseEntity<ApiResponse<Long>> boardWrite(@RequestBody final BoardDto.BoardRequestDto params){
-        Long boardId = boardService.boardRegister(params);
+    public ResponseEntity<ApiResponse<Long>> boardWrite(@RequestBody BoardDto.BoardRequestDto params){
+        Long boardId = boardService.boardRegister(params, params.getUser().getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId,"Register board success"));
     }
 
