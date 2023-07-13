@@ -1,7 +1,6 @@
 package com.umc_spring.Heart_Hub.board.controller.community;
 
-import com.umc_spring.Heart_Hub.board.dto.community.BoardRequestDto;
-import com.umc_spring.Heart_Hub.board.dto.community.BoardResponseDto;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.service.community.BoardService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,7 @@ public class BoardController {
 
     //게시글 작성
     @PostMapping("/articles/write")
-    public ResponseEntity<ApiResponse<Long>> boardWrite(@RequestBody final BoardRequestDto params){
+    public ResponseEntity<ApiResponse<Long>> boardWrite(@RequestBody final BoardDto.BoardRequestDto params){
         Long boardId = boardService.boardRegister(params);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId,"Register board success"));
     }
@@ -32,15 +31,15 @@ public class BoardController {
      */
     //전체
     @GetMapping("/articles")
-    public ResponseEntity<ApiResponse<List<BoardResponseDto>>> articleList(){
-        List<BoardResponseDto> boards = boardService.findAll();
+    public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> articleList(){
+        List<BoardDto.BoardResponseDto> boards = boardService.findAll();
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boards,"Search total boards success"));
     }
 
     //특정 게시물
     @GetMapping("/articles/{boardId}")
-    public ResponseEntity<ApiResponse<BoardResponseDto>> detailBoard(@PathVariable Long boardId){
-        BoardResponseDto boardResponseDto = boardService.findBoard(boardId);
+    public ResponseEntity<ApiResponse<BoardDto.BoardResponseDto>> detailBoard(@PathVariable Long boardId){
+        BoardDto.BoardResponseDto boardResponseDto = boardService.findBoard(boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardResponseDto,"Find board success"));
     }
 
