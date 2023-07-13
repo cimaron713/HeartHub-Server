@@ -1,9 +1,8 @@
-package com.umc_spring.Heart_Hub.board.controller;
+package com.umc_spring.Heart_Hub.board.controller.community;
 
-import com.umc_spring.Heart_Hub.board.dto.BoardRequestDto;
-import com.umc_spring.Heart_Hub.board.dto.BoardResponseDto;
-import com.umc_spring.Heart_Hub.board.model.Board;
-import com.umc_spring.Heart_Hub.board.service.BoardService;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardRequestDto;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardResponseDto;
+import com.umc_spring.Heart_Hub.board.service.community.BoardService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

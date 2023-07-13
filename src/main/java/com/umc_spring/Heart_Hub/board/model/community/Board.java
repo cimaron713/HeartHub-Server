@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.board.model;
+package com.umc_spring.Heart_Hub.board.model.community;
 
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
@@ -21,6 +21,9 @@ public class Board extends BaseEntity {
 
     @Column(nullable = false)
     private String status;
+
+    @Column(nullable = false, length = 1)
+    private String theme;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")

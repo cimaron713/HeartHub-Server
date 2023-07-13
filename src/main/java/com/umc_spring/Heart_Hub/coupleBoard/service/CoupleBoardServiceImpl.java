@@ -1,13 +1,13 @@
-package com.umc_spring.Heart_Hub.coupleboard.service;
+package com.umc_spring.Heart_Hub.coupleBoard.service;
 
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardImageUploadDto;
-import com.umc_spring.Heart_Hub.coupleboard.model.CoupleBoard;
-import com.umc_spring.Heart_Hub.coupleboard.model.CoupleBoardImage;
-import com.umc_spring.Heart_Hub.coupleboard.repository.CoupleBoardRepository;
-import com.umc_spring.Heart_Hub.coupleboard.repository.ImageRepository;
+import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoard;
+import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
+import com.umc_spring.Heart_Hub.coupleBoard.repository.CoupleBoardRepository;
+import com.umc_spring.Heart_Hub.coupleBoard.repository.ImageRepository;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public Long saveBoard(BoardDto.Request requestDto, BoardImageUploadDto boardImageUploadDto, String userName) {
-        User user = userRepository.findByName(userName).orElseThrow(() -> {throw new CustomException(ErrorCode.NOT_FIND_USER);});
+        User user = userRepository.findByName(userName).orElseThrow(() -> {throw new CustomException(ErrorCode.USER_NOT_FOUND);});
 
         CoupleBoard result = CoupleBoard.builder()
                 .content(requestDto.getContent())
@@ -69,7 +69,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public BoardDto.Response detailBoard(Long postId) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.NOT_FIND_POST);});
+        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.POST_NOT_FOUND);});
         BoardDto.Response result = BoardDto.Response.builder()
                 .board(coupleBoard)
                 .build();
@@ -91,7 +91,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public Long updateBoard(Long postId, BoardDto.Request requestDto) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.NOT_FIND_POST);});
+        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.POST_NOT_FOUND);});
         coupleBoard.update(requestDto.getContent());
         coupleBoardRepository.save(coupleBoard);
 
