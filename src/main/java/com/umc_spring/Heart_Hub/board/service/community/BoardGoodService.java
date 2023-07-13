@@ -26,7 +26,7 @@ public class BoardGoodService {
         Board board = boardRepository.findById(boardRequest.getBoard().getBoardId()).orElseThrow();
 
         //좋아요 안누른 게시글만 좋아요 누르게 허용
-        if(boardGoodRepository.findByUserBoard(user, board) == null){
+        if(boardGoodRepository.findByUserAndBoard(user, board) == null){
             BoardGood boardGood = BoardGood.builder()
                     .user(user)
                     .board(board)
@@ -35,7 +35,7 @@ public class BoardGoodService {
         }
         //좋아요 누른 게시글은 좋아요가 사라지게.
         else{
-            BoardGood boardGood = boardGoodRepository.findByUserBoard(user,board).orElseThrow();
+            BoardGood boardGood = boardGoodRepository.findByUserAndBoard(user,board).orElseThrow();
             boardGoodRepository.delete(boardGood);
         }
     }

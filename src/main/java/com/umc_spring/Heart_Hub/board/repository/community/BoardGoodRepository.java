@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BoardGoodRepository extends JpaRepository<BoardGood,Long> {
-    Optional<BoardGood> findByUserBoard(User user, Board board);
+    Optional<BoardGood> findByUserAndBoard(User user, Board board);
 
     @Query(value = "select count(*) from BoardGood group by BOARD_ID > :id", nativeQuery = true)
     public List<BoardGood> countGood(@Param(value = "id") Long id);
