@@ -36,7 +36,14 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public Long saveBoard(BoardDto.Request requestDto, BoardImageUploadDto boardImageUploadDto, String userName) {
-        User user = userRepository.findByName(userName).orElseThrow(() -> {throw new CustomException(ErrorCode.USER_NOT_FOUND);});
+        User user = userRepository.findByUsername(userName);
+        /**
+         * findByUsername의 경우 Return Type이 Optional이 아니어서 .orElseThrow를 사용할 수 없습니다.
+         * 때문에 따로 에러 처리 했습니다.
+         */
+        if(user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
 
         CoupleBoard result = CoupleBoard.builder()
                 .content(requestDto.getContent())

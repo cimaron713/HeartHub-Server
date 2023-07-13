@@ -20,7 +20,7 @@ public class CoupleBoardImage extends BaseEntity {
     @Column(name = "coupleImgUrl", nullable = false)
     private String imgUrl;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "postId")
     private CoupleBoard board;
 }

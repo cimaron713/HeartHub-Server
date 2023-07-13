@@ -2,6 +2,7 @@ package com.umc_spring.Heart_Hub.board.model.mission;
 
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 @Entity
 public class Mission {
@@ -22,4 +23,10 @@ public class Mission {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
+
+    @Builder
+    public Mission(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
 }

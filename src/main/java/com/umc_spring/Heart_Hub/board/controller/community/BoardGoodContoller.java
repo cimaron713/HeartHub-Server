@@ -20,11 +20,11 @@ public class BoardGoodContoller {
     }
 
     //좋아요 취소
-    @DeleteMapping
-    public ResponseEntity<ApiResponse<String>> goodCancle(@RequestBody BoardGoodDto params) {
-        boardGoodService.goodCancle(params);
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("cancle good success"));
-    }
+//    @DeleteMapping
+//    public ResponseEntity<ApiResponse<String>> goodCancle(@RequestBody BoardGoodDto params) {
+//        boardGoodService.goodCancle(params);
+//        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("cancle good success"));
+//    }
 
     @GetMapping("/{id}/counts")
     public ResponseEntity<ApiResponse<Integer>> goodCount(@RequestBody BoardGoodDto params){

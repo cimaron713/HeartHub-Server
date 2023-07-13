@@ -4,6 +4,7 @@ import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardImageUploadDto;
 import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
