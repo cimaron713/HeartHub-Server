@@ -1,14 +1,13 @@
 package com.umc_spring.Heart_Hub.coupleBoard.controller;
 
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
-import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardDto;
-import com.umc_spring.Heart_Hub.coupleBoard.dto.BoardImageUploadDto;
+import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
+import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardImageUploadDto;
 import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,8 +35,8 @@ public class CoupleBoardController {
      */
     @PostMapping(value = "/couple-board/write",
             consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart BoardDto.Request requestDto,
-                                                           @RequestPart("files") BoardImageUploadDto boardImageUploadDto,
+    public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart CoupleBoardDto.Request requestDto,
+                                                           @RequestPart("files") CoupleBoardImageUploadDto boardImageUploadDto,
                                                            Authentication authentication) {
 
         logger.info("boardImageDTO is {}", boardImageUploadDto);
@@ -51,9 +50,9 @@ public class CoupleBoardController {
      * 게시물 조회 (날짜에 따른)
      */
     @GetMapping("/couple-board/{createAt}")
-    public ResponseEntity<List<BoardDto.Response>> getBoardsByDate(@PathVariable LocalDate createAt, Authentication authentication) {
-        List<BoardDto.Response> boardList = coupleBoardService.searchBoardList(createAt);
-        Collections.sort(boardList, Comparator.comparing(BoardDto.Response::getCreateAt));
+    public ResponseEntity<List<CoupleBoardDto.Response>> getBoardsByDate(@PathVariable LocalDate createAt, Authentication authentication) {
+        List<CoupleBoardDto.Response> boardList = coupleBoardService.searchBoardList(createAt);
+        Collections.sort(boardList, Comparator.comparing(CoupleBoardDto.Response::getCreateAt));
 
         return ResponseEntity.ok(boardList);
     }
@@ -62,10 +61,10 @@ public class CoupleBoardController {
      * 게시물 수정
      */
     @PutMapping("/couple-board/{postId}/update")
-    public ResponseEntity<ApiResponse<String>> updateBoard(@PathVariable Long postId, @RequestBody BoardDto.Request requestDto,
+    public ResponseEntity<ApiResponse<String>> updateBoard(@PathVariable Long postId, @RequestBody CoupleBoardDto.Request requestDto,
                                                            Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        BoardDto.Response result = coupleBoardService.detailBoard(postId);
+        CoupleBoardDto.Response result = coupleBoardService.detailBoard(postId);
         if(!Objects.equals(result.getUserName(), userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.createError(HttpStatus.FORBIDDEN, "You are not allowed to update this board"));
@@ -82,7 +81,7 @@ public class CoupleBoardController {
     @DeleteMapping("/couple-board/{postId}/delete")
     public ResponseEntity<ApiResponse<String>> deleteBoard(@PathVariable Long postId, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        BoardDto.Response result = coupleBoardService.detailBoard(postId);
+        CoupleBoardDto.Response result = coupleBoardService.detailBoard(postId);
         if(!Objects.equals(result.getUserName(), userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.createError(HttpStatus.FORBIDDEN, "You are not allowed to delete this board"));
