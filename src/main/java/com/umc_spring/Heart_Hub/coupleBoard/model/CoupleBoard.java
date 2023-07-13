@@ -31,10 +31,7 @@ public class CoupleBoard extends BaseEntity {
     @Column(nullable = false, length = 1)
     private String status;
 
-    /**
-     * @OneToMany에서 mappedBy는 대상 entity의 fk의 이름을 그대로 따라야 합니다. CoupleBoard (x) -> board
-     */
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "coupleBoard", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private List<CoupleBoardImage> boardImages = new ArrayList<>();
 
     public CoupleBoard(String content) {
