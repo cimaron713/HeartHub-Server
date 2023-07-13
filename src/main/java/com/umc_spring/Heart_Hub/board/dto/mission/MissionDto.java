@@ -38,20 +38,13 @@ public class MissionDto {
     @Getter
     @NoArgsConstructor
     public static class RandomMissionRespDto {
-        private List<MissionDto> randomMissions;
+        private String missionContent;
         private Long userId;
 
         @Builder
-        public RandomMissionRespDto(List<Mission> missions, User user) {
-            this.randomMissions = convertToDto(missions);
+        public RandomMissionRespDto(String missionContent, User user) {
+            this.missionContent = missionContent;
             this.userId = user.getUserId();
-        }
-
-        private List<MissionDto> convertToDto(List<Mission> missions) {
-            ModelMapper modelMapper = new ModelMapper();
-            return missions.stream()
-                    .map(mission -> modelMapper.map(mission, MissionDto.class))
-                    .collect(Collectors.toList());
         }
     }
 }

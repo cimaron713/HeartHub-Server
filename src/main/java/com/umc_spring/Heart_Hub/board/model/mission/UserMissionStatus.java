@@ -3,11 +3,14 @@ package com.umc_spring.Heart_Hub.board.model.mission;
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserMissionStatus extends BaseEntity {
 
     @Id
@@ -22,6 +25,7 @@ public class UserMissionStatus extends BaseEntity {
 
     // 0(Fail), 1(Success) , 미션의 성공 상태정보
     private String checkStatus;
+
 
     public UserMissionStatus(Mission mission, User user) {
         this.mission = mission;

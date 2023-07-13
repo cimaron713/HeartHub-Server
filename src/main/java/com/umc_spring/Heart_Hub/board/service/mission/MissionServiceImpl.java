@@ -4,10 +4,9 @@ import com.umc_spring.Heart_Hub.board.dto.mission.MissionDto;
 import com.umc_spring.Heart_Hub.board.model.mission.Mission;
 import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
 import com.umc_spring.Heart_Hub.board.repository.mission.MissionRepository;
-import com.umc_spring.Heart_Hub.board.repository.mission.UserMissionStatusRepository;
+import com.umc_spring.Heart_Hub.board.repository.mission.ums.UserMissionStatusRepository;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,10 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class MissionServiceImpl implements MissionService{
 
@@ -39,19 +39,32 @@ public class MissionServiceImpl implements MissionService{
     }
 
     public List<MissionDto.RandomMissionRespDto> getMissions() {
+        Random random = new Random();
         List<User> userList = userRepository.findAll();
         List<MissionDto.RandomMissionRespDto> randomMissions = new ArrayList<>();
 
         for(User user : userList) {
-            List<Mission> missions = missionRepository.getMissions(user.getUserId());
-            MissionDto.RandomMissionRespDto dtoMissions = MissionDto.RandomMissionRespDto.builder()
-                    .missions(missions)
-                    .user(user)
-                    .build();
+            List<Long> missionIdList = umsRepository.getMissionIds(user.getUserId());
 
-            randomMissions.add(dtoMissions);
+            List<Long> randomMissionIdList = new ArrayList<>();
+            for(int i=0; i<4; i++) {
+                randomMissionIdList.add(missionIdList.get(random.nextInt(missionIdList.size())));
+            }
+
+            for(Long missionId : randomMissionIdList) {
+                String contentById = missionRepository.getContentById(missionId);
+
+                MissionDto.RandomMissionRespDto randomMissionRespDto = MissionDto.RandomMissionRespDto.builder()
+                        .missionContent(contentById)
+                        .user(user)
+                        .build();
+
+                randomMissions.add(randomMissionRespDto);
+            }
+
         }
 
         return randomMissions;
     }
 }
+
