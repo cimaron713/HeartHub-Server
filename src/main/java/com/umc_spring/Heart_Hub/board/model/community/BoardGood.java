@@ -3,16 +3,15 @@ package com.umc_spring.Heart_Hub.board.model.community;
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BoardGood extends BaseEntity {
     @Id
     @JoinColumn
@@ -29,9 +28,5 @@ public class BoardGood extends BaseEntity {
 
     @Column(nullable = false, length = 1)
     private String status;
-    @Builder
-    public BoardGood(User user, Board board){
-        this.user = user;
-        this.board = board;
-    }
+
 }

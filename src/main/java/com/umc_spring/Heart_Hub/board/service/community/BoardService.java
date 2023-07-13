@@ -3,6 +3,8 @@ package com.umc_spring.Heart_Hub.board.service.community;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
+import com.umc_spring.Heart_Hub.user.model.User;
+import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private UserRepository userRepository;
     //등록
     @Transactional
-    public Long boardRegister(BoardDto.BoardRequestDto params){
-        Board boardRegister = boardRepository.save(params.toEntity());
-        Long id = boardRegister.getBoardId();
-        return id;
+    public Long boardRegister(BoardDto.BoardRequestDto params, String userName){
+        User user = userRepository.findByUsername(userName);
+        Board boardRegister = Board.builder()
+                .user(user)
+                .content(params.getContent())
+                .build();
+        boardRepository.save(boardRegister);
+        Long boardId = boardRegister.getBoardId();
+        return boardId;
     }
 
     /*
