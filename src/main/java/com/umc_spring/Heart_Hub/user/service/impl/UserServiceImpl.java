@@ -1,5 +1,7 @@
 package com.umc_spring.Heart_Hub.user.service.impl;
 
+import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
 import com.umc_spring.Heart_Hub.user.model.Role;
 import com.umc_spring.Heart_Hub.user.model.User;
@@ -71,5 +73,14 @@ public class UserServiceImpl implements UserService {
                 .token(accessToken)
                 .build();
         return response;
+    }
+
+    public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
+        User user = userRepository.findByUserId(request.getUserId());
+        if(user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return UserDTO.GetUserInfoResponse.of(user);
     }
 }

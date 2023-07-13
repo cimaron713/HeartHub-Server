@@ -1,7 +1,9 @@
 package com.umc_spring.Heart_Hub.user.controller;
 
 
+import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
+import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import com.umc_spring.Heart_Hub.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,5 +36,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserDTO.LoginResponse> login(@RequestBody UserDTO.LoginRequest user){
         return ResponseEntity.ok(userService.login(user));
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {
+        UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 }
