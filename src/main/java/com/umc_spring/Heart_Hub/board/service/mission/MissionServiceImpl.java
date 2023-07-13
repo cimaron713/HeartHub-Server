@@ -1,7 +1,7 @@
 package com.umc_spring.Heart_Hub.board.service.mission;
 
 import com.umc_spring.Heart_Hub.board.dto.mission.MissionDto;
-import com.umc_spring.Heart_Hub.config.mission.Mission;
+import com.umc_spring.Heart_Hub.board.model.mission.Mission;
 import com.umc_spring.Heart_Hub.board.repository.mission.MissionRepository;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;

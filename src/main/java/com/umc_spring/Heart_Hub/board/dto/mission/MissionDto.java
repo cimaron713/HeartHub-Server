@@ -1,6 +1,6 @@
 package com.umc_spring.Heart_Hub.board.dto.mission;
 
-import com.umc_spring.Heart_Hub.config.mission.Mission;
+import com.umc_spring.Heart_Hub.board.model.mission.Mission;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.Builder;
 import lombok.Getter;

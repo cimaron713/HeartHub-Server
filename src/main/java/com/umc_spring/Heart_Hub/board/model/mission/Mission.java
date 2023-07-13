@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.config.mission;
+package com.umc_spring.Heart_Hub.board.model.mission;
 
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
