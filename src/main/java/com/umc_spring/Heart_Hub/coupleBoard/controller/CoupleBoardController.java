@@ -34,7 +34,7 @@ public class CoupleBoardController {
     /**
      * 게시물 작성
      */
-    @PostMapping(value = "/board",
+    @PostMapping(value = "/couple-board/write",
             consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart BoardDto.Request requestDto,
                                                            @RequestPart("files") BoardImageUploadDto boardImageUploadDto,
@@ -50,7 +50,7 @@ public class CoupleBoardController {
     /**
      * 게시물 조회 (날짜에 따른)
      */
-    @GetMapping("/board/search/{createAt}")
+    @GetMapping("/couple-board/{createAt}")
     public ResponseEntity<List<BoardDto.Response>> getBoardsByDate(@PathVariable LocalDate createAt, Authentication authentication) {
         List<BoardDto.Response> boardList = coupleBoardService.searchBoardList(createAt);
         Collections.sort(boardList, Comparator.comparing(BoardDto.Response::getCreateAt));
@@ -61,7 +61,7 @@ public class CoupleBoardController {
     /**
      * 게시물 수정
      */
-    @PutMapping("/board/{postId}/update")
+    @PutMapping("/couple-board/{postId}/update")
     public ResponseEntity<ApiResponse<String>> updateBoard(@PathVariable Long postId, @RequestBody BoardDto.Request requestDto,
                                                            Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -79,7 +79,7 @@ public class CoupleBoardController {
     /**
      * 게시물 삭제
      */
-    @DeleteMapping("/board/{postId}/delete")
+    @DeleteMapping("/couple-board/{postId}/delete")
     public ResponseEntity<ApiResponse<String>> deleteBoard(@PathVariable Long postId, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         BoardDto.Response result = coupleBoardService.detailBoard(postId);
