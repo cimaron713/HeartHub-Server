@@ -1,9 +1,7 @@
 package com.umc_spring.Heart_Hub.board.repository.mission.ums;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.umc_spring.Heart_Hub.board.model.mission.QMission;
 import com.umc_spring.Heart_Hub.board.model.mission.QUserMissionStatus;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +9,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class UMSRepositoryImpl implements UMSRepositoryCustom{
+public class UserMissionStatusRepositoryImpl implements UMSRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
 
