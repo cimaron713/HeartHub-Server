@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -27,6 +30,9 @@ public class CoupleBoard extends BaseEntity {
 
     @Column(nullable = false, length = 1)
     private String status;
+
+    @OneToMany(mappedBy = "CoupleBoard", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    private List<CoupleBoardImage> boardImages = new ArrayList<>();
 
     public CoupleBoard(String content) {
         this.content = content;
