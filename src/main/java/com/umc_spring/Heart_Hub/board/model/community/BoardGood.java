@@ -29,7 +29,6 @@ public class BoardGood extends BaseEntity {
 
     @Column(nullable = false, length = 1)
     private String status;
-
     @Builder
     public BoardGood(User user, Board board){
         this.user = user;
