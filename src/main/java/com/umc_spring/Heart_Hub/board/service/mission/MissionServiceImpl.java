@@ -32,8 +32,15 @@ public class MissionServiceImpl implements MissionService{
     public List<MissionDto.RandomMissionRespDto> getMissions() {
         List<User> userList = userRepository.findAll();
         List<MissionDto.RandomMissionRespDto> randomMissions = new ArrayList<>();
-        for(User user : userList) {
 
+        for(User user : userList) {
+            List<Mission> missions = missionRepository.getMissions(user.getUserId());
+            MissionDto.RandomMissionRespDto dtoMissions = MissionDto.RandomMissionRespDto.builder()
+                    .missions(missions)
+                    .user(user)
+                    .build();
+
+            randomMissions.add(dtoMissions);
         }
 
         return randomMissions;

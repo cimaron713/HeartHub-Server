@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface MissionRepositoryCustom {
 
-    List<Mission> getMissions(Mission mission, Long userId);
+    List<Mission> getMissions(Long userId);
 }
