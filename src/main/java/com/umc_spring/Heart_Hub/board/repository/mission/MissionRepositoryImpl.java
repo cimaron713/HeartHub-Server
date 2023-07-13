@@ -3,7 +3,7 @@ package com.umc_spring.Heart_Hub.board.repository.mission;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.umc_spring.Heart_Hub.board.model.mission.Mission;
-import com.umc_spring.Heart_Hub.config.mission.QMission;
+import com.umc_spring.Heart_Hub.board.model.mission.QMission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
