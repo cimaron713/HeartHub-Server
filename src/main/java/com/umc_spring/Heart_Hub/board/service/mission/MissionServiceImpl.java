@@ -23,9 +23,11 @@ public class MissionServiceImpl implements MissionService{
     public void addMissionToUser(MissionDto.MissionRequestDto missionRequestDto) {
         List<User> userList = userRepository.findAll();
 
-        for(User user : userList) {
-            Mission mission = missionRequestDto.toEntity(user);
-            missionRepository.save(mission);
+        if(!userList.isEmpty()) {
+            for(User user : userList) {
+                Mission mission = missionRequestDto.toEntity(user);
+                missionRepository.save(mission);
+            }
         }
     }
 
