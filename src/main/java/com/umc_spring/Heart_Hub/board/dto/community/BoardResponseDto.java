@@ -14,6 +14,12 @@ public class BoardResponseDto {
 
     private User user;
 
+    public Board toEntity(){
+        return Board.builder()
+                .content(content)
+                .user(user)
+                .build();
+    }
 
     public BoardResponseDto(Board board){
         this.boardId = board.getBoardId();

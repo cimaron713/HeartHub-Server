@@ -1,11 +1,10 @@
-package com.umc_spring.Heart_Hub.board.controller;
+package com.umc_spring.Heart_Hub.board.controller.community;
 
-import com.umc_spring.Heart_Hub.board.dto.BoardGoodDto;
-import com.umc_spring.Heart_Hub.board.service.BoardGoodService;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardGoodDto;
+import com.umc_spring.Heart_Hub.board.service.community.BoardGoodService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,10 +1,10 @@
-package com.umc_spring.Heart_Hub.board.service;
+package com.umc_spring.Heart_Hub.board.service.community;
 
-import com.umc_spring.Heart_Hub.board.dto.BoardGoodDto;
-import com.umc_spring.Heart_Hub.board.model.Board;
-import com.umc_spring.Heart_Hub.board.model.BoardGood;
-import com.umc_spring.Heart_Hub.board.repository.BoardGoodRepository;
-import com.umc_spring.Heart_Hub.board.repository.BoardRepository;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardGoodDto;
+import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.board.model.community.BoardGood;
+import com.umc_spring.Heart_Hub.board.repository.community.BoardGoodRepository;
+import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

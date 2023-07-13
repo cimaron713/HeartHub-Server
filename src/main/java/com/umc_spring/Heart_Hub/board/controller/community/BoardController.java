@@ -5,6 +5,7 @@ import com.umc_spring.Heart_Hub.board.dto.community.BoardResponseDto;
 import com.umc_spring.Heart_Hub.board.service.community.BoardService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@NoArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
     private BoardService boardService;

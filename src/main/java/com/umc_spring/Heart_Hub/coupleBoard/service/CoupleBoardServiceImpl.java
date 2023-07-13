@@ -9,6 +9,7 @@ import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
 import com.umc_spring.Heart_Hub.coupleBoard.repository.CoupleBoardRepository;
 import com.umc_spring.Heart_Hub.coupleBoard.repository.ImageRepository;
 import com.umc_spring.Heart_Hub.user.model.User;
+import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Value("${file.boardImgPath}")
     private String uploadFolder;
+
 
     @Override
     public Long saveBoard(BoardDto.Request requestDto, BoardImageUploadDto boardImageUploadDto, String userName) {
@@ -100,7 +102,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public void deleteBoard(Long postId) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.NOT_FIND_POST);});
+        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.POST_NOT_FOUND);});
         coupleBoardRepository.delete(coupleBoard);
     }
 
