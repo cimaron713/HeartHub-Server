@@ -31,7 +31,7 @@ public class CoupleBoard extends BaseEntity {
     @Column(nullable = false, length = 1)
     private String status;
 
-    @OneToMany(mappedBy = "CoupleBoard", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "coupleBoard", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private List<CoupleBoardImage> boardImages = new ArrayList<>();
 
     public CoupleBoard(String content) {
