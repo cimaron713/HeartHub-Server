@@ -1,7 +1,6 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
-import com.umc_spring.Heart_Hub.board.dto.community.BoardRequestDto;
-import com.umc_spring.Heart_Hub.board.dto.community.BoardResponseDto;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     //등록
     @Transactional
-    public Long boardRegister(final BoardRequestDto params){
+    public Long boardRegister(BoardDto.BoardRequestDto params){
         Board boardRegister = boardRepository.save(params.toEntity());
         Long id = boardRegister.getBoardId();
         return id;
@@ -27,16 +26,16 @@ public class BoardService {
      게시글 리스트 조회
      */
     @Transactional
-    public List<BoardResponseDto> findAll() {
+    public List<BoardDto.BoardResponseDto> findAll() {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         List<Board> list = boardRepository.findAll(sort);
-        List<BoardResponseDto> responseList = list.stream().map(m -> new BoardResponseDto(m)).toList();
+        List<BoardDto.BoardResponseDto> responseList = list.stream().map(m -> new BoardDto.BoardResponseDto(m)).toList();
         return responseList;
     }
     @Transactional
-    public BoardResponseDto findBoard(final Long id){
+    public BoardDto.BoardResponseDto findBoard(final Long id){
         Board findBoard = boardRepository.findById(id).get();
-        BoardResponseDto boardResponseDto = new BoardResponseDto(findBoard);
+        BoardDto.BoardResponseDto boardResponseDto = new BoardDto.BoardResponseDto(findBoard);
         return boardResponseDto;
     }
 
