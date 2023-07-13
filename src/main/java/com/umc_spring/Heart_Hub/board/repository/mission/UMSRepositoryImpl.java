@@ -1,9 +1,8 @@
 package com.umc_spring.Heart_Hub.board.repository.mission;
 
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.umc_spring.Heart_Hub.board.model.mission.Mission;
-import com.umc_spring.Heart_Hub.board.model.mission.QMission;
+import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,12 +10,12 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class MissionRepositoryImpl implements MissionRepositoryCustom{
+public class UMSRepositoryImpl implements UMSRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Mission> getMissions(Long userId) {
+    public List<UserMissionStatus> getMissions(Long userId) {
 //        QMission m = QMission.mission;
 //
 //        List<Mission> missions = jpaQueryFactory
