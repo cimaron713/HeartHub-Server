@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.coupleboard.model;
+package com.umc_spring.Heart_Hub.coupleBoard.model;
 
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import jakarta.persistence.*;
