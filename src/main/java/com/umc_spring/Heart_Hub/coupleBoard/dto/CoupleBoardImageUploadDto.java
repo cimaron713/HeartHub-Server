@@ -7,6 +7,6 @@ import java.util.List;
 
 //다중 이미지를 전달받을 DTO
 @Getter
-public class BoardImageUploadDto {
+public class CoupleBoardImageUploadDto {
     private List<MultipartFile> files;
 }

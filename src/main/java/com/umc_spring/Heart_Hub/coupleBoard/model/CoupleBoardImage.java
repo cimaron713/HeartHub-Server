@@ -22,5 +22,5 @@ public class CoupleBoardImage extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "postId")
-    private CoupleBoard board;
+    private CoupleBoard coupleBoard;
 }

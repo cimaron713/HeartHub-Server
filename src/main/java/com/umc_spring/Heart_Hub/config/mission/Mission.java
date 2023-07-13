@@ -1,12 +1,14 @@
-package com.umc_spring.Heart_Hub.board.model.mission;
+package com.umc_spring.Heart_Hub.config.mission;
 
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mission {
     @Id
