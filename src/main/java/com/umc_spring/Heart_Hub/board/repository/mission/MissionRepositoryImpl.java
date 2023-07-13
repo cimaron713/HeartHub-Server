@@ -17,14 +17,14 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom{
 
     @Override
     public List<Mission> getMissions(Long userId) {
-        QMission m = QMission.mission;
+//        QMission m = QMission.mission;
+//
+//        List<Mission> missions = jpaQueryFactory
+//                .selectFrom(m)
+//                .where(m.user.userId.eq(userId)
+//                        .and(m.checkStatus.eq("0")))
+//                .fetch();
 
-        List<Mission> missions = jpaQueryFactory
-                .selectFrom(m)
-                .where(m.user.userId.eq(userId)
-                        .and(m.checkStatus.eq("0")))
-                .fetch();
-
-        return missions;
+        return null;
     }
 }

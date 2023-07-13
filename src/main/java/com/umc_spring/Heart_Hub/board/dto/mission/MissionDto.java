@@ -2,6 +2,7 @@ package com.umc_spring.Heart_Hub.board.dto.mission;
 
 import com.umc_spring.Heart_Hub.board.model.mission.Mission;
 import com.umc_spring.Heart_Hub.user.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,13 +24,13 @@ public class MissionDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class MissionRequestDto{
         private String content;
 
-        public Mission toEntity(User user) {
+        public Mission toEntity() {
             return Mission.builder()
                     .content(content)
-                    .user(user)
                     .build();
         }
     }

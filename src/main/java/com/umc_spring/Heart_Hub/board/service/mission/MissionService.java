@@ -10,4 +10,13 @@ public interface MissionService {
 
     List<MissionDto.RandomMissionRespDto> getMissions();
 
+    /**
+     * checkStatus 상태 변경 api
+     */
+
+    /**
+     * deleteStatus 상태 변경 api (mission 삭제)
+     */
+
+
 }

@@ -35,4 +35,12 @@ public class MissionController {
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(randomMissionRespDtos, "Success Get Missions"));
     }
+
+    /**
+     * checkStatus 상태 변경 api
+     */
+
+    /**
+     * deleteStatus 상태 변경 api (mission 삭제)
+     */
 }
