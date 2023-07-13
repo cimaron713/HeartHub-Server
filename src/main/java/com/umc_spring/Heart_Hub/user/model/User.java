@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.user.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
 import jakarta.persistence.*;
@@ -59,6 +60,8 @@ public class User implements UserDetails {
 
     private Long mate;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Board> boardList = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER) // 테이블 생성, 부모 Entity에 의해 관리.
     @Builder.Default
