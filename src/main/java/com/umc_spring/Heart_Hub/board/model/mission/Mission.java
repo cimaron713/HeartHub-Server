@@ -2,9 +2,12 @@ package com.umc_spring.Heart_Hub.board.model.mission;
 
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
