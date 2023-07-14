@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,6 +94,7 @@ public class UserDTO {
         public static GetUserInfoResponse of(User user) {
             List<BoardDto.BoardResponseDto> boardList = user.getBoardList().stream()
                     .map(board -> new BoardDto.BoardResponseDto(board))
+                    .sorted(Comparator.comparing(BoardDto.BoardResponseDto::getCreatedDate).reversed())
                     .collect(Collectors.toList());
 
             return new GetUserInfoResponse(boardList, user);
