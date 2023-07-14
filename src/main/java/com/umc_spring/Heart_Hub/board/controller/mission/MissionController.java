@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +40,15 @@ public class MissionController {
     /**
      * checkStatus 상태 변경 api
      */
+    @PutMapping("/api/mission/{missionId}")
+    public ResponseEntity<ApiResponse<Long>> checkStatusModify(@PathVariable Long missionId,
+                                                               Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Long umsId = missionService.checkStatusModify(missionId, username);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(umsId, "Success Modify checkStatus"));
+
+    }
 
     /**
      * deleteStatus 상태 변경 api (mission 삭제)

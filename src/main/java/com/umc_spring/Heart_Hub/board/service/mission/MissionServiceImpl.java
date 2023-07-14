@@ -28,6 +28,7 @@ public class MissionServiceImpl implements MissionService{
     private final UserRepository userRepository;
     private final UserMissionStatusRepository umsRepository;
 
+    @Override
     public void addMissionToUser(MissionDto.MissionRequestDto missionRequestDto) {
         Mission mission = missionRepository.save(missionRequestDto.toEntity());
         List<User> userList = userRepository.findAll();
@@ -39,7 +40,7 @@ public class MissionServiceImpl implements MissionService{
             }
         }
     }
-
+    @Override
     public List<MissionDto.RandomMissionRespDto> getMissions() {
         Random random = new Random();
         List<User> userList = userRepository.findAll();
@@ -69,18 +70,31 @@ public class MissionServiceImpl implements MissionService{
         return randomMissions;
     }
 
+
     /**
      * checkStatus 상태 변경 api
      */
+    @Override
+    public Long checkStatusModify(Long missionId, String username) {
+        Long userId = userRepository.getUserIdByUserName(username);
+        Long umsId = umsRepository.findUMSByMissionIdAndUserId(missionId, userId);
+        UserMissionStatus userMissionStatus = umsRepository.findById(umsId).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_MISSION_STATUS_NOT_FOUND);
+        });
+
+        userMissionStatus.checkStatusModify();
+        return umsId;
+    }
 
     /**
      * deleteStatus 상태 변경 api (mission 삭제)
      */
+    @Override
     public void deleteMission(Long missionId) {
         Mission mission = missionRepository.findById(missionId).orElseThrow(()-> {
-            throw new CustomException(ErrorCode.MISSION_NOT_FOUNT);
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
-        mission.deleteMission();
+        mission.deleteStatusModify();
     }
 }
 

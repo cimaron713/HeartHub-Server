@@ -5,4 +5,5 @@ import java.util.List;
 public interface UMSRepositoryCustom {
 
     List<Long> getMissionIds(Long userId);
+    Long findUMSByMissionIdAndUserId(Long missionId, Long userId);
 }

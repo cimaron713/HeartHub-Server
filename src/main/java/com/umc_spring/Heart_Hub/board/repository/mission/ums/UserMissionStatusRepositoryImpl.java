@@ -30,4 +30,17 @@ public class UserMissionStatusRepositoryImpl implements UMSRepositoryCustom{
 
         return missionIdList;
     }
+
+    @Override
+    public Long findUMSByMissionIdAndUserId(Long missionId, Long userId) {
+        QUserMissionStatus userMissionStatus = QUserMissionStatus.userMissionStatus;
+
+        Long umsId = jpaQueryFactory
+                .select(userMissionStatus.userMissionStatusId)
+                .from(userMissionStatus)
+                .where(userMissionStatus.user.userId.eq(userId)
+                        .and(userMissionStatus.mission.missionId.eq(missionId)))
+                .fetchOne();
+        return umsId;
+    }
 }

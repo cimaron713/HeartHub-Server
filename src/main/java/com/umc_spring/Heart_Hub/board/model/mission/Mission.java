@@ -1,7 +1,6 @@
 package com.umc_spring.Heart_Hub.board.model.mission;
 
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
-import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,7 +31,7 @@ public class Mission extends BaseEntity {
         this.deleteStatus = "0";
     }
 
-    public void deleteMission() {
+    public void deleteStatusModify() {
         this.deleteStatus = "1";
     }
 }

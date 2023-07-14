@@ -33,4 +33,12 @@ public class UserMissionStatus extends BaseEntity {
         this.checkStatus = "0";
     }
 
+    public void checkStatusModify() {
+        if(this.checkStatus.equals("0")) {
+            this.checkStatus = "1";
+        } else {
+            this.checkStatus = "0";
+        }
+    }
+
 }

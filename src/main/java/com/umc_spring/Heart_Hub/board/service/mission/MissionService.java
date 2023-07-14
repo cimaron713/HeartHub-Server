@@ -13,6 +13,7 @@ public interface MissionService {
     /**
      * checkStatus 상태 변경 api
      */
+    Long checkStatusModify(Long missionId, String username);
 
     /**
      * deleteStatus 상태 변경 api (mission 삭제)
