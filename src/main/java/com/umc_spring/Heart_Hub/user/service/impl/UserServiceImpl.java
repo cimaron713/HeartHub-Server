@@ -2,6 +2,7 @@ package com.umc_spring.Heart_Hub.user.service.impl;
 
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
+import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
 import com.umc_spring.Heart_Hub.user.model.Role;
 import com.umc_spring.Heart_Hub.user.model.User;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final RedisUtils redisUtils;
-
+    private final EmailService emailService;
 
     @Override
     public Boolean register(UserDTO.SignUpRequest signUpRequest){
@@ -73,6 +74,20 @@ public class UserServiceImpl implements UserService {
                 .token(accessToken)
                 .build();
         return response;
+    }
+    @Override
+    public String emailSend(String email) throws Exception {
+        String code = emailService.sendSimpleMessage(email);
+        return code;
+    }
+    @Override
+    public Boolean emailCodeCheck(String code, String userInput) {
+        if (code.equals(userInput)) {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {

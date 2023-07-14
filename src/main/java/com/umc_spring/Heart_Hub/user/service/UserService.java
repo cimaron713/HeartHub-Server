@@ -6,6 +6,7 @@ public interface UserService {
     Boolean register(UserDTO.SignUpRequest request);
     Boolean validateDuplicateEmail(String email);
     UserDTO.LoginResponse login(UserDTO.LoginRequest request);
-
+    String emailSend(String email) throws Exception;
+    Boolean emailCodeCheck(String code, String userInput);
     UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request);
 }

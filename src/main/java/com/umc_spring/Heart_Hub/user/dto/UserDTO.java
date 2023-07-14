@@ -1,10 +1,8 @@
 package com.umc_spring.Heart_Hub.user.dto;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
-import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.time.LocalDateTime;
@@ -60,10 +58,24 @@ public class UserDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class sendVerificationCode{
+        private String email;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class emailVerification{
+        private String code;
+    }
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class GetUserInfoRequest {
         private Long userId;
     }
-
     @Getter
     @NoArgsConstructor
     public static class GetUserInfoResponse {
