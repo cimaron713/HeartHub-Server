@@ -14,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,12 +47,13 @@ public class MissionServiceImpl implements MissionService{
         for(User user : userList) {
             List<Long> missionIdList = umsRepository.getMissionIds(user.getUserId());
 
-            List<Long> randomMissionIdList = new ArrayList<>();
-            for(int i=0; i<4; i++) {
-                randomMissionIdList.add(missionIdList.get(random.nextInt(missionIdList.size())));
+            Set<Long> randomMissionIdSet = new HashSet<>();
+            while(randomMissionIdSet.size() < Math.min(4, missionIdList.size())) {
+                randomMissionIdSet.add(missionIdList.get(random.nextInt(missionIdList.size())));
             }
 
-            for(Long missionId : randomMissionIdList) {
+            for(Long missionId : randomMissionIdSet) {
+                log.info("missionId : " + missionId);
                 String contentById = missionRepository.getContentById(missionId);
 
                 MissionDto.RandomMissionRespDto randomMissionRespDto = MissionDto.RandomMissionRespDto.builder()
