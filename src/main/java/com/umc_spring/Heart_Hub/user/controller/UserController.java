@@ -46,7 +46,7 @@ public class UserController {
         return ResponseEntity.ok(emailService.sendSimpleMessage(email.getEmail()));
     }
 
-    @PostMapping("/users")
+    @PostMapping("/user/info")
     public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {
         UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
