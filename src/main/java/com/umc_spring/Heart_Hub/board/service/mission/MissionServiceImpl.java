@@ -5,6 +5,8 @@ import com.umc_spring.Heart_Hub.board.model.mission.Mission;
 import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
 import com.umc_spring.Heart_Hub.board.repository.mission.MissionRepository;
 import com.umc_spring.Heart_Hub.board.repository.mission.ums.UserMissionStatusRepository;
+import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +67,20 @@ public class MissionServiceImpl implements MissionService{
         }
 
         return randomMissions;
+    }
+
+    /**
+     * checkStatus 상태 변경 api
+     */
+
+    /**
+     * deleteStatus 상태 변경 api (mission 삭제)
+     */
+    public void deleteMission(Long missionId) {
+        Mission mission = missionRepository.findById(missionId).orElseThrow(()-> {
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUNT);
+        });
+        mission.deleteMission();
     }
 }
 

@@ -17,6 +17,6 @@ public interface MissionService {
     /**
      * deleteStatus 상태 변경 api (mission 삭제)
      */
-
+    void deleteMission(Long missionId);
 
 }
