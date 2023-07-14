@@ -33,14 +33,9 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
     @Value("${file.boardImgPath}")
     private String uploadFolder;
 
-
     @Override
     public Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) {
         User user = userRepository.findByUsername(userName);
-        /**
-         * findByUsername의 경우 Return Type이 Optional이 아니어서 .orElseThrow를 사용할 수 없습니다.
-         * 때문에 따로 에러 처리 했습니다.
-         */
         if(user == null) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }

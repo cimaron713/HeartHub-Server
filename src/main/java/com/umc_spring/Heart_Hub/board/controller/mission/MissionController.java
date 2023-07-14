@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +35,29 @@ public class MissionController {
         List<MissionDto.RandomMissionRespDto> randomMissionRespDtos = missionService.getMissions();
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(randomMissionRespDtos, "Success Get Missions"));
+    }
+
+    /**
+     * checkStatus 상태 변경 api
+     */
+    @PutMapping("/api/mission/{missionId}")
+    public ResponseEntity<ApiResponse<Long>> checkStatusModify(@PathVariable Long missionId,
+                                                               Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        Long umsId = missionService.checkStatusModify(missionId, username);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(umsId, "Success Modify checkStatus"));
+
+    }
+
+    /**
+     * deleteStatus 상태 변경 api (mission 삭제)
+     */
+    @DeleteMapping("/api/mission/{missionId}")
+    public ResponseEntity<ApiResponse<Long>> deleteMission(@PathVariable Long missionId) {
+        missionService.deleteMission(missionId);
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(missionId, "Success Delete Mission"));
+
     }
 }

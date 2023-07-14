@@ -2,6 +2,7 @@ package com.umc_spring.Heart_Hub.board.dto.mission;
 
 import com.umc_spring.Heart_Hub.board.model.mission.Mission;
 import com.umc_spring.Heart_Hub.user.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,13 +24,13 @@ public class MissionDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class MissionRequestDto{
         private String content;
 
-        public Mission toEntity(User user) {
+        public Mission toEntity() {
             return Mission.builder()
                     .content(content)
-                    .user(user)
                     .build();
         }
     }
@@ -37,20 +38,13 @@ public class MissionDto {
     @Getter
     @NoArgsConstructor
     public static class RandomMissionRespDto {
-        private List<MissionDto> randomMissions;
+        private String missionContent;
         private Long userId;
 
         @Builder
-        public RandomMissionRespDto(List<Mission> missions, User user) {
-            this.randomMissions = convertToDto(missions);
+        public RandomMissionRespDto(String missionContent, User user) {
+            this.missionContent = missionContent;
             this.userId = user.getUserId();
-        }
-
-        private List<MissionDto> convertToDto(List<Mission> missions) {
-            ModelMapper modelMapper = new ModelMapper();
-            return missions.stream()
-                    .map(mission -> modelMapper.map(mission, MissionDto.class))
-                    .collect(Collectors.toList());
         }
     }
 }
