@@ -30,17 +30,17 @@ public class EmailServiceImpl implements EmailService {
         LOGGER.info("[createMessage] 보내는 대상 {}, 인증 번호 {}", to, ePw);
         MimeMessage  message = emailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, to);
-        message.setSubject("임시 비밀번호");
+        message.setSubject("이메일 인증 코드 입니다.");
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
-        msgg+= "<h1> 임시 비밀번호 입니다.. </h1>";
+        msgg+= "<h1> 이메일 진증 코드 입니다.. </h1>";
         msgg+= "<br>";
         msgg+= "<p>아래 코드를 복사해 입력해주세요<p>";
         msgg+= "<br>";
         msgg+= "<p>테스트.<p>";
         msgg+= "<br>";
         msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-        msgg+= "<h3 style='color:blue;'>임시 비밀번호 입니다.</h3>";
+        msgg+= "<h3 style='color:blue;'>이메일 진증 코드 입니다</h3>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "CODE : <strong>";
         msgg+= ePw+"</strong><div><br/> ";
@@ -55,7 +55,7 @@ public class EmailServiceImpl implements EmailService {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
-        for (int i = 0; i < 4; i++) { // 임시비번 4자리
+        for (int i = 0; i < 4; i++) {
             key.append((rnd.nextInt(10)));
         }
         return key.toString();
