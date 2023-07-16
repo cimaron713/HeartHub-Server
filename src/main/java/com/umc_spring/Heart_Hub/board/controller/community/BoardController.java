@@ -1,11 +1,13 @@
 package com.umc_spring.Heart_Hub.board.controller.community;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
+import com.umc_spring.Heart_Hub.board.service.community.BlockUserService;
 import com.umc_spring.Heart_Hub.board.service.community.BoardService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private BoardService boardService;
+    private BlockUserService blockUserService;
     //게시글 작성
     //작성화면
 
@@ -52,5 +55,25 @@ public class BoardController {
     public ResponseEntity<ApiResponse<String>> delBoard(@PathVariable Long boardId){
         boardService.delBoard(boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Delete board success"));
+    }
+
+    /**
+     * 상대방 차단하기
+     */
+    @PostMapping("/api/block")
+    public ResponseEntity<ApiResponse<String>> blockUser(@RequestBody BoardDto.BlockUserReqDto blockReqDto, Authentication authentication) {
+        String username = authentication.getName();
+        blockUserService.blockUser(username, blockReqDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Block user success"));
+    }
+
+    /**
+     * 상대방 차단 해제
+     */
+    @PostMapping("/api/unblock")
+    public ResponseEntity<ApiResponse<String>> unblockUser(@RequestBody BoardDto.UnblockUserReqDto unblockReqDto, Authentication authentication) {
+        String username = authentication.getName();
+        blockUserService.unblockUser(username, unblockReqDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Unblock user success"));
     }
 }

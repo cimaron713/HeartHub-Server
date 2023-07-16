@@ -40,4 +40,38 @@ public class BoardDto {
         }
     }
 
+    @Getter
+    @NoArgsConstructor
+    public static class BlockUserReqDto {
+        private String blockedUserName;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class BlockUserResDto {
+        private String blockedUserName;
+
+        @Builder
+        public BlockUserResDto(User user) {
+            this.blockedUserName = user.getUsername();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UnblockUserReqDto {
+        private String blockedUserName;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UnblockUserResDto {
+        private String blockedUserName;
+
+        @Builder
+        public UnblockUserResDto(User user) {
+            this.blockedUserName = user.getUsername();
+        }
+    }
+
 }

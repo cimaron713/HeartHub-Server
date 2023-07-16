@@ -15,4 +15,6 @@ public interface BoardGoodRepository extends JpaRepository<BoardGood,Long> {
 
     @Query(value = "select count(*) from BoardGood group by BOARD_ID > :id", nativeQuery = true)
     public List<BoardGood> countGood(@Param(value = "id") Long id);
+
+    List<BoardGood> findAllByUserAndBoard_User(User user, User blockedUser);
 }
