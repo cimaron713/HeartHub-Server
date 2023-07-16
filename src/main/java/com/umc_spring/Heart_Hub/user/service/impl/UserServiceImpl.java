@@ -71,16 +71,16 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDTO.LoginResponse login(UserDTO.LoginRequest request){
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findById(request.getId());
         UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-        String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
-        String refreshToken = redisUtils.getData("RT:"+user.getEmail());
+        String accessToken = jwtUtils.createToken(user.getId(), JwtUtils.TOKEN_VALID_TIME);
+        String refreshToken = redisUtils.getData("RT:"+user.getId());
 
         if(refreshToken == null) {
-            refreshToken = jwtUtils.createToken(user.getEmail(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
-            redisUtils.setDataExpire("RT:" + user.getEmail(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            refreshToken = jwtUtils.createToken(user.getId(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            redisUtils.setDataExpire("RT:" + user.getId(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
         }
         UserDTO.LoginResponse response = UserDTO.LoginResponse.builder()
                 .token(accessToken)

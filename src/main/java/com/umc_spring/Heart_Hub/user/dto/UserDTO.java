@@ -32,11 +32,11 @@ public class UserDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class LoginRequest{
-        private String email;
+        private String id;
         private String password;
 
         public UsernamePasswordAuthenticationToken toAuthentication(){
-            return new UsernamePasswordAuthenticationToken(this.email, this.password);
+            return new UsernamePasswordAuthenticationToken(this.id, this.password);
         }
     }
 
