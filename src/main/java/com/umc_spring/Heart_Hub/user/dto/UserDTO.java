@@ -18,6 +18,7 @@ public class UserDTO {
     @NoArgsConstructor
     public static class SignUpRequest{
         private String username;
+        private String id;
         private String password;
         private String gender;
         private String email;
@@ -47,6 +48,13 @@ public class UserDTO {
         private String email;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DuplicateIdCheckRequest{
+        private String id;
+    }
     @Data
     @Builder
     @AllArgsConstructor

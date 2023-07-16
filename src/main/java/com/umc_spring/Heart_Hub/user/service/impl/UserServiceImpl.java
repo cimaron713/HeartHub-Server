@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
     public Boolean register(UserDTO.SignUpRequest signUpRequest){
         User user = User.builder()
                 .username(signUpRequest.getUsername())
+                .id(signUpRequest.getId())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .birth(signUpRequest.getBirth())
@@ -57,6 +58,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    @Override
+    public Boolean validateDuplicateId(String id){
+        User findUser = userRepository.findById(id);
+        if (findUser != null) {
+            return true; // 존재한다면 true 반환
+        }
+        else {
+            return false; // 존재하지 않으면 false 반환
+        }
+    }
     @Override
     public UserDTO.LoginResponse login(UserDTO.LoginRequest request){
         User user = userRepository.findByEmail(request.getEmail());

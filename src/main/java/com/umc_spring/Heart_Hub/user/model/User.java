@@ -31,6 +31,9 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 45)
     private String username;
 
+    @Column(nullable = false, length = 45)
+    private String id;
+
     @Column(nullable = false)
     private String password;
 
@@ -67,6 +70,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER) // 테이블 생성, 부모 Entity에 의해 관리.
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
