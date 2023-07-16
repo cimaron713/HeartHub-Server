@@ -5,7 +5,7 @@ import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class UserDTO {
         private String email;
         private String nickname;
         private String marketingStatus;
-        //private LocalDateTime birth;
+        private LocalDate birth;
     }
 
     @Data
