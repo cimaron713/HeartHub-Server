@@ -86,11 +86,11 @@ public class UserController {
     }
 
     @GetMapping("/dDay")
-    public ResponseEntity<ApiResponse<UserDTO.GetDday>> getDday(/*Authentication authentication*/) {
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        UserDTO.GetDday dDay = userService.getDday(userDetails.getUsername());
+    public ResponseEntity<ApiResponse<UserDTO.GetDday>> getDday(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDTO.GetDday dDay = userService.getDday(userDetails.getUsername());
 
-        UserDTO.GetDday dDay = userService.getDday("user3");
+//        UserDTO.GetDday dDay = userService.getDday("user3");
 
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(dDay, "Success Get D-Day!"));
