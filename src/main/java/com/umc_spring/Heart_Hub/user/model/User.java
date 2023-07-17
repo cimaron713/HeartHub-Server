@@ -62,6 +62,7 @@ public class User implements UserDetails {
     private Long mate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @Builder.Default
     private List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
