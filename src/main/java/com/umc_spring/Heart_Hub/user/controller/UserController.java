@@ -8,6 +8,8 @@ import com.umc_spring.Heart_Hub.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -81,5 +83,16 @@ public class UserController {
     public ResponseEntity<ApiResponse<Boolean>> mateMatchingUser(@RequestBody UserDTO.MateMatchRequest request){
         Boolean response = userService.mateMatching(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+    }
+
+    @GetMapping("/dDay")
+    public ResponseEntity<ApiResponse<UserDTO.GetDday>> getDday(/*Authentication authentication*/) {
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//        UserDTO.GetDday dDay = userService.getDday(userDetails.getUsername());
+
+        UserDTO.GetDday dDay = userService.getDday("user3");
+
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(dDay, "Success Get D-Day!"));
     }
 }

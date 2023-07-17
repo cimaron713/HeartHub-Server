@@ -136,4 +136,14 @@ public class UserDTO {
         }
 
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class GetDday {
+        private LocalDate dDay;
+        @Builder
+        public GetDday(LocalDate dDay) {
+            this.dDay = dDay;
+        }
+    }
 }

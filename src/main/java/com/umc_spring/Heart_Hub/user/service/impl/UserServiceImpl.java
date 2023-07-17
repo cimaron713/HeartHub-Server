@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -132,6 +133,17 @@ public class UserServiceImpl implements UserService {
         else{
             return false;
         }
+    }
+
+    @Override
+    public UserDTO.GetDday getDday(String username) {
+        User findUser = userRepository.getDdayByUserName(username);
+
+        UserDTO.GetDday dDay = UserDTO.GetDday.builder()
+                .dDay(findUser.getDDay())
+                .build();
+
+        return dDay;
     }
 
 }
