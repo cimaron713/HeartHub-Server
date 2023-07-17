@@ -41,8 +41,8 @@ public class BoardService {
         return responseList;
     }
     @Transactional
-    public BoardDto.BoardResponseDto findBoard(final Long id){
-        Board findBoard = boardRepository.findById(id).get();
+    public BoardDto.BoardResponseDto findBoard(Long id){
+        Board findBoard = boardRepository.findById(id).orElseThrow();
         BoardDto.BoardResponseDto boardResponseDto = new BoardDto.BoardResponseDto(findBoard);
         return boardResponseDto;
     }
