@@ -5,7 +5,7 @@ import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,12 +18,13 @@ public class UserDTO {
     @NoArgsConstructor
     public static class SignUpRequest{
         private String username;
+        private String id;
         private String password;
         private String gender;
         private String email;
         private String nickname;
         private String marketingStatus;
-        //private LocalDateTime birth;
+        private LocalDate birth;
     }
 
     @Data
@@ -31,11 +32,11 @@ public class UserDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class LoginRequest{
-        private String email;
+        private String id;
         private String password;
 
         public UsernamePasswordAuthenticationToken toAuthentication(){
-            return new UsernamePasswordAuthenticationToken(this.email, this.password);
+            return new UsernamePasswordAuthenticationToken(this.id, this.password);
         }
     }
 
@@ -47,6 +48,13 @@ public class UserDTO {
         private String email;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DuplicateIdCheckRequest{
+        private String id;
+    }
     @Data
     @Builder
     @AllArgsConstructor
