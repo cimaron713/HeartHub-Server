@@ -10,10 +10,10 @@ import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.webjars.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class CommentService {
@@ -38,16 +38,26 @@ public class CommentService {
     /*
     댓글 등록
      */
+
     @Transactional
-    public Long createComment(Long id, CommentDto.Request commentRequest, String username){
+    public Long createComment(Long boardId,CommentDto.Request replyRequest, String username){
         User user = userRepository.findByUsername(username);
-        Board board = boardRepository.findById(commentRequest.getBoard().getBoardId()).orElseThrow();
-        Comment newComment = Comment .builder()
-                .content(commentRequest.getContent())
+        Board board = boardRepository.findById(boardId).orElseThrow();
+
+        Comment replyComment = Comment .builder()
+                .content(replyRequest.getContent())
                 .user(user)
                 .board(board)
                 .build();
-        commentRepository.save(newComment);
-        return newComment.getCommentId();
+
+        Comment parent;
+        if(replyRequest.getParentId() == null){
+            parent = commentRepository.findById(replyRequest.getParentId()).orElseThrow(
+                    ()->new NotFoundException("Could not found comment Id:"+ replyRequest.getParentId()));
+            replyComment.updateParent(parent);
+        }
+        replyComment.updateBoard(board);
+        commentRepository.save(replyComment);
+        return replyComment.getCommentId();
     }
 }

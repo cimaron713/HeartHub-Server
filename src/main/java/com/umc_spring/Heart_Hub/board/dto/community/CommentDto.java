@@ -5,6 +5,8 @@ import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommentDto {
@@ -12,10 +14,12 @@ public class CommentDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class Request{
         private Board board;
         private User user;
         private String content;
+        private Long parentId;
 
 
         public Comment Request(){
@@ -33,6 +37,7 @@ public class CommentDto {
         private Board board;
         private User user;
         private String content;
+        private List<Response> responseList = new ArrayList<>();
 
         @Builder
         public Response(Comment comment){
@@ -41,5 +46,12 @@ public class CommentDto {
             this.board = comment.getBoard();
             this.content = comment.getContent();
         }
+
+        public static Response convertCommentToDto(Comment comment) {
+            return new Response(comment);
+        }
+
     }
+
+
 }
