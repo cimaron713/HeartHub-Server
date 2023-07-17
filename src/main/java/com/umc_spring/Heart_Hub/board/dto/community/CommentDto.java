@@ -3,13 +3,9 @@ package com.umc_spring.Heart_Hub.board.dto.community;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.user.model.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.stream.Collectors;
 
 public class CommentDto {
     @Data
@@ -20,6 +16,15 @@ public class CommentDto {
         private Board board;
         private User user;
         private String content;
+
+
+        public Comment Request(){
+            return Comment.builder()
+                    .board(board)
+                    .user(user)
+                    .content(content)
+                    .build();
+        }
 
     }
     @Getter

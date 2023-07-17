@@ -1,0 +1,12 @@
+package com.umc_spring.Heart_Hub.board.repository.community;
+
+import com.umc_spring.Heart_Hub.board.dto.community.CommentDto;
+import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.board.model.community.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface CommentRepository extends JpaRepository<Comment, Long> {
+    List<CommentDto.Response> findAllByBoardId(Long boardId);
+}
