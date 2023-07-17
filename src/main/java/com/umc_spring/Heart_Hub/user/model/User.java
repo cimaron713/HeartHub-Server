@@ -1,10 +1,7 @@
 package com.umc_spring.Heart_Hub.user.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
-import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
-import com.umc_spring.Heart_Hub.user.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +30,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false, length = 45)
     private String username;
+
+    @Column(nullable = false, length = 45)
+    private String id;
 
     @Column(nullable = false)
     private String password;
@@ -54,7 +54,7 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 1)
     private String marketingStatus;
 
-    private LocalDateTime birth;
+    private LocalDate birth;
 
     @Column(nullable = false, length = 1)
     private String status;
@@ -70,6 +70,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER) // 테이블 생성, 부모 Entity에 의해 관리.
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()

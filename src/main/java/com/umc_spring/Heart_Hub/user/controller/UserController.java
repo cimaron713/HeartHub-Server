@@ -34,6 +34,12 @@ public class UserController {
         return ResponseEntity.ok(userService.validateDuplicateEmail(email.getEmail()));
     }
 
+    @PostMapping(value = "/check/id")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Boolean> duplicateIdCheck(@RequestBody UserDTO.DuplicateIdCheckRequest id){
+        return ResponseEntity.ok(userService.validateDuplicateEmail(id.getId()));
+    }
+
     @PostMapping(value = "/login")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserDTO.LoginResponse> login(@RequestBody UserDTO.LoginRequest user){
@@ -45,6 +51,8 @@ public class UserController {
     public ResponseEntity<String> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception{
         return ResponseEntity.ok(emailService.sendSimpleMessage(email.getEmail()));
     }
+
+
 
     @PostMapping("/user/info")
     public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {

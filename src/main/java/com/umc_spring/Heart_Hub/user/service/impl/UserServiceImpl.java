@@ -33,9 +33,10 @@ public class UserServiceImpl implements UserService {
     public Boolean register(UserDTO.SignUpRequest signUpRequest){
         User user = User.builder()
                 .username(signUpRequest.getUsername())
+                .id(signUpRequest.getId())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                //.birth(signUpRequest.getBirth())
+                .birth(signUpRequest.getBirth())
                 .gender(signUpRequest.getGender())
                 .nickname(signUpRequest.getNickname())
                 .role(Role.ROLE_USER)
@@ -57,18 +58,29 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    @Override
+    public Boolean validateDuplicateId(String id){
+        User findUser = userRepository.findById(id);
+        if (findUser != null) {
+            return true; // 존재한다면 true 반환
+        }
+        else {
+            return false; // 존재하지 않으면 false 반환
+        }
+    }
     @Override
     public UserDTO.LoginResponse login(UserDTO.LoginRequest request){
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findById(request.getId());
         UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-        String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
-        String refreshToken = redisUtils.getData("RT:"+user.getEmail());
+        String accessToken = jwtUtils.createToken(user.getId(), JwtUtils.TOKEN_VALID_TIME);
+        String refreshToken = redisUtils.getData("RT:"+user.getId());
 
         if(refreshToken == null) {
-            refreshToken = jwtUtils.createToken(user.getEmail(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
-            redisUtils.setDataExpire("RT:" + user.getEmail(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            refreshToken = jwtUtils.createToken(user.getId(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            redisUtils.setDataExpire("RT:" + user.getId(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
         }
         UserDTO.LoginResponse response = UserDTO.LoginResponse.builder()
                 .token(accessToken)
