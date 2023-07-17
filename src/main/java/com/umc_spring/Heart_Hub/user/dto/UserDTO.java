@@ -85,6 +85,24 @@ public class UserDTO {
     public static class GetUserInfoRequest {
         private Long userId;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class findIdRequest{
+        private String email;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class findPwRequest{
+        private String email;
+        private String id;
+    }
+
     @Getter
     @NoArgsConstructor
     public static class GetUserInfoResponse {
