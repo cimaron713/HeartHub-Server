@@ -54,10 +54,14 @@ public class User implements UserDetails {
 
     private LocalDate birth;
 
+    private LocalDate dDay;
+
     @Column(nullable = false, length = 1)
     private String status;
 
-    private Long mate;
+    @OneToOne
+    @JoinColumn(name = "mate")
+    private User user;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Builder.Default

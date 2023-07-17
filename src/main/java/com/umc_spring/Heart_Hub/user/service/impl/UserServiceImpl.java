@@ -111,8 +111,6 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
-
-
     public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
         User user = userRepository.findByUserId(request.getUserId());
         if(user == null) {
@@ -121,4 +119,19 @@ public class UserServiceImpl implements UserService {
 
         return UserDTO.GetUserInfoResponse.of(user);
     }
+
+    @Override
+    public Boolean mateMatching(UserDTO.MateMatchRequest request){
+        User currentUser = userRepository.findById(request.getCurrentUserId());
+        User mateUser = userRepository.findById(request.getMateId());
+        if(mateUser.getUser().equals(null)){
+            currentUser.setUser(mateUser);
+            mateUser.setUser(currentUser);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

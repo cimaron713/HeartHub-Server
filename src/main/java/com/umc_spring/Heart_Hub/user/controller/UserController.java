@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping(value = "/check/id")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateIdCheck(@RequestBody UserDTO.DuplicateIdCheckRequest id){
-        Boolean response = userService.validateDuplicateEmail(id.getId());
+        Boolean response = userService.validateDuplicateId(id.getId());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
@@ -74,6 +74,12 @@ public class UserController {
     @PostMapping("/user/info")
     public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {
         UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+    }
+
+    @PostMapping("/set/mate")
+    public ResponseEntity<ApiResponse<Boolean>> mateMatchingUser(@RequestBody UserDTO.MateMatchRequest request){
+        Boolean response = userService.mateMatching(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 }

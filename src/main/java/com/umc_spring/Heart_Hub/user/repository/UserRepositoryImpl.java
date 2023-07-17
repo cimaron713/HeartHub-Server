@@ -13,7 +13,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 
     @Override
     public Long getUserIdByUserName(String username) {
-        QUser user = QUser.user;
+        QUser user = QUser.user1;
 
         Long userId = jpaQueryFactory
                 .select(user.userId)

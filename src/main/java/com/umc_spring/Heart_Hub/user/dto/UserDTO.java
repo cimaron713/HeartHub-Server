@@ -103,6 +103,15 @@ public class UserDTO {
         private String id;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MateMatchRequest{
+        private String currentUserId;
+        private String mateId;
+    }
+
     @Getter
     @NoArgsConstructor
     public static class GetUserInfoResponse {
