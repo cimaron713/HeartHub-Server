@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     public Boolean mateMatching(UserDTO.MateMatchRequest request){
         User currentUser = userRepository.findById(request.getCurrentUserId());
         User mateUser = userRepository.findById(request.getMateId());
-        if(mateUser.getUser().equals(null)){
+        if(mateUser.getUser().equals(null)){ // 현재 오류
             currentUser.setUser(mateUser);
             mateUser.setUser(currentUser);
             return true;
