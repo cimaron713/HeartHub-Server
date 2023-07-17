@@ -54,6 +54,8 @@ public class User implements UserDetails {
 
     private LocalDate birth;
 
+    private LocalDate dDay;
+
     @Column(nullable = false, length = 1)
     private String status;
 
