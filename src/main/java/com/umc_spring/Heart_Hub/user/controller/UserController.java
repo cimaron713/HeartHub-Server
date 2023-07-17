@@ -22,36 +22,53 @@ public class UserController {
         this.emailService = emailService;
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/join")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Boolean> signUp(@RequestBody UserDTO.SignUpRequest user) {
-        userService.register(user);
-        return ResponseEntity.ok(true);
+    public ResponseEntity<ApiResponse<Boolean>> signUp(@RequestBody UserDTO.SignUpRequest user) {
+        Boolean response = userService.register(user);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
     @PostMapping(value = "/check/email")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Boolean> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email){
-        return ResponseEntity.ok(userService.validateDuplicateEmail(email.getEmail()));
+    public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email){
+        Boolean response = userService.validateDuplicateEmail(email.getEmail());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping(value = "/check/id")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Boolean> duplicateIdCheck(@RequestBody UserDTO.DuplicateIdCheckRequest id){
-        return ResponseEntity.ok(userService.validateDuplicateEmail(id.getId()));
+    public ResponseEntity<ApiResponse<Boolean>> duplicateIdCheck(@RequestBody UserDTO.DuplicateIdCheckRequest id){
+        Boolean response = userService.validateDuplicateEmail(id.getId());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping(value = "/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserDTO.LoginResponse> login(@RequestBody UserDTO.LoginRequest user){
-        return ResponseEntity.ok(userService.login(user));
+    public ResponseEntity<ApiResponse<UserDTO.LoginResponse>> login(@RequestBody UserDTO.LoginRequest user){
+        UserDTO.LoginResponse response = userService.login(user);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping(value = "/email-verification")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception{
-        return ResponseEntity.ok(emailService.sendSimpleMessage(email.getEmail()));
+    public ResponseEntity<ApiResponse<String>> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception{
+        String response = emailService.sendVerificationCode(email.getEmail());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
+    @PostMapping(value = "/find/id")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ApiResponse<Boolean>> findId(@RequestBody UserDTO.findIdRequest request) throws Exception{
+        Boolean response = userService.findId(request);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+    }
+
+    @PostMapping(value = "/find/passwd")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ApiResponse<Boolean>> findPasswd(@RequestBody UserDTO.findPwRequest request) throws Exception{
+        Boolean response = userService.findPw(request);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+    }
 
 
     @PostMapping("/user/info")

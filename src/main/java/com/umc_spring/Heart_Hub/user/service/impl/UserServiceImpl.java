@@ -10,6 +10,7 @@ import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import com.umc_spring.Heart_Hub.user.service.UserService;
 import com.umc_spring.Heart_Hub.security.util.JwtUtils;
 import com.umc_spring.Heart_Hub.security.util.RedisUtils;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,6 +70,28 @@ public class UserServiceImpl implements UserService {
             return false; // 존재하지 않으면 false 반환
         }
     }
+
+    @Override
+    public Boolean findId(UserDTO.findIdRequest request) throws Exception{
+        User user = userRepository.findByEmail(request.getEmail());
+        emailService.sendId(request.getEmail(), user.getId());
+        return true;
+    }
+
+    @Override
+    public Boolean findPw(UserDTO.findPwRequest request) throws Exception{
+        User user = userRepository.findByEmail(request.getEmail());
+        if(user.getId().equals(request.getId())){
+            String code = emailService.sendTemporaryPasswd(request.getEmail());
+            user.setPassword(passwordEncoder.encode(code));
+            userRepository.save(user);
+            return true;
+        }
+        else{
+             return false;
+        }
+    }
+
     @Override
     public UserDTO.LoginResponse login(UserDTO.LoginRequest request){
         User user = userRepository.findById(request.getId());
@@ -87,20 +110,8 @@ public class UserServiceImpl implements UserService {
                 .build();
         return response;
     }
-    @Override
-    public String emailSend(String email) throws Exception {
-        String code = emailService.sendSimpleMessage(email);
-        return code;
-    }
-    @Override
-    public Boolean emailCodeCheck(String code, String userInput) {
-        if (code.equals(userInput)) {
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
+
+
 
     public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
         User user = userRepository.findByUserId(request.getUserId());
