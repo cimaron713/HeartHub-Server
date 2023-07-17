@@ -22,7 +22,7 @@ public class UserController {
         this.emailService = emailService;
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/join")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Boolean> signUp(@RequestBody UserDTO.SignUpRequest user) {
         userService.register(user);
@@ -49,9 +49,20 @@ public class UserController {
     @PostMapping(value = "/email-verification")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception{
-        return ResponseEntity.ok(emailService.sendSimpleMessage(email.getEmail()));
+        return ResponseEntity.ok(emailService.sendVerificationCode(email.getEmail()));
     }
 
+    @PostMapping(value = "/find/id")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Boolean> findId(@RequestBody UserDTO.findIdRequest request) throws Exception{
+        return ResponseEntity.ok(userService.findId(request));
+    }
+
+    @PostMapping(value = "/find/passwd")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Boolean> findPasswd(@RequestBody UserDTO.findPwRequest request) throws Exception{
+        return ResponseEntity.ok(userService.findPw(request));
+    }
 
 
     @PostMapping("/user/info")

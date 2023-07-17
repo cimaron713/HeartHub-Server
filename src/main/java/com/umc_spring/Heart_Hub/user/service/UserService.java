@@ -7,7 +7,7 @@ public interface UserService {
     Boolean validateDuplicateEmail(String email);
     Boolean validateDuplicateId(String id);
     UserDTO.LoginResponse login(UserDTO.LoginRequest request);
-    String emailSend(String email) throws Exception;
-    Boolean emailCodeCheck(String code, String userInput);
+    Boolean findId(UserDTO.findIdRequest request) throws Exception;
+    Boolean findPw(UserDTO.findPwRequest request) throws Exception;
     UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request);
 }
