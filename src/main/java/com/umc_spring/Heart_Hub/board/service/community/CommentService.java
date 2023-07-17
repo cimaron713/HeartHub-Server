@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
+import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.CommentDto;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
@@ -10,6 +11,7 @@ import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +25,14 @@ public class CommentService {
     해당 게시글 댓글 목록
      */
     @Transactional
-    public List<CommentDto.Response> findComments(Long id){
-        List<CommentDto.Response> comments = commentRepository.findAllByBoardId(id).stream().toList();
-        return comments;
+    public List<CommentDto.Response> findComments(BoardDto.BoardResponseDto boardResponse){
+        Board board = boardRepository.findById(boardResponse.getBoardId()).orElseThrow();
+        List<Comment> comments = commentRepository.findAllByBoard(board);
+        List<CommentDto.Response> commentResponse = new ArrayList<>();
+        for(Comment c : comments){
+            commentResponse.add(new CommentDto.Response(c));
+        }
+        return commentResponse;
     }
 
     /*
@@ -34,7 +41,7 @@ public class CommentService {
     @Transactional
     public Long createComment(Long id, CommentDto.Request commentRequest, String username){
         User user = userRepository.findByUsername(username);
-        Board board = boardRepository.findById(id).orElseThrow();
+        Board board = boardRepository.findById(commentRequest.getBoard().getBoardId()).orElseThrow();
         Comment newComment = Comment .builder()
                 .content(commentRequest.getContent())
                 .user(user)
