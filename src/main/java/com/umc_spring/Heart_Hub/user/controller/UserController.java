@@ -76,4 +76,10 @@ public class UserController {
         UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
+
+    @PostMapping("/set/mate")
+    public ResponseEntity<ApiResponse<Boolean>> mateMatchingUser(@RequestBody UserDTO.MateMatchRequest request){
+        Boolean response = userService.mateMatching(request);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+    }
 }

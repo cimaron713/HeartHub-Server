@@ -10,4 +10,5 @@ public interface UserService {
     Boolean findId(UserDTO.findIdRequest request) throws Exception;
     Boolean findPw(UserDTO.findPwRequest request) throws Exception;
     UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request);
+    Boolean mateMatching(UserDTO.MateMatchRequest request);
 }
