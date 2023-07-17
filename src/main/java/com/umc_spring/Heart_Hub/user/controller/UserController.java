@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping(value = "/check/id")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateIdCheck(@RequestBody UserDTO.DuplicateIdCheckRequest id){
-        Boolean response = userService.validateDuplicateEmail(id.getId());
+        Boolean response = userService.validateDuplicateId(id.getId());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
