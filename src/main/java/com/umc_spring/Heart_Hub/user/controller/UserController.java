@@ -37,9 +37,9 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
-    @PostMapping(value = "/check/id")
+    @PostMapping(value = "/check/username")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> duplicateIdCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id){
+    public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id){
         Boolean response = userService.validateDuplicateUsername(id.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
@@ -58,9 +58,9 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
-    @PostMapping(value = "/find/id")
+    @PostMapping(value = "/find/username")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> findId(@RequestBody UserDTO.FindUsernameRequest request) throws Exception{
+    public ResponseEntity<ApiResponse<Boolean>> findUsername(@RequestBody UserDTO.FindUsernameRequest request) throws Exception{
         Boolean response = userService.findUsername(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
