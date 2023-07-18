@@ -39,8 +39,8 @@ public class UserController {
 
     @PostMapping(value = "/check/id")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> duplicateIdCheck(@RequestBody UserDTO.DuplicateIdCheckRequest id){
-        Boolean response = userService.validateDuplicateId(id.getId());
+    public ResponseEntity<ApiResponse<Boolean>> duplicateIdCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id){
+        Boolean response = userService.validateDuplicateUsername(id.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
@@ -60,14 +60,14 @@ public class UserController {
 
     @PostMapping(value = "/find/id")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> findId(@RequestBody UserDTO.findIdRequest request) throws Exception{
-        Boolean response = userService.findId(request);
+    public ResponseEntity<ApiResponse<Boolean>> findId(@RequestBody UserDTO.FindUsernameRequest request) throws Exception{
+        Boolean response = userService.findUsername(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping(value = "/find/passwd")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> findPasswd(@RequestBody UserDTO.findPwRequest request) throws Exception{
+    public ResponseEntity<ApiResponse<Boolean>> findPasswd(@RequestBody UserDTO.FindPwRequest request) throws Exception{
         Boolean response = userService.findPw(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }

@@ -62,8 +62,8 @@ public class EmailServiceImpl implements EmailService {
         return message;
     }
 
-    public MimeMessage createIdMessage(String to, String id)throws Exception{
-        LOGGER.info("[createMessage] 보내는 대상 {}, 아이디 {}", to, id);
+    public MimeMessage createUsernameMessage(String to, String username)throws Exception{
+        LOGGER.info("[createMessage] 보내는 대상 {}, 아이디 {}", to, username);
         MimeMessage  message = emailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, to);
         message.setSubject("아이디 입니다.");
@@ -78,7 +78,7 @@ public class EmailServiceImpl implements EmailService {
         msgg+= "<h3 style='color:blue;'>아이디 입니다</h3>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "CODE : <strong>";
-        msgg+= id+"</strong><div><br/> ";
+        msgg+= username+"</strong><div><br/> ";
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
         message.setFrom(new InternetAddress("jinuktest208@gmail.com","test"));
@@ -121,8 +121,8 @@ public class EmailServiceImpl implements EmailService {
         return code;
     }
     @Override
-    public void sendId(String to, String id) throws Exception{
-        MimeMessage message = createIdMessage(to, id);
+    public void sendUsername(String to, String username) throws Exception{
+        MimeMessage message = createUsernameMessage(to, username);
         try{
             emailSender.send(message);
         }catch(MailException es){

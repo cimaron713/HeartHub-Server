@@ -18,7 +18,6 @@ public class UserDTO {
     @NoArgsConstructor
     public static class SignUpRequest{
         private String username;
-        private String id;
         private String password;
         private String gender;
         private String email;
@@ -32,11 +31,11 @@ public class UserDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class LoginRequest{
-        private String id;
+        private String username;
         private String password;
 
         public UsernamePasswordAuthenticationToken toAuthentication(){
-            return new UsernamePasswordAuthenticationToken(this.id, this.password);
+            return new UsernamePasswordAuthenticationToken(this.username, this.password);
         }
     }
 
@@ -52,8 +51,8 @@ public class UserDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class DuplicateIdCheckRequest{
-        private String id;
+    public static class DuplicateUsernameCheckRequest{
+        private String username;
     }
     @Data
     @Builder
@@ -90,7 +89,7 @@ public class UserDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class findIdRequest{
+    public static class FindUsernameRequest {
         private String email;
     }
 
@@ -98,9 +97,9 @@ public class UserDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class findPwRequest{
+    public static class FindPwRequest{
         private String email;
-        private String id;
+        private String username;
     }
 
     @Data
@@ -108,8 +107,8 @@ public class UserDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MateMatchRequest{
-        private String currentUserId;
-        private String mateId;
+        private String currentUsername;
+        private String mateName;
     }
 
     @Getter
