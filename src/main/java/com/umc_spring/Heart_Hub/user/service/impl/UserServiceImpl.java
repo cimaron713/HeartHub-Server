@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
     public Boolean mateMatching(UserDTO.MateMatchRequest request){
         User currentUser = userRepository.findByUsername(request.getCurrentUsername());
         User mateUser = userRepository.findByUsername(request.getMateName());
-        if(mateUser.getUser().equals(null)){ // 현재 오류
+        if(currentUser.getUser() == null){
             currentUser.setUser(mateUser);
             mateUser.setUser(currentUser);
             return true;
