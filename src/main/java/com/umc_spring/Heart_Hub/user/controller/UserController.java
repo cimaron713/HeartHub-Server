@@ -85,6 +85,11 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
+    @PostMapping("/change/passwd")
+    public ResponseEntity<ApiResponse<Boolean>> changePassword(@RequestBody UserDTO.ChangePasswordRequest request){
+        Boolean response = userService.changePassword(request);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Change Success!"));
+    }
     @GetMapping("/dDay")
     public ResponseEntity<ApiResponse<UserDTO.GetDday>> getDday(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

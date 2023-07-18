@@ -39,19 +39,19 @@ public final class JwtUtils {
                 .getBody();
     }
 
-    public String getUserEmail(String token){
-        return extractAllClaims(token).get("userEmail", String.class);
+    public String getUsername(String token){
+        return extractAllClaims(token).get("username", String.class);
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmail(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
 
-    public String createToken(String email, long expireTime) {
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("userEmail", email);
+    public String createToken(String username, long expireTime) {
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("username", username);
         String jwt = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

@@ -143,4 +143,21 @@ public class UserServiceImpl implements UserService {
         return dDay;
     }
 
+    @Override
+    public Boolean changePassword(UserDTO.ChangePasswordRequest request){
+        String username = jwtUtils.getUsername(request.getToken());
+        User user = userRepository.findByUsername(username);
+        System.out.println(username);
+        System.out.println(user);
+
+        if(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(request.getChangePassword()));
+            userRepository.save(user);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

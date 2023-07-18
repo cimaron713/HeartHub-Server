@@ -11,6 +11,7 @@ public interface UserService {
     Boolean findPw(UserDTO.FindPwRequest request) throws Exception;
     UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request);
     Boolean mateMatching(UserDTO.MateMatchRequest request);
+    Boolean changePassword(UserDTO.ChangePasswordRequest request);
 
     UserDTO.GetDday getDday(String username);
 }

@@ -111,6 +111,15 @@ public class UserDTO {
         private String mateName;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ChangePasswordRequest {
+        private String token;
+        private String currentPassword;
+        private String changePassword;
+    }
     @Getter
     @NoArgsConstructor
     public static class GetUserInfoResponse {
