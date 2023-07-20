@@ -13,6 +13,7 @@ import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,8 +86,20 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
     }
 
     @Override
-    public List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt) {
-        List<CoupleBoard> boardList = coupleBoardRepository.findAllByCreatedDate(createAt);
+    public List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt, String username) {
+        List<CoupleBoard> boardList;
+        User user  = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        User mate = user.getUser();
+        if(mate == null) {
+            boardList = coupleBoardRepository.findAllByUserAndCreatedDate(user, createAt);
+        } else {
+            boardList = coupleBoardRepository.findAllByUserOrUserAndCreatedDate(user, mate, createAt);
+        }
+
         List<CoupleBoardDto.Response> resultList = new ArrayList<>();
 
         for(CoupleBoard board : boardList) {

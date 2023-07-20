@@ -29,7 +29,7 @@ public interface CoupleBoardService {
      * @param createAt
      * @return
      */
-    List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt);
+    List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt, String username);
 
     /**
      * 게시물 수정

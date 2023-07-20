@@ -52,7 +52,8 @@ public class CoupleBoardController {
      */
     @GetMapping("/couple-board/{createAt}")
     public ResponseEntity<List<CoupleBoardDto.Response>> getBoardsByDate(@PathVariable LocalDate createAt, Authentication authentication) {
-        List<CoupleBoardDto.Response> boardList = coupleBoardService.searchBoardList(createAt);
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        List<CoupleBoardDto.Response> boardList = coupleBoardService.searchBoardList(createAt, username);
         Collections.sort(boardList, Comparator.comparing(CoupleBoardDto.Response::getCreateAt));
 
         return ResponseEntity.ok(boardList);
