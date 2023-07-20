@@ -37,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
-    @PostMapping(value = "/check/username")
+    @GetMapping(value = "/check/username")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id){
         Boolean response = userService.validateDuplicateUsername(id.getUsername());
@@ -51,7 +51,7 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
-    @PostMapping(value = "/email-verification")
+    @GetMapping(value = "/email-verification")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<String>> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception{
         String response = emailService.sendVerificationCode(email.getEmail());
