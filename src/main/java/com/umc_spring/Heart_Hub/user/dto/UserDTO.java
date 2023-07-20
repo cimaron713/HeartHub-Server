@@ -154,4 +154,18 @@ public class UserDTO {
             this.dDay = dDay;
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class MateExistenceDto {
+        private Boolean hasMate;
+
+        public MateExistenceDto(Boolean hasMate) {
+            this.hasMate = hasMate;
+        }
+
+        public Boolean getHasMate() {
+            return hasMate;
+        }
+    }
 }

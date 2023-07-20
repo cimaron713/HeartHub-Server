@@ -12,6 +12,7 @@ public interface UserService {
     UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request);
     Boolean mateMatching(UserDTO.MateMatchRequest request);
     Boolean changePassword(UserDTO.ChangePasswordRequest request);
-
     UserDTO.GetDday getDday(String username);
+    UserDTO.MateExistenceDto checkMateExist(String username);
+
 }

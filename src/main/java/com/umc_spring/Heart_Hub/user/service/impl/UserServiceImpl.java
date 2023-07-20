@@ -160,4 +160,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserDTO.MateExistenceDto checkMateExist(String username) {
+        User user = userRepository.findByUsername(username);
+        Boolean hasMate = user.getUser() != null;
+        return new UserDTO.MateExistenceDto(hasMate);
+    }
+
 }

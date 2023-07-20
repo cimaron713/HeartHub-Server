@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,6 +99,13 @@ public class UserController {
 //        UserDTO.GetDday dDay = userService.getDday("user3");
 
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(dDay, "Success Get D-Day!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(dDay, "Get D-Day Success!"));
+    }
+
+    @GetMapping("/exist-mate")
+    public ResponseEntity<ApiResponse<UserDTO.MateExistenceDto>> checkMateExist(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDTO.MateExistenceDto mateExist = userService.checkMateExist(userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(mateExist, "Get hasMate Success!"));
     }
 }
