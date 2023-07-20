@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.coupleBoard.controller;
 
+import com.google.protobuf.Api;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
@@ -10,6 +11,7 @@ import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -57,12 +59,12 @@ public class CoupleBoardController {
      * 게시물 조회 (날짜에 따른)
      */
     @GetMapping("/couple-board/{createAt}")
-    public ResponseEntity<List<CoupleBoardDto.Response>> getBoardsByDate(@PathVariable LocalDate createAt, Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<CoupleBoardDto.Response>>> getBoardsByDate(@PathVariable LocalDate createAt, Authentication authentication) {
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         List<CoupleBoardDto.Response> boardList = coupleBoardService.searchBoardList(createAt, username);
         Collections.sort(boardList, Comparator.comparing(CoupleBoardDto.Response::getCreateAt));
 
-        return ResponseEntity.ok(boardList);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardList, "Search Couple board Success!"));
     }
 
     /**
@@ -80,7 +82,7 @@ public class CoupleBoardController {
 
         coupleBoardService.updateBoard(postId, requestDto);
 
-        return ResponseEntity.ok(ApiResponse.createSuccess(postId.toString(), "Update Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), "Update Success!"));
     }
 
     /**
@@ -97,29 +99,29 @@ public class CoupleBoardController {
 
         coupleBoardService.deleteBoard(postId);
 
-        return ResponseEntity.ok(ApiResponse.createSuccess(postId.toString(), "Delete Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), "Delete Success!"));
     }
 
     /**
      * 자신이 스크랩한 게시물 조회
      */
     @GetMapping("/scrap-board")
-    public ResponseEntity<List<CoupleBoardDto.ScrapResponse>> scrapBoard(Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<CoupleBoardDto.ScrapResponse>>> scrapBoard(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<CoupleBoardDto.ScrapResponse> scrapBoardList = boardHeartService.getHeartBoards(userDetails.getUsername());
 
-        return ResponseEntity.ok(scrapBoardList);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, "Search Scrap board Success!"));
     }
 
     /**
      * 연동한 계정이 스크랩한 게시물 조회
      */
     @GetMapping("/scrap-mate-board")
-    public ResponseEntity<List<CoupleBoardDto.ScrapResponse>> scrapMateBoard(Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<CoupleBoardDto.ScrapResponse>>> scrapMateBoard(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<CoupleBoardDto.ScrapResponse> scrapBoardList = boardHeartService.getHeartMateBoards(userDetails.getUsername());
 
-        return ResponseEntity.ok(scrapBoardList);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, "Search Mate's Scrap board Success!"));
     }
 
 }
