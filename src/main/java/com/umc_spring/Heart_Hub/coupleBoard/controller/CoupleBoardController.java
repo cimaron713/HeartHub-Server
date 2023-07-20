@@ -1,9 +1,13 @@
 package com.umc_spring.Heart_Hub.coupleBoard.controller;
 
+import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
+import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardImageUploadDto;
 import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
+import com.umc_spring.Heart_Hub.user.model.User;
+import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,6 +34,8 @@ public class CoupleBoardController {
     private static final Logger logger = LoggerFactory.getLogger(CoupleBoardController.class);
 
     private final CoupleBoardService coupleBoardService;
+    private final BoardHeartService boardHeartService;
+    private final UserRepository userRepository;
 
     /**
      * 게시물 작성
@@ -92,6 +98,28 @@ public class CoupleBoardController {
         coupleBoardService.deleteBoard(postId);
 
         return ResponseEntity.ok(ApiResponse.createSuccess(postId.toString(), "Delete Success!"));
+    }
+
+    /**
+     * 자신이 스크랩한 게시물 조회
+     */
+    @GetMapping("/scrap-board")
+    public ResponseEntity<List<CoupleBoardDto.ScrapResponse>> scrapBoard(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<CoupleBoardDto.ScrapResponse> scrapBoardList = boardHeartService.getHeartBoards(userDetails.getUsername());
+
+        return ResponseEntity.ok(scrapBoardList);
+    }
+
+    /**
+     * 연동한 계정이 스크랩한 게시물 조회
+     */
+    @GetMapping("/scrap-mate-board")
+    public ResponseEntity<List<CoupleBoardDto.ScrapResponse>> scrapMateBoard(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<CoupleBoardDto.ScrapResponse> scrapBoardList = boardHeartService.getHeartMateBoards(userDetails.getUsername());
+
+        return ResponseEntity.ok(scrapBoardList);
     }
 
 }

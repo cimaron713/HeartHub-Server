@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface BoardHeartRepository extends JpaRepository<BoardHeart, Long> {
     Optional<BoardHeart> findByUserAndBoard(User user, Board board);
     List<BoardHeart> findAllByUserAndBoard_User(User user, User blockedUser);
+    List<BoardHeart> findByUser(User user);
 }
