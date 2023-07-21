@@ -11,6 +11,7 @@ import com.umc_spring.Heart_Hub.user.service.UserService;
 import com.umc_spring.Heart_Hub.security.util.JwtUtils;
 import com.umc_spring.Heart_Hub.security.util.RedisUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -96,7 +98,7 @@ public class UserServiceImpl implements UserService {
         UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-        String accessToken = jwtUtils.createToken(user.getUsername(), JwtUtils.TOKEN_VALID_TIME);
+        String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
         String refreshToken = redisUtils.getData("RT:"+user.getUsername());
 
         if(refreshToken == null) {
@@ -145,10 +147,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean changePassword(UserDTO.ChangePasswordRequest request){
-        String username = jwtUtils.getUsername(request.getToken());
-        User user = userRepository.findByUsername(username);
-        System.out.println(username);
-        System.out.println(user);
+        String email = jwtUtils.getEmailInToken(request.getToken());
+        User user = userRepository.findByEmail(email);
+        log.info("email : "+email);
+        log.info("user : "+user);
 
         if(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(request.getChangePassword()));

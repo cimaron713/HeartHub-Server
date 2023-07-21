@@ -1,5 +1,7 @@
 package com.umc_spring.Heart_Hub.security.util;
 
+import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -7,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +21,7 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public final class JwtUtils {
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -39,19 +43,27 @@ public final class JwtUtils {
                 .getBody();
     }
 
-    public String getUsername(String token){
-        return extractAllClaims(token).get("username", String.class);
+//    public String getUsername(String token){
+//        return extractAllClaims(token).get("username", String.class);
+//    }
+
+    public String getEmailInToken(String token) {
+        return extractAllClaims(token).get("email", String.class);
     }
 
+    // 권한정보 획득
+    // Spring Security 인증과정에서 권한 확인을 위해 사용
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getEmailInToken(token));
+        log.info("new UsernamePasswordAuthenticationToken(userDetails, \"\", userDetails.getAuthorities() : " + new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities()));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-
-    public String createToken(String username, long expireTime) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("username", username);
+    // username(id)를 claim에 넣어서 사용할경우 보안상 좋지 않음 대체할것이 필요
+    // username -> email 으로 변경
+    public String createToken(String email, long expireTime) {
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("email", email);
         String jwt = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -62,8 +74,7 @@ public final class JwtUtils {
         return jwt;
     }
 
-
-
+    //
     public String resolveToken(HttpServletRequest request){
         String token = request.getHeader("Authorization");
         if(token != null){
@@ -79,7 +90,7 @@ public final class JwtUtils {
             return !claims.getBody().getExpiration().before(new Date());
 
         } catch (Exception e){
-            return false;
+            throw new CustomException(ErrorCode.JWT_EXPIRED);
         }
     }
 
