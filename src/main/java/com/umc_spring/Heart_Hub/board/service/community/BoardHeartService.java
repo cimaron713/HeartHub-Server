@@ -41,7 +41,9 @@ public class BoardHeartService {
     }
 
     public List<CoupleBoardDto.ScrapResponse> getHeartMateBoards(String username) {
-        User mate = userRepository.findByUser(username);
+//        User mate = userRepository.findByUser(username);
+        User mate = userRepository.findByUsername(username);
+
         return getHeartBoardsByUsername(mate.getUsername());
     }
 
