@@ -45,6 +45,11 @@ public class UserServiceImpl implements UserService {
                 .status("T")
                 .build();
         userRepository.save(user);
+        UserDTO.MateMatchRequest request = UserDTO.MateMatchRequest.builder()
+                .mateName(signUpRequest.getMate())
+                .currentUsername(signUpRequest.getUsername())
+                .build();
+        mateMatching(request);
         return true;
     }
 
@@ -83,7 +88,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(request.getEmail());
         if(user.getUsername().equals(request.getUsername())){
             String code = emailService.sendTemporaryPasswd(request.getEmail());
-            user.setPassword(passwordEncoder.encode(code));
+            user.changePassword(passwordEncoder.encode(code));
             userRepository.save(user);
             return true;
         }
@@ -124,13 +129,17 @@ public class UserServiceImpl implements UserService {
     public Boolean mateMatching(UserDTO.MateMatchRequest request){
         User currentUser = userRepository.findByUsername(request.getCurrentUsername());
         User mateUser = userRepository.findByUsername(request.getMateName());
-        if(currentUser.getUser() == null){
-            currentUser.setUser(mateUser);
-            mateUser.setUser(currentUser);
-            return true;
-        }
-        else{
+        if(mateUser == null){
             return false;
+        }
+        else {
+            if (currentUser.getUser() == null && mateUser.getUser() == null) {
+                currentUser.mateMatching(mateUser);
+                mateUser.mateMatching(currentUser);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -153,7 +162,7 @@ public class UserServiceImpl implements UserService {
         log.info("user : "+user);
 
         if(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
-            user.setPassword(passwordEncoder.encode(request.getChangePassword()));
+            user.changePassword(passwordEncoder.encode(request.getChangePassword()));
             userRepository.save(user);
             return true;
         }

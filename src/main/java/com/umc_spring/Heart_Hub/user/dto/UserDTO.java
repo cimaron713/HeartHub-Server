@@ -23,6 +23,7 @@ public class UserDTO {
         private String email;
         private String nickname;
         private String marketingStatus;
+        private String mate;
         private LocalDate birth;
     }
 

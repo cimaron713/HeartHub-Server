@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -104,4 +103,11 @@ public class User implements UserDetails {
         return true;
     }
 
+    public void changePassword(String password){
+        this.password = password;
+    }
+
+    public void mateMatching(User mate){
+        this.user = mate;
+    }
 }
