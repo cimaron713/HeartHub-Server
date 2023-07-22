@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(request.getEmail());
         if(user.getUsername().equals(request.getUsername())){
             String code = emailService.sendTemporaryPasswd(request.getEmail());
-            user.setPassword(passwordEncoder.encode(code));
+            user.changePassword(passwordEncoder.encode(code));
             userRepository.save(user);
             return true;
         }
@@ -125,8 +125,8 @@ public class UserServiceImpl implements UserService {
         User currentUser = userRepository.findByUsername(request.getCurrentUsername());
         User mateUser = userRepository.findByUsername(request.getMateName());
         if(currentUser.getUser() == null){
-            currentUser.setUser(mateUser);
-            mateUser.setUser(currentUser);
+            currentUser.mateMatching(mateUser);
+            mateUser.mateMatching(currentUser);
             return true;
         }
         else{
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
         log.info("user : "+user);
 
         if(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
-            user.setPassword(passwordEncoder.encode(request.getChangePassword()));
+            user.changePassword(passwordEncoder.encode(request.getChangePassword()));
             userRepository.save(user);
             return true;
         }
