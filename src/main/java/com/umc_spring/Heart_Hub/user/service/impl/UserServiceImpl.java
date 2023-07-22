@@ -45,6 +45,11 @@ public class UserServiceImpl implements UserService {
                 .status("T")
                 .build();
         userRepository.save(user);
+        UserDTO.MateMatchRequest request = UserDTO.MateMatchRequest.builder()
+                .mateName(signUpRequest.getMate())
+                .currentUsername(signUpRequest.getUsername())
+                .build();
+        mateMatching(request);
         return true;
     }
 
@@ -124,13 +129,17 @@ public class UserServiceImpl implements UserService {
     public Boolean mateMatching(UserDTO.MateMatchRequest request){
         User currentUser = userRepository.findByUsername(request.getCurrentUsername());
         User mateUser = userRepository.findByUsername(request.getMateName());
-        if(currentUser.getUser() == null){
-            currentUser.mateMatching(mateUser);
-            mateUser.mateMatching(currentUser);
-            return true;
-        }
-        else{
+        if(mateUser == null){
             return false;
+        }
+        else {
+            if (currentUser.getUser() == null && mateUser.getUser() == null) {
+                currentUser.mateMatching(mateUser);
+                mateUser.mateMatching(currentUser);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
