@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtils jwtUtils;
     private final RedisUtils redisUtils;
     private final EmailService emailService;
@@ -95,13 +98,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO.LoginResponse login(UserDTO.LoginRequest request){
         User user = userRepository.findByUsername(request.getUsername());
-        UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        if(user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
+        boolean isMatch = bCryptPasswordEncoder.matches(encodedPassword, encodedPassword);
+
+        if(!isMatch) {
+            throw new CustomException(ErrorCode.LOGIN_FAILED);
+        }
 
         String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
         String refreshToken = redisUtils.getData("RT:"+user.getUsername());
 
         if(refreshToken == null) {
+            // refreshToken이 존재하지 않는다면 설정해줘야함
             refreshToken = jwtUtils.createToken(user.getUsername(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
             redisUtils.setDataExpire("RT:" + user.getUsername(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
         }

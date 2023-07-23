@@ -90,6 +90,11 @@ public final class JwtUtils {
             return !claims.getBody().getExpiration().before(new Date());
 
         } catch (Exception e){
+            /**
+             * accessToken의 만료의 경우 customError를 던질게아니라 아래 로직에 따라가야됨.
+             * 1. accessToken이 만료된 경우 refreshToken을 이용해서 accessToken을 갱신해야됨.
+             * 2. refreshToken도 만료된 경우 refreshToken의 갱신이 필요
+             */
             throw new CustomException(ErrorCode.JWT_EXPIRED);
         }
     }
