@@ -4,7 +4,7 @@ import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
-import com.umc_spring.Heart_Hub.user.model.Role;
+import com.umc_spring.Heart_Hub.user.model.enums.Role;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import com.umc_spring.Heart_Hub.user.service.UserService;
