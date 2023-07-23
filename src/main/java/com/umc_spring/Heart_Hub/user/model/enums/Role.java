@@ -1,4 +1,4 @@
-package com.umc_spring.Heart_Hub.user.model;
+package com.umc_spring.Heart_Hub.user.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
