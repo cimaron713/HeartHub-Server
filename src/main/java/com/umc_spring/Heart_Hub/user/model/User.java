@@ -1,7 +1,9 @@
 package com.umc_spring.Heart_Hub.user.model;
 
+import com.umc_spring.Heart_Hub.Report.model.enums.ReportStatus;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
+import com.umc_spring.Heart_Hub.user.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +26,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
     @Column(nullable = false, length = 45)
     private String username;
 
@@ -57,6 +60,9 @@ public class User implements UserDetails {
     @OneToOne
     @JoinColumn(name = "mate")
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private ReportStatus reportedStatus = ReportStatus.NORMAL;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Builder.Default
@@ -109,5 +115,17 @@ public class User implements UserDetails {
 
     public void mateMatching(User mate){
         this.user = mate;
+    }
+
+    public void warnUser() {
+        this.reportedStatus = ReportStatus.WARNED;
+    }
+
+    public void deleteUserContents() {
+        this.reportedStatus = ReportStatus.CONTENT_DELETED;
+    }
+
+    public void suspendUser() {
+        this.reportedStatus = ReportStatus.ACCOUNT_SUSPENDED;
     }
 }

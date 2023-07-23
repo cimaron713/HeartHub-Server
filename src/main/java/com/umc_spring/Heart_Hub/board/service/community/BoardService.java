@@ -81,4 +81,12 @@ public class BoardService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
+
+    /**
+     * 사용자가 작성한 게시물 모두 삭제하기
+     */
+    public void delAllBoard(User user) {
+        List<Board> boardList = boardRepository.findAllByUser(user);
+        boardRepository.deleteAll(boardList);
+    }
 }
