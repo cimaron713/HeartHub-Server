@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.board.model.community;
 
+import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,9 +36,16 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
+    //이미지
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    private List<BoardImg> community = new ArrayList<>();
+
     @Builder
     public Board(String content, User user){
         this.content = content;
         this.user = user;
+    }
+    public void update(String content){
+        this.content = content;
     }
 }

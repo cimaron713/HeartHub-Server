@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.board.dto.community;
 
 import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.board.model.community.BoardImg;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.Builder;
@@ -35,6 +36,7 @@ public class BoardDto {
         private User user;
 
         private List<CommentDto.Response> commentList;
+        private List<String> communityImgUrl;
 
         private LocalDateTime createdDate;
         @Builder
@@ -43,7 +45,8 @@ public class BoardDto {
             this.content = board.getContent();
             this.status = board.getStatus();
             this.user = board.getUser();
-            this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());;
+            this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());
+            this.communityImgUrl = board.getCommunity().stream().map(BoardImg::getPostImgUrl).collect(Collectors.toList());
         }
     }
 

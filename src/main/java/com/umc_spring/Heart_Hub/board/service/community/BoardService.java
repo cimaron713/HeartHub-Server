@@ -1,21 +1,32 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardImageUploadDto;
 import com.umc_spring.Heart_Hub.board.model.community.BlockedList;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.board.model.community.BoardImg;
 import com.umc_spring.Heart_Hub.board.repository.community.BlockedListRepository;
+import com.umc_spring.Heart_Hub.board.repository.community.BoardImgRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
+import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,17 +34,41 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final BlockedListRepository blockedListRepository;
+    private final BoardImgRepository boardImgRepository;
+
+    @Value("${file.communityImgPath}")
+    private String communityImgFolder;
     //등록
     @Transactional
-    public Long boardRegister(BoardDto.BoardRequestDto params, String userName){
+    public Long boardRegister(BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
         User user = userRepository.findByUsername(userName);
+        if(user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
         Board boardRegister = Board.builder()
                 .user(user)
                 .content(params.getContent())
                 .build();
         boardRepository.save(boardRegister);
-        Long boardId = boardRegister.getBoardId();
-        return boardId;
+        if(boardImageUploadDto.getCommunityFiles() != null && !boardImageUploadDto.getCommunityFiles().isEmpty()){
+            for(MultipartFile file : boardImageUploadDto.getCommunityFiles()){
+                UUID uuid = UUID.randomUUID();
+                String communityImgFileName = uuid+"_"+file.getOriginalFilename();
+                File imgPath = new File(communityImgFolder+communityImgFileName);
+                try{
+                    file.transferTo(imgPath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                BoardImg boardImg = BoardImg.builder()
+                        .postImgUrl("/boardImgs/"+communityImgFileName)
+                        .board(boardRegister)
+                        .build();
+                boardImgRepository.save(boardImg);
+            }
+        }
+
+        return boardRegister.getBoardId();
     }
 
     /*
@@ -56,11 +91,24 @@ public class BoardService {
         return responseList;
     }
 
+    /**
+     * 특정 게시물 조회
+     */
     @Transactional
     public BoardDto.BoardResponseDto findBoard(Long id){
         Board findBoard = boardRepository.findById(id).orElseThrow();
         BoardDto.BoardResponseDto boardResponseDto = new BoardDto.BoardResponseDto(findBoard);
         return boardResponseDto;
+    }
+
+    /**
+     * 게시글 수정
+     */
+    @Transactional
+    public Long updateBoard(Long id, BoardDto.BoardRequestDto requestDto){
+        Board board = boardRepository.findById(id).orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+        board.update(requestDto.getContent());
+        return id;
     }
 
     /*
