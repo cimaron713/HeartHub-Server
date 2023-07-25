@@ -60,7 +60,9 @@ public class UserDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class LoginResponse{
-        private String token;
+        private String accessToken;
+        private String refreshToken;
+        private Long accessTokenExpirationTime;
     }
 
     @Data
@@ -168,5 +170,23 @@ public class UserDTO {
         public Boolean getHasMate() {
             return hasMate;
         }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ReissueReqDto {
+        private String refreshToken;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ReissueRespDto {
+        private String newAccessToken;
+        private String newRefreshToken;
+        private Long accessTokenExpirationTime;
     }
 }

@@ -13,8 +13,6 @@ import com.umc_spring.Heart_Hub.security.util.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
 
     @Override
-    public Boolean register(UserDTO.SignUpRequest signUpRequest){
+    public Boolean register(UserDTO.SignUpRequest signUpRequest) {
         User user = User.builder()
                 .username(signUpRequest.getUsername())
                 .email(signUpRequest.getEmail())
@@ -59,78 +57,78 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean validateDuplicateEmail(String email) {
         User findUser = userRepository.findByEmail(email);
-        if(findUser != null) {
+        if (findUser != null) {
             return true; // 존재한다면 true 반환
-        }
-        else{
+        } else {
             return false; // 존재하지 않으면 false 반환
         }
     }
 
 
     @Override
-    public Boolean validateDuplicateUsername(String username){
+    public Boolean validateDuplicateUsername(String username) {
         User findUser = userRepository.findByUsername(username);
-        if(findUser != null) {
+        if (findUser != null) {
             return true; // 존재한다면 true 반환
-        }
-        else {
+        } else {
             return false; // 존재하지 않으면 false 반환
         }
     }
 
     @Override
-    public Boolean findUsername(UserDTO.FindUsernameRequest request) throws Exception{
+    public Boolean findUsername(UserDTO.FindUsernameRequest request) throws Exception {
         User user = userRepository.findByEmail(request.getEmail());
         emailService.sendUsername(request.getEmail(), user.getUsername());
         return true;
     }
 
     @Override
-    public Boolean findPw(UserDTO.FindPwRequest request) throws Exception{
+    public Boolean findPw(UserDTO.FindPwRequest request) throws Exception {
         User user = userRepository.findByEmail(request.getEmail());
-        if(user.getUsername().equals(request.getUsername())){
+        if (user.getUsername().equals(request.getUsername())) {
             String code = emailService.sendTemporaryPasswd(request.getEmail());
             user.changePassword(passwordEncoder.encode(code));
             userRepository.save(user);
             return true;
-        }
-        else{
-             return false;
+        } else {
+            return false;
         }
     }
 
     @Override
-    public UserDTO.LoginResponse login(UserDTO.LoginRequest request){
+    public UserDTO.LoginResponse login(UserDTO.LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername());
-        if(user == null) {
+        if (user == null) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
         boolean isMatch = bCryptPasswordEncoder.matches(encodedPassword, encodedPassword);
 
-        if(!isMatch) {
+        if (!isMatch) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
         String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
-        String refreshToken = redisUtils.getData("RT:"+user.getUsername());
+        String refreshToken = redisUtils.getData("RT:" + user.getEmail());
 
-        if(refreshToken == null) {
+        if (refreshToken == null) {
             // refreshToken이 존재하지 않는다면 설정해줘야함
-            refreshToken = jwtUtils.createToken(user.getUsername(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
-            redisUtils.setDataExpire("RT:" + user.getUsername(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            refreshToken = jwtUtils.createToken(user.getEmail(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            redisUtils.setDataExpire("RT:" + user.getEmail(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
         }
+
         UserDTO.LoginResponse response = UserDTO.LoginResponse.builder()
-                .token(accessToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpirationTime(JwtUtils.TOKEN_VALID_TIME)
                 .build();
         return response;
     }
 
     public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
         User user = userRepository.findByUserId(request.getUserId());
-        if(user == null) {
+        if (user == null) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -138,13 +136,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean mateMatching(UserDTO.MateMatchRequest request){
+    public Boolean mateMatching(UserDTO.MateMatchRequest request) {
         User currentUser = userRepository.findByUsername(request.getCurrentUsername());
         User mateUser = userRepository.findByUsername(request.getMateName());
-        if(mateUser == null){
+        if (mateUser == null) {
             return false;
-        }
-        else {
+        } else {
             if (currentUser.getUser() == null && mateUser.getUser() == null) {
                 currentUser.mateMatching(mateUser);
                 mateUser.mateMatching(currentUser);
@@ -167,18 +164,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean changePassword(UserDTO.ChangePasswordRequest request){
+    public Boolean changePassword(UserDTO.ChangePasswordRequest request) {
         String email = jwtUtils.getEmailInToken(request.getToken());
         User user = userRepository.findByEmail(email);
-        log.info("email : "+email);
-        log.info("user : "+user);
+        log.info("email : " + email);
+        log.info("user : " + user);
 
-        if(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
+        if (passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             user.changePassword(passwordEncoder.encode(request.getChangePassword()));
             userRepository.save(user);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -188,6 +184,31 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
         Boolean hasMate = user.getUser() != null;
         return new UserDTO.MateExistenceDto(hasMate);
+    }
+
+    @Override
+    public UserDTO.ReissueRespDto reissue(String refreshToken) {
+        /**
+         * 여기에 resolveToken 넣어야할지도,,,,,,, 내일 해봐야지
+         */
+        jwtUtils.validateToken(refreshToken);
+
+        String email = jwtUtils.getEmailInToken(refreshToken);
+        String savedRefreshToken = redisUtils.getData("RT:" + email);
+
+        if (refreshToken.isEmpty() || !refreshToken.equals(savedRefreshToken)) {
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        } else {
+            String newAccessToken = jwtUtils.createToken(email, JwtUtils.TOKEN_VALID_TIME);
+            String newRefreshToken = jwtUtils.createToken(email, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            redisUtils.setDataExpire("RT" + email, newRefreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+
+            return UserDTO.ReissueRespDto.builder()
+                    .newAccessToken(newAccessToken)
+                    .newRefreshToken(newRefreshToken)
+                    .accessTokenExpirationTime(JwtUtils.TOKEN_VALID_TIME)
+                    .build();
+        }
     }
 
 }

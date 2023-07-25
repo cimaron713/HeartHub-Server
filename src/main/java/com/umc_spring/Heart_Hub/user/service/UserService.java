@@ -15,4 +15,6 @@ public interface UserService {
     UserDTO.GetDday getDday(String username);
     UserDTO.MateExistenceDto checkMateExist(String username);
 
+    UserDTO.ReissueRespDto reissue(String refreshToken);
+
 }

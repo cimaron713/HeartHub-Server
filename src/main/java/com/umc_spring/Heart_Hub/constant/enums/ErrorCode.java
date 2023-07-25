@@ -11,10 +11,13 @@ public enum ErrorCode {
     // 404 : NOT FOUND
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자 정보를 찾을 수 없습니다."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시물 정보를 찾을 수 없습니다."),
-
     MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "미션 정보를 찾을 수 없습니다."),
     USER_MISSION_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "UMS 정보를 찾을 수 없습니다."),
-    JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    EXPIRED_JWT(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    MALFORMED_JWT(HttpStatus.BAD_REQUEST, "잘못된 JWT 서명입니다."),
+    UNSUPPORTED_JWT(HttpStatus.BAD_REQUEST, "지원되지 않는 JWT 토큰입니다."),
+    BAD_JWT(HttpStatus.BAD_REQUEST, "JWT 토큰이 잘못되었습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "Refresh Token이 일치하지 않습니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "로그인에 실패하였습니다."),
     ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "이미 신고한 사용자입니다.");
 
