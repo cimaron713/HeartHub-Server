@@ -41,7 +41,8 @@ public class Board extends BaseEntity {
     private List<BoardImg> community = new ArrayList<>();
 
     @Builder
-    public Board(String content, User user){
+    public Board(String theme, String content, User user){
+        this.theme = theme;
         this.content = content;
         this.user = user;
     }

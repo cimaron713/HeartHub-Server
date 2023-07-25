@@ -20,21 +20,19 @@ public class BoardDto {
     @NoArgsConstructor
     public static class BoardRequestDto{
         private String content;
+        private String theme;
         private User user;
         private Board board;
         private List<Comment> commentList;
-
     }
+
     @Getter
     public static class BoardResponseDto {
         private final Long boardId;
-
         private String content;
-
         private String status;
-
+        private String theme;
         private User user;
-
         private List<CommentDto.Response> commentList;
         private List<String> communityImgUrl;
 
@@ -44,6 +42,7 @@ public class BoardDto {
             this.boardId = board.getBoardId();
             this.content = board.getContent();
             this.status = board.getStatus();
+            this.theme = board.getTheme();
             this.user = board.getUser();
             this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());
             this.communityImgUrl = board.getCommunity().stream().map(BoardImg::getPostImgUrl).collect(Collectors.toList());

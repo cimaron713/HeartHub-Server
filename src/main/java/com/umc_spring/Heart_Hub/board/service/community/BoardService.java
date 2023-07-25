@@ -40,14 +40,16 @@ public class BoardService {
     private String communityImgFolder;
     //등록
     @Transactional
-    public Long boardRegister(BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
+    public Long boardRegister(String theme, BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
         User user = userRepository.findByUsername(userName);
         if(user == null) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         Board boardRegister = Board.builder()
+                .theme(theme)
                 .user(user)
                 .content(params.getContent())
+                .theme(params.getTheme())
                 .build();
         boardRepository.save(boardRegister);
         if(boardImageUploadDto.getCommunityFiles() != null && !boardImageUploadDto.getCommunityFiles().isEmpty()){
@@ -75,7 +77,7 @@ public class BoardService {
      게시글 리스트 조회
      */
     @Transactional
-    public List<BoardDto.BoardResponseDto> findAll() {
+    public List<BoardDto.BoardResponseDto> findAll(String theme) {
         String username = getLoginUsername();
         User user = userRepository.findByUsername(username);
         //로그인한 사용자가 차단한 사용자들의 목록 가져오기
@@ -84,7 +86,7 @@ public class BoardService {
                 .collect(Collectors.toList());
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-        List<Board> list = boardRepository.findAll(sort);
+        List<Board> list = boardRepository.findAllByTheme(sort,theme);
         List<BoardDto.BoardResponseDto> responseList = list.stream()
                 .filter(board -> !blockedUsers.contains(board.getUser()))
                 .map(m -> new BoardDto.BoardResponseDto(m)).toList();
@@ -95,8 +97,8 @@ public class BoardService {
      * 특정 게시물 조회
      */
     @Transactional
-    public BoardDto.BoardResponseDto findBoard(Long id){
-        Board findBoard = boardRepository.findById(id).orElseThrow();
+    public BoardDto.BoardResponseDto findBoard(String theme, Long id){
+        Board findBoard = boardRepository.findByBoardIdAndTheme(id,theme).orElseThrow();
         BoardDto.BoardResponseDto boardResponseDto = new BoardDto.BoardResponseDto(findBoard);
         return boardResponseDto;
     }
@@ -106,7 +108,7 @@ public class BoardService {
      */
     @Transactional
     public Long updateBoard(Long id, BoardDto.BoardRequestDto requestDto){
-        Board board = boardRepository.findById(id).orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+        Board board = boardRepository.findByBoardIdAndTheme(id, requestDto.getTheme()).orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
         board.update(requestDto.getContent());
         return id;
     }
