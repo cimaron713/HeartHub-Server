@@ -22,7 +22,9 @@ public class CommentGoodService {
     public void commentGood(Long id,CommentDto.Request request, String username){
         User user = userRepository.findByUsername(username);
         Comment comment= commentRepository.findById(id).orElseThrow();
-
+        if(comment.getParent() != null){
+            return;
+        }
         if(commentGoodRepository.findByUserAndComment(user, comment) == null){
             //좋아요 안누른 유저만 좋아요
             CommentGood commentGood = CommentGood.builder()

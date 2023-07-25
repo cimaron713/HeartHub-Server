@@ -11,8 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.querydsl.core.types.ExpressionUtils.orderBy;
+import static com.querydsl.jpa.JPAExpressions.select;
+import static com.querydsl.jpa.JPAExpressions.selectFrom;
 import static com.umc_spring.Heart_Hub.board.dto.community.CommentDto.Response.convertCommentToDto;
 import static com.umc_spring.Heart_Hub.board.model.community.QComment.comment;
+import static com.umc_spring.Heart_Hub.board.model.community.QCommentGood.commentGood;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
                 .where(comment.board.boardId.eq(id))
                 .orderBy(comment.parent.commentId.asc().nullsFirst())
                 .fetch();
+
 
         List<CommentDto.Response> commentResponseDTOList = new ArrayList<>();
         Map<Long, CommentDto.Response> commentDTOHashMap = new HashMap<>();
