@@ -2,6 +2,8 @@ package com.umc_spring.Heart_Hub.security.util;
 
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
+import com.umc_spring.Heart_Hub.user.model.User;
+import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import com.umc_spring.Heart_Hub.user.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -23,6 +25,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Slf4j
 public final class JwtUtils {
+    private final UserRepository userRepository;
     private final UserDetailsServiceImpl userDetailsService;
 
     private final String SECRET_KEY = "saldkfjlaksfjlitulkasjgklasghisaouytlasjktkalthlkjas";
@@ -42,10 +45,6 @@ public final class JwtUtils {
                 .parseClaimsJws(jwtToken)
                 .getBody();
     }
-
-//    public String getUsername(String token){
-//        return extractAllClaims(token).get("username", String.class);
-//    }
 
     public String getEmailInToken(String token) {
         return extractAllClaims(token).get("email", String.class);
@@ -86,16 +85,21 @@ public final class JwtUtils {
 
     public boolean validateToken(String jwtToken){
         try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
-
-        } catch (Exception e){
-            /**
-             * accessToken의 만료의 경우 customError를 던질게아니라 아래 로직에 따라가야됨.
-             * 1. accessToken이 만료된 경우 refreshToken을 이용해서 accessToken을 갱신해야됨.
-             * 2. refreshToken도 만료된 경우 refreshToken의 갱신이 필요
-             */
-            throw new CustomException(ErrorCode.JWT_EXPIRED);
+            Claims claims = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(jwtToken).getBody();
+//            return !claims.getExpiration().before(new Date());
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+            throw new CustomException(ErrorCode.MALFORMED_JWT);
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+            throw new CustomException(ErrorCode.EXPIRED_JWT);
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+            throw new CustomException(ErrorCode.UNSUPPORTED_JWT);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
+            throw new CustomException(ErrorCode.BAD_JWT);
         }
     }
 
@@ -104,6 +108,17 @@ public final class JwtUtils {
                 .parseClaimsJws(jwtToken).getBody().getExpiration();
         long now = System.currentTimeMillis();
         return expiration.getTime() - now;
+    }
+
+    public boolean getReportedStatusByToken(String token) {
+        String email = getEmailInToken(token);
+        User user = userRepository.findByEmail(email);
+
+        if(user.getReportedStatus().equals("ACCOUNT_SUSPENDED")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 

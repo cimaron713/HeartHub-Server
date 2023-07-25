@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -95,10 +94,6 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO.GetDday>> getDday(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         UserDTO.GetDday dDay = userService.getDday(userDetails.getUsername());
-
-//        UserDTO.GetDday dDay = userService.getDday("user3");
-
-
         return ResponseEntity.ok().body(ApiResponse.createSuccess(dDay, "Get D-Day Success!"));
     }
 
@@ -107,5 +102,11 @@ public class UserController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         UserDTO.MateExistenceDto mateExist = userService.checkMateExist(userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(mateExist, "Get hasMate Success!"));
+    }
+
+    @PostMapping("/member/reissue")
+    public ResponseEntity<ApiResponse<UserDTO.ReissueRespDto>> reissue(UserDTO.ReissueReqDto reissueReqDto) {
+        UserDTO.ReissueRespDto reissueRespDto = userService.reissue(reissueReqDto.getRefreshToken());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(reissueRespDto, "Success Reissue"));
     }
 }
