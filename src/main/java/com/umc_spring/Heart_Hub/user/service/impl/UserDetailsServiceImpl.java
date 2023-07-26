@@ -1,9 +1,12 @@
 package com.umc_spring.Heart_Hub.user.service.impl;
 
 
+import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
+import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,15 +15,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.info("loadUserByUsername"+ email);
+        return userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
 
-        return userRepository.findByEmail(email);
     }
 }
