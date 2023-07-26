@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface BoardGoodRepository extends JpaRepository<BoardGood,Long> {
+public interface BoardGoodRepository extends JpaRepository<BoardGood,Long>, BoardGoodRepositoryCustom {
     Optional<BoardGood> findByUserAndBoard(User user, Board board);
 
     @Query(value = "select count(*) from BoardGood group by BOARD_ID > :id", nativeQuery = true)
