@@ -2,9 +2,11 @@ package com.umc_spring.Heart_Hub.board.service.community;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.CommentDto;
+import com.umc_spring.Heart_Hub.board.model.community.BlockedList;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.board.model.community.CommentGood;
+import com.umc_spring.Heart_Hub.board.repository.community.BlockedListRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.CommentGoodRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.CommentRepository;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -23,17 +26,25 @@ public class CommentService {
     private BoardRepository boardRepository;
     private UserRepository userRepository;
     private CommentGoodRepository commentGoodRepository;
+    private BlockedListRepository blockedListRepository;
 
     /**
     해당 게시글 댓글 목록 조회
      */
     @Transactional
-    public List<CommentDto.Response> findComments(BoardDto.BoardResponseDto boardResponse){
+    public List<CommentDto.Response> findComments(BoardDto.BoardResponseDto boardResponse, String username){
+        User user = userRepository.findByUsername(username);
+        List<User> blockedUsers = blockedListRepository.findAllByBlocker(user).stream()
+                .map(BlockedList::getBlockedUser)
+                .collect(Collectors.toList());
+
         Board board = boardRepository.findById(boardResponse.getBoardId()).orElseThrow();
         List<Comment> comments = commentRepository.findAllByBoard(board);
         List<CommentDto.Response> commentResponse = new ArrayList<>();
         for(Comment c : comments){
-            commentResponse.add(new CommentDto.Response(c));
+            if(!blockedUsers.contains(c.getUser())) {
+                commentResponse.add(new CommentDto.Response(c));
+            }
         }
         return commentResponse;
     }
