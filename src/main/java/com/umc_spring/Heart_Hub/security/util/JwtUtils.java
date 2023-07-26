@@ -65,14 +65,12 @@ public final class JwtUtils {
     public String createToken(String email, long expireTime) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("email", email);
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS256)
                 .compact();
-
-        return jwt;
     }
 
     //
@@ -88,7 +86,6 @@ public final class JwtUtils {
     public boolean validateToken(String jwtToken){
         try {
             Claims claims = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(jwtToken).getBody();
-//            return !claims.getExpiration().before(new Date());
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
@@ -113,8 +110,9 @@ public final class JwtUtils {
     }
 
     public boolean getReportedStatusByToken(String token) {
-        String email = getEmailInToken(token);
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(getEmailInToken(token)).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
 
         if(user.getReportedStatus().equals("ACCOUNT_SUSPENDED")) {
             return false;

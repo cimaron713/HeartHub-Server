@@ -21,6 +21,7 @@ public enum ErrorCode {
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "로그인에 실패하였습니다."),
     AUTHENTICATION_FAILED(HttpStatus.BAD_REQUEST, "정상적인 JWT가 아닙니다."),
     AUTHORIZATION_FAILED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
+    NOT_PERMIT(HttpStatus.BAD_REQUEST, "누적 신고수 때문에 로그인 못합니다"),
     ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "이미 신고한 사용자입니다.");
 
     private final HttpStatus httpStatus;

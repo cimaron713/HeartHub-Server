@@ -1,5 +1,7 @@
 package com.umc_spring.Heart_Hub.security;
 
+import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.security.util.JwtUtils;
 import com.umc_spring.Heart_Hub.security.util.RedisUtils;
 import jakarta.servlet.FilterChain;
@@ -24,14 +26,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         String token = jwtUtils.resolveToken(request);
 
-        if(!path.startsWith("/api/member/reissue") && !path.startsWith("/api/login") && token != null && jwtUtils.validateToken(token)){
+        // 여기 path 없애도 될거같음
+        if(!path.startsWith("/api/member/reissue") && !path.startsWith("/api/login")
+                && !path.startsWith("/api/join")
+                && token != null && jwtUtils.validateToken(token)){
             if(jwtUtils.getReportedStatusByToken(token)) {
                 String isLogout = redisUtils.getData(token);
                 if(isLogout == null){
                     Authentication authentication = jwtUtils.getAuthentication(token);
-                    log.info("filter getAu thorities() : "+authentication.getAuthorities().toString());
+                    log.info("filter get Authorities() : "+authentication.getAuthorities().toString());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
+            } else {
+                throw new CustomException(ErrorCode.NOT_PERMIT);
             }
         }
         filterChain.doFilter(request, response);
