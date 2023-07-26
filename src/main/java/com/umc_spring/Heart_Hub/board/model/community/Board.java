@@ -23,10 +23,10 @@ public class Board extends BaseEntity {
     @Column(length = 200)
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1)
     private String goodStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1)
     private String heartStatus;
 
     @Column(nullable = false, length = 1)
