@@ -16,7 +16,6 @@ public interface UserService {
     UserDTO.MateExistenceDto checkMateExist(String username);
 
     UserDTO.ReissueRespDto reissue(String refreshToken);
-
     void logout(String accessToken);
-
+    void withdrawUser(String token);
 }

@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtils jwtUtils;
     private final RedisUtils redisUtils;
     private final EmailService emailService;
@@ -234,4 +233,11 @@ public class UserServiceImpl implements UserService {
         redisUtils.setDataExpire(accessToken, "logout", jwtUtils.getExpiration(accessToken));
     }
 
+    @Override
+    public void withdrawUser(String accessToken){
+        String email = jwtUtils.getEmailInToken(accessToken);
+        User user = userRepository.findByEmail(email);
+        userRepository.delete(user);
+        logout(accessToken);
+    }
 }
