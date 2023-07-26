@@ -40,8 +40,6 @@ public class BoardDto {
         public BoardResponseDto(Board board){
             this.boardId = board.getBoardId();
             this.content = board.getContent();
-            this.goodStatus = board.getGoodStatus();
-            this.heartStatus = board.getHeartStatus();
             this.theme = board.getTheme();
             this.userName = board.getUser().getUsername();
             this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());
