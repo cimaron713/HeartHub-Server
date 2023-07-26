@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.coupleBoard.controller;
 
 import com.google.protobuf.Api;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
@@ -106,9 +107,9 @@ public class CoupleBoardController {
      * 자신이 스크랩한 게시물 조회
      */
     @GetMapping("/scrap-board")
-    public ResponseEntity<ApiResponse<List<CoupleBoardDto.ScrapResponse>>> scrapBoard(Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> scrapBoard(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        List<CoupleBoardDto.ScrapResponse> scrapBoardList = boardHeartService.getHeartBoards(userDetails.getUsername());
+        List<BoardDto.BoardResponseDto> scrapBoardList = boardHeartService.getHeartBoards(userDetails.getUsername());
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, "Search Scrap board Success!"));
     }
@@ -117,9 +118,9 @@ public class CoupleBoardController {
      * 연동한 계정이 스크랩한 게시물 조회
      */
     @GetMapping("/scrap-mate-board")
-    public ResponseEntity<ApiResponse<List<CoupleBoardDto.ScrapResponse>>> scrapMateBoard(Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> scrapMateBoard(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        List<CoupleBoardDto.ScrapResponse> scrapBoardList = boardHeartService.getHeartMateBoards(userDetails.getUsername());
+        List<BoardDto.BoardResponseDto> scrapBoardList = boardHeartService.getHeartMateBoards(userDetails.getUsername());
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, "Search Mate's Scrap board Success!"));
     }
