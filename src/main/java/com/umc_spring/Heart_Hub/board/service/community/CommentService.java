@@ -24,8 +24,8 @@ public class CommentService {
     private UserRepository userRepository;
     private CommentGoodRepository commentGoodRepository;
 
-    /*
-    해당 게시글 댓글 목록
+    /**
+    해당 게시글 댓글 목록 조회
      */
     @Transactional
     public List<CommentDto.Response> findComments(BoardDto.BoardResponseDto boardResponse){
@@ -38,10 +38,9 @@ public class CommentService {
         return commentResponse;
     }
 
-    /*
+    /**
     댓글 등록
      */
-
     @Transactional
     public Long createComment(Long boardId,CommentDto.Request replyRequest, String username){
         User user = userRepository.findByUsername(username);

@@ -11,7 +11,6 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class BoardGood extends BaseEntity {
     @Id
     @JoinColumn
@@ -28,5 +27,16 @@ public class BoardGood extends BaseEntity {
 
     @Column(nullable = false, length = 1)
     private String status;
+
+    @Builder
+    public BoardGood(User user, Board board){
+        this.user = user;
+        this.board = board;
+        this.status = "T";
+    }
+
+    public void deleteStatus(){
+        this.status = "F";
+    }
 
 }
