@@ -215,12 +215,12 @@ public class UserDTO {
         private String accessToken;
     }
 
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Data
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class WithdrawReqDto {
-        private String accessToken;
+        private String token;
     }
 
 }
