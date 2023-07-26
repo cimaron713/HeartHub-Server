@@ -17,5 +17,5 @@ public interface CommentGoodRepository extends JpaRepository<CommentGood,Long> {
     Optional<CommentGood> findByUserAndComment(User user, Comment comment);
 
     @Query(value = "select count(*) from CommentGood group by COMMENT_ID > :id", nativeQuery = true)
-    public List<CommentGood> commentGoodCount(@Param(value = "id") Long id);
+    List<CommentGood> commentGoodCount(@Param(value = "id") Long id);
 }

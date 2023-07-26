@@ -38,6 +38,7 @@ public class CommentDto {
         private User user;
         private String content;
         private List<Response> responseList = new ArrayList<>();
+        private int count;
 
         @Builder
         public Response(Comment comment){
@@ -45,6 +46,7 @@ public class CommentDto {
             this.user = comment.getUser();
             this.board = comment.getBoard();
             this.content = comment.getContent();
+            this.count = comment.getGoods().size();
         }
 
         public static Response convertCommentToDto(Comment comment) {

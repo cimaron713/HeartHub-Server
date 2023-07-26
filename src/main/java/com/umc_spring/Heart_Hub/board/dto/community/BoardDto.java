@@ -35,7 +35,6 @@ public class BoardDto {
         private User user;
         private List<CommentDto.Response> commentList;
         private List<String> communityImgUrl;
-
         private LocalDateTime createdDate;
         @Builder
         public BoardResponseDto(Board board){
