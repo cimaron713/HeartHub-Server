@@ -27,7 +27,7 @@ public class ReportController {
     }
 
     @PostMapping("/report/user")
-    public ResponseEntity<ApiResponse<ReportDto.UserReportResDto>> userReport(@RequestBody ReportDto.UserReportReqDto reqDto, Authentication authentication) {
+    public ResponseEntity<ApiResponse<ReportDto.UserReportResDto>> userReport(@RequestBody ReportDto.UserReportReqDto reqDto, Authentication authentication) throws Exception {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         ReportDto.UserReportResDto resDto = userReportService.reportUser(reqDto, userDetails.getUsername());
 
