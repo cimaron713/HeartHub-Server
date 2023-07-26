@@ -234,12 +234,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void withdrawUser(String accessToken){
-        String email = jwtUtils.getEmailInToken(accessToken);
+    public Boolean withdrawUser(UserDTO.WithdrawReqDto response){
+        String email = jwtUtils.getEmailInToken(response.getToken());
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
         userRepository.delete(user);
-        logout(accessToken);
+        logout(response.getToken());
+        return true;
     }
+
+
 }

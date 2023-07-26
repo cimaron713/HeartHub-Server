@@ -118,9 +118,9 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Logout Success"));
     }
 
-    @DeleteMapping("/user/delete")
-    public ResponseEntity<ApiResponse<String>> withdrawUser(UserDTO.WithdrawReqDto withdrawReqDto){
-        userService.withdrawUser(withdrawReqDto.getAccessToken());
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("withdrawUser Success"));
+    @PostMapping("/delete/user")
+    public ResponseEntity<ApiResponse<Boolean>> withdrawUser(UserDTO.WithdrawReqDto withdrawReqDto){
+        Boolean response = userService.withdrawUser(withdrawReqDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "withdrawUser Success"));
     }
 }
