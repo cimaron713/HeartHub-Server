@@ -48,6 +48,9 @@ public class User extends BaseEntity implements UserDetails{
     @Column(nullable = false, length = 45)
     private String nickname;
 
+    @Column(length = 45)
+    private String userMessage;
+
     @Column(nullable = false, length = 1)
     private String marketingStatus;
 
