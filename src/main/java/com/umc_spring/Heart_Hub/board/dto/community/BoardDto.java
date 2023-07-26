@@ -2,7 +2,6 @@ package com.umc_spring.Heart_Hub.board.dto.community;
 
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.BoardImg;
-import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +29,8 @@ public class BoardDto {
     public static class BoardResponseDto {
         private final Long boardId;
         private String content;
-        private String status;
+        private String goodStatus;
+        private String heartStatus;
         private String theme;
         private String userName;
         private List<CommentDto.Response> commentList;
@@ -40,7 +40,8 @@ public class BoardDto {
         public BoardResponseDto(Board board){
             this.boardId = board.getBoardId();
             this.content = board.getContent();
-            this.status = board.getStatus();
+            this.goodStatus = board.getGoodStatus();
+            this.heartStatus = board.getHeartStatus();
             this.theme = board.getTheme();
             this.userName = board.getUser().getUsername();
             this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());
