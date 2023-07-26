@@ -127,6 +127,7 @@ public class BoardService {
     /**
      * 현재 로그인한 유저의 이름 가져오기
      */
+    @Transactional
     public String getLoginUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
@@ -135,6 +136,7 @@ public class BoardService {
     /**
      * 사용자가 작성한 게시물 모두 삭제하기
      */
+    @Transactional
     public void delAllBoard(User user) {
         List<Board> boardList = boardRepository.findAllByUser(user);
         boardRepository.deleteAll(boardList);
