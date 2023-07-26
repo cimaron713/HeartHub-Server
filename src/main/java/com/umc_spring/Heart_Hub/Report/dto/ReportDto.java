@@ -12,6 +12,7 @@ public class ReportDto {
     @NoArgsConstructor
     public static class UserReportReqDto {
         private String reportedUsername;
+        private String email;
         private ReportReason reason;
         private String detail; //기타 사유
 
@@ -21,11 +22,13 @@ public class ReportDto {
     @NoArgsConstructor
     public static class UserReportResDto {
         private String reportedUsername;
+        private String email;
         private ReportReason reason;
 
         @Builder
         public UserReportResDto(UserReport userReport) {
             this.reportedUsername = userReport.getReported().getUsername();
+            this.email = userReport.getReported().getEmail();
             this.reason = userReport.getReason();
         }
     }

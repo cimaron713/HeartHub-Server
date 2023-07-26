@@ -3,6 +3,7 @@ package com.umc_spring.Heart_Hub.email.impl;
 
 import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.service.impl.UserServiceImpl;
+import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -109,6 +110,57 @@ public class EmailServiceImpl implements EmailService {
         return message;
     }
 
+    public MimeMessage createWarningMessage(String to) throws Exception {
+        LOGGER.info("[createMessage] 보내는 대상 {}", to);
+        MimeMessage message = emailSender.createMimeMessage();
+        message.addRecipients(Message.RecipientType.TO, to);
+        message.setSubject("[경고 알림] HeartHub 서비스 이용이 제한될 수 있습니다.");
+        String msgg="";
+        msgg+= "<h1> 비매너의 사유로 HeartHub 서비스 이용이 제한될 수 있습니다. 게시글 작성 시 감정을 상하게 하는 말은 삼가해주시길 바랍니다.</h1>";
+        msgg+= "<br>";
+        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        msgg+= "<div style='font-size:130%'>";
+        msgg+= "<div style='margin:20px;'>";
+        msgg+= "</div>";
+        message.setText(msgg, "utf-8", "html");
+        message.setFrom(new InternetAddress("jinuktest208@gmail.com","test"));
+        return message;
+    }
+
+    public MimeMessage createContentDelMessage(String to) throws Exception {
+        LOGGER.info("[createMessage] 보내는 대상 {}", to);
+        MimeMessage message = emailSender.createMimeMessage();
+        message.addRecipients(Message.RecipientType.TO, to);
+        message.setSubject("[콘텐츠 삭제 알림] HeartHub에 작성하신 콘텐츠가 삭제됩니다. ");
+        String msgg="";
+        msgg+= "<h1> 반복적인 비방/저격 사유로 HeartHub에 작성하신 콘텐츠들은 모두 삭제됩니다. 게시글 작성 시 감정을 상하게 하는 말은 삼가해주시길 바랍니다.</h1>";
+        msgg+= "<br>";
+        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        msgg+= "<div style='font-size:130%'>";
+        msgg+= "<div style='margin:20px;'>";
+        msgg+= "</div>";
+        message.setText(msgg, "utf-8", "html");
+        message.setFrom(new InternetAddress("jinuktest208@gmail.com","test"));
+        return message;
+    }
+
+    public MimeMessage createSuspendMessage(String to) throws Exception {
+        LOGGER.info("[createMessage] 보내는 대상 {}", to);
+        MimeMessage message = emailSender.createMimeMessage();
+        message.addRecipients(Message.RecipientType.TO, to);
+        message.setSubject("[이용 중지 알림] HeartHub 서비스 이용이 중지됩니다 ");
+        String msgg="";
+        msgg+= "<h1> 지속적인 비매너 사유로 HeartHub 서비스 이용이 중지됩니다. 귀하의 계정은 금일을 기준으로 7일 이후부터 서비스 이용이 가능합니다.</h1>";
+        msgg+= "<br>";
+        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        msgg+= "<div style='font-size:130%'>";
+        msgg+= "<div style='margin:20px;'>";
+        msgg+= "</div>";
+        message.setText(msgg, "utf-8", "html");
+        message.setFrom(new InternetAddress("jinuktest208@gmail.com","test"));
+        return message;
+    }
+
     @Override
     public String sendVerificationCode(String to)throws Exception {
         MimeMessage message = createVerificationMessage(to);
@@ -140,5 +192,38 @@ public class EmailServiceImpl implements EmailService {
             throw new IllegalArgumentException();
         }
         return code;
+    }
+
+    @Override
+    public void sendWarningMessage(String to) throws Exception {
+        MimeMessage message = createWarningMessage(to);
+        try{
+            emailSender.send(message);
+        }catch(MailException es){
+            es.printStackTrace();
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void sendContentDelMessage(String to) throws Exception {
+        MimeMessage message = createContentDelMessage(to);
+        try{
+            emailSender.send(message);
+        }catch(MailException es){
+            es.printStackTrace();
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void sendSuspendMessage(String to) throws Exception {
+        MimeMessage message = createSuspendMessage(to);
+        try{
+            emailSender.send(message);
+        }catch(MailException es){
+            es.printStackTrace();
+            throw new IllegalArgumentException();
+        }
     }
 }
