@@ -18,11 +18,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
 public class MissionController {
 
     private final MissionService missionService;
 
-    @PostMapping("/api/mission/add")
+    @PostMapping("/admin/mission/add")
     public ResponseEntity<ApiResponse<String>> addMissionToUser(MissionDto.MissionRequestDto missionRequestDto) {
         log.info("missionRequestDto : " + missionRequestDto.getContent());
         missionService.addMissionToUser(missionRequestDto);
@@ -30,7 +31,7 @@ public class MissionController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Success add Mission To User"));
     }
 
-    @GetMapping("/api/missions")
+    @GetMapping("/user/missions")
     public ResponseEntity<ApiResponse<List<MissionDto.RandomMissionRespDto>>> getMissions() {
         List<MissionDto.RandomMissionRespDto> randomMissionRespDtos = missionService.getMissions();
 
@@ -40,7 +41,7 @@ public class MissionController {
     /**
      * checkStatus 상태 변경 api
      */
-    @PutMapping("/api/mission/{missionId}")
+    @PutMapping("/user/mission/{missionId}")
     public ResponseEntity<ApiResponse<Long>> checkStatusModify(@PathVariable Long missionId,
                                                                Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -53,7 +54,7 @@ public class MissionController {
     /**
      * deleteStatus 상태 변경 api (mission 삭제)
      */
-    @DeleteMapping("/api/mission/{missionId}")
+    @DeleteMapping("/admin/mission/{missionId}")
     public ResponseEntity<ApiResponse<Long>> deleteMission(@PathVariable Long missionId) {
         missionService.deleteMission(missionId);
 

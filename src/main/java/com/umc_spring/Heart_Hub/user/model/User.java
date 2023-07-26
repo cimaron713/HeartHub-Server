@@ -48,6 +48,9 @@ public class User extends BaseEntity implements UserDetails{
     @Column(nullable = false, length = 45)
     private String nickname;
 
+    @Column(length = 45)
+    private String userMessage;
+
     @Column(nullable = false, length = 1)
     private String marketingStatus;
 
@@ -72,17 +75,11 @@ public class User extends BaseEntity implements UserDetails{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserMissionStatus> userMissionStatusList;
 
-//    @ElementCollection(fetch = FetchType.EAGER) // 테이블 생성, 부모 Entity에 의해 관리.
-//    @Builder.Default
-//    private List<String> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return this.roles.stream()
-//                .map(SimpleGrantedAuthority::new)// x -> new SimpleGrantedAuthority(x)
-//                .collect(Collectors.toList());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.role.getRole()));
+        authorities.add(new SimpleGrantedAuthority(this.role.getRole()));
 
         return authorities;
     }
@@ -133,4 +130,6 @@ public class User extends BaseEntity implements UserDetails{
     public void suspendUser() {
         this.reportedStatus = ReportStatus.ACCOUNT_SUSPENDED;
     }
+
+    public void modifyUserAuthority() { this.role = Role.ROLE_ADMIN; }
 }

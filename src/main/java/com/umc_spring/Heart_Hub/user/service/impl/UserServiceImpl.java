@@ -59,8 +59,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean validateDuplicateEmail(String email) {
-        User findUser = userRepository.findByEmail(email);
-        if (findUser != null) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
+        if (user != null) {
             return true; // 존재한다면 true 반환
         } else {
             return false; // 존재하지 않으면 false 반환
@@ -80,14 +82,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean findUsername(UserDTO.FindUsernameRequest request) throws Exception {
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
         emailService.sendUsername(request.getEmail(), user.getUsername());
         return true;
     }
 
     @Override
     public Boolean findPw(UserDTO.FindPwRequest request) throws Exception {
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
         if (user.getUsername().equals(request.getUsername())) {
             String code = emailService.sendTemporaryPasswd(request.getEmail());
             user.changePassword(passwordEncoder.encode(code));
@@ -157,17 +163,17 @@ public class UserServiceImpl implements UserService {
     public UserDTO.GetRespDatingDateDto getDatingDate(String username) {
         User findUser = userRepository.getDatingDateByUserName(username);
 
-        UserDTO.GetRespDatingDateDto dDay = UserDTO.GetRespDatingDateDto.builder()
+        return UserDTO.GetRespDatingDateDto.builder()
                 .datingDate(findUser.getDatingDate())
                 .build();
-
-        return dDay;
     }
 
     @Override
     public Boolean changePassword(UserDTO.ChangePasswordRequest request) {
         String email = jwtUtils.getEmailInToken(request.getToken());
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
         log.info("email : " + email);
         log.info("user : " + user);
 
@@ -228,10 +234,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void withdrawUser(String accessToken){
-        String email = jwtUtils.getEmailInToken(accessToken);
-        User user = userRepository.findByEmail(email);
+    public Boolean withdrawUser(UserDTO.WithdrawReqDto response){
+        String email = jwtUtils.getEmailInToken(response.getToken());
+        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
         userRepository.delete(user);
-        logout(accessToken);
+        logout(response.getToken());
+        return true;
     }
+
+
 }
