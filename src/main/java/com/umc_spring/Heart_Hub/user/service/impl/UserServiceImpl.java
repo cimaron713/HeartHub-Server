@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.user.service.impl;
 
+import com.umc_spring.Heart_Hub.Report.model.enums.ReportStatus;
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.email.EmailService;
@@ -12,7 +13,6 @@ import com.umc_spring.Heart_Hub.security.util.JwtUtils;
 import com.umc_spring.Heart_Hub.security.util.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,33 +25,37 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtils jwtUtils;
     private final RedisUtils redisUtils;
     private final EmailService emailService;
 
     @Override
-    public Boolean register(UserDTO.SignUpRequest signUpRequest) {
+    public  UserDTO.SignUpRespDto register(UserDTO.SignUpRequestDto signUpRequestDto) {
         User user = User.builder()
-                .username(signUpRequest.getUsername())
-                .email(signUpRequest.getEmail())
-                .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                .birth(signUpRequest.getBirth())
-                .gender(signUpRequest.getGender())
-                .nickname(signUpRequest.getNickname())
+                .username(signUpRequestDto.getUsername())
+                .email(signUpRequestDto.getEmail())
+                .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
+                .birth(signUpRequestDto.getBirth())
+                .gender(signUpRequestDto.getGender())
+                .nickname(signUpRequestDto.getNickname())
                 .role(Role.ROLE_USER)
-                .marketingStatus(signUpRequest.getMarketingStatus())
+                .marketingStatus(signUpRequestDto.getMarketingStatus())
                 .status("T")
+                .datingDate(signUpRequestDto.getDatingDate())
+                .reportedStatus(ReportStatus.NORMAL)
                 .build();
         userRepository.save(user);
+
         UserDTO.MateMatchRequest request = UserDTO.MateMatchRequest.builder()
-                .mateName(signUpRequest.getMate())
-                .currentUsername(signUpRequest.getUsername())
+                .mateName(signUpRequestDto.getMate())
+                .currentUsername(signUpRequestDto.getUsername())
                 .build();
         mateMatching(request);
-        return true;
+
+        return UserDTO.SignUpRespDto.builder()
+                .nickname(user.getNickname())
+                .build();
     }
 
     @Override
@@ -96,16 +100,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO.LoginResponse login(UserDTO.LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername());
+    public UserDTO.LoginResponse login(UserDTO.LoginRequest loginRequest) {
+        log.info(loginRequest.toString());
+        User user = userRepository.findByUsername(loginRequest.getUsername());
+
         if (user == null) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
-        boolean isMatch = bCryptPasswordEncoder.matches(encodedPassword, encodedPassword);
-
-        if (!isMatch) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
@@ -118,12 +121,11 @@ public class UserServiceImpl implements UserService {
             redisUtils.setDataExpire("RT:" + user.getEmail(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
         }
 
-        UserDTO.LoginResponse response = UserDTO.LoginResponse.builder()
+        return UserDTO.LoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .accessTokenExpirationTime(JwtUtils.TOKEN_VALID_TIME)
                 .build();
-        return response;
     }
 
     public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
@@ -153,11 +155,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO.GetDday getDday(String username) {
-        User findUser = userRepository.getDdayByUserName(username);
+    public UserDTO.GetRespDatingDateDto getDatingDate(String username) {
+        User findUser = userRepository.getDatingDateByUserName(username);
 
-        UserDTO.GetDday dDay = UserDTO.GetDday.builder()
-                .dDay(findUser.getDDay())
+        UserDTO.GetRespDatingDateDto dDay = UserDTO.GetRespDatingDateDto.builder()
+                .datingDate(findUser.getDatingDate())
                 .build();
 
         return dDay;
@@ -209,6 +211,21 @@ public class UserServiceImpl implements UserService {
                     .accessTokenExpirationTime(JwtUtils.TOKEN_VALID_TIME)
                     .build();
         }
+    }
+
+    @Override
+    public void logout(String accessToken) {
+        /**
+         * 여기에 resolveToken 넣어야할지도,,,,,,, 내일 해봐야지
+         */
+        jwtUtils.validateToken(accessToken);
+        String email = jwtUtils.getEmailInToken(accessToken);
+
+        if(!redisUtils.getData("RT"+email).isEmpty()) {
+            redisUtils.deleteData("RT"+email);
+        }
+
+        redisUtils.setDataExpire(accessToken, "logout", jwtUtils.getExpiration(accessToken));
     }
 
 }

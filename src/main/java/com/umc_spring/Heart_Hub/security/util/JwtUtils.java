@@ -54,7 +54,9 @@ public final class JwtUtils {
     // Spring Security 인증과정에서 권한 확인을 위해 사용
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getEmailInToken(token));
-        log.info("new UsernamePasswordAuthenticationToken(userDetails, \"\", userDetails.getAuthorities() : " + new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities()));
+        log.info("userDetails.getUsername : "+userDetails.getUsername());
+        log.info("userDetails.getPassword : "+ userDetails.getPassword());
+        log.info("getAuthorities() : "+userDetails.getAuthorities().toString());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

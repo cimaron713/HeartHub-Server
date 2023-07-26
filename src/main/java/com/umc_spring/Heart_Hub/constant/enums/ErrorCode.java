@@ -19,6 +19,8 @@ public enum ErrorCode {
     BAD_JWT(HttpStatus.BAD_REQUEST, "JWT 토큰이 잘못되었습니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "Refresh Token이 일치하지 않습니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "로그인에 실패하였습니다."),
+    AUTHENTICATION_FAILED(HttpStatus.BAD_REQUEST, "정상적인 JWT가 아닙니다."),
+    AUTHORIZATION_FAILED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
     ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "이미 신고한 사용자입니다.");
 
     private final HttpStatus httpStatus;

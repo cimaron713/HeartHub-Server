@@ -3,6 +3,7 @@ package com.umc_spring.Heart_Hub.user.model;
 import com.umc_spring.Heart_Hub.Report.model.enums.ReportStatus;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
+import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +53,7 @@ public class User implements UserDetails {
 
     private LocalDate birth;
 
-    private LocalDate dDay;
+    private LocalDate datingDate;
 
     @Column(nullable = false, length = 1)
     private String status;
@@ -62,7 +63,7 @@ public class User implements UserDetails {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private ReportStatus reportedStatus = ReportStatus.NORMAL;
+    private ReportStatus reportedStatus;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Builder.Default
@@ -71,15 +72,19 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserMissionStatus> userMissionStatusList;
 
-    @ElementCollection(fetch = FetchType.EAGER) // 테이블 생성, 부모 Entity에 의해 관리.
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+//    @ElementCollection(fetch = FetchType.EAGER) // 테이블 생성, 부모 Entity에 의해 관리.
+//    @Builder.Default
+//    private List<String> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)// x -> new SimpleGrantedAuthority(x)
-                .collect(Collectors.toList());
+//        return this.roles.stream()
+//                .map(SimpleGrantedAuthority::new)// x -> new SimpleGrantedAuthority(x)
+//                .collect(Collectors.toList());
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.role.getRole()));
+
+        return authorities;
     }
 
     @Override

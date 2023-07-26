@@ -5,7 +5,8 @@ import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
 import com.umc_spring.Heart_Hub.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,86 +15,86 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
+@Slf4j
 public class UserController {
     private final UserService userService;
     private final EmailService emailService;
 
-    @Autowired
-    public UserController(UserService userService, EmailService emailService) {
-        this.userService = userService;
-        this.emailService = emailService;
-    }
-
     @PostMapping(value = "/join")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> signUp(@RequestBody UserDTO.SignUpRequest user) {
-        Boolean response = userService.register(user);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+    public ResponseEntity<ApiResponse<UserDTO.SignUpRespDto>> signUp(@RequestBody UserDTO.SignUpRequestDto signUpRequestDto) {
+        log.info(signUpRequestDto.toString());
+        log.info(signUpRequestDto.getDatingDate().toString());
+        UserDTO.SignUpRespDto registeredUser = userService.register(signUpRequestDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(registeredUser, "Success Join"));
     }
+
     @PostMapping(value = "/check/email")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email){
+    public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email) {
         Boolean response = userService.validateDuplicateEmail(email.getEmail());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @GetMapping(value = "/check/username")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id){
+    public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id) {
         Boolean response = userService.validateDuplicateUsername(id.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping(value = "/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<UserDTO.LoginResponse>> login(@RequestBody UserDTO.LoginRequest user){
+    public ResponseEntity<ApiResponse<UserDTO.LoginResponse>> login(@RequestBody UserDTO.LoginRequest user) {
         UserDTO.LoginResponse response = userService.login(user);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Login Success!"));
     }
 
     @GetMapping(value = "/email-verification")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<String>> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception{
+    public ResponseEntity<ApiResponse<String>> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception {
         String response = emailService.sendVerificationCode(email.getEmail());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping(value = "/find/username")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> findUsername(@RequestBody UserDTO.FindUsernameRequest request) throws Exception{
+    public ResponseEntity<ApiResponse<Boolean>> findUsername(@RequestBody UserDTO.FindUsernameRequest request) throws Exception {
         Boolean response = userService.findUsername(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping(value = "/find/passwd")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> findPasswd(@RequestBody UserDTO.FindPwRequest request) throws Exception{
+    public ResponseEntity<ApiResponse<Boolean>> findPasswd(@RequestBody UserDTO.FindPwRequest request) throws Exception {
         Boolean response = userService.findPw(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
 
-    @PostMapping("/user/info")
+    @GetMapping("/user/info")
     public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {
         UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping("/set/mate")
-    public ResponseEntity<ApiResponse<Boolean>> mateMatchingUser(@RequestBody UserDTO.MateMatchRequest request){
+    public ResponseEntity<ApiResponse<Boolean>> mateMatchingUser(@RequestBody UserDTO.MateMatchRequest request) {
         Boolean response = userService.mateMatching(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
     @PostMapping("/change/passwd")
-    public ResponseEntity<ApiResponse<Boolean>> changePassword(@RequestBody UserDTO.ChangePasswordRequest request){
+    public ResponseEntity<ApiResponse<Boolean>> changePassword(@RequestBody UserDTO.ChangePasswordRequest request) {
         Boolean response = userService.changePassword(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Change Success!"));
     }
-    @GetMapping("/dDay")
-    public ResponseEntity<ApiResponse<UserDTO.GetDday>> getDday(Authentication authentication) {
+
+    @GetMapping("/user/datingDate")
+    public ResponseEntity<ApiResponse<UserDTO.GetRespDatingDateDto>> getDatingDate(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        UserDTO.GetDday dDay = userService.getDday(userDetails.getUsername());
+        UserDTO.GetRespDatingDateDto dDay = userService.getDatingDate(userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(dDay, "Get D-Day Success!"));
     }
 
@@ -107,6 +108,12 @@ public class UserController {
     @PostMapping("/member/reissue")
     public ResponseEntity<ApiResponse<UserDTO.ReissueRespDto>> reissue(UserDTO.ReissueReqDto reissueReqDto) {
         UserDTO.ReissueRespDto reissueRespDto = userService.reissue(reissueReqDto.getRefreshToken());
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(reissueRespDto, "Success Reissue"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(reissueRespDto, "Reissue Success"));
+    }
+
+    @PostMapping("/member/logout")
+    public ResponseEntity<ApiResponse<String>> logout(UserDTO.LogoutReqDto logoutReqDto) {
+        userService.logout(logoutReqDto.getAccessToken());
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Logout Success"));
     }
 }

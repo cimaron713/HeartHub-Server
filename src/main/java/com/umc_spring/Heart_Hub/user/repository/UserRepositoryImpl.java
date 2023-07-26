@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     }
 
     @Override
-    public User getDdayByUserName(String username) {
+    public User getDatingDateByUserName(String username) {
 
         User findUser = jpaQueryFactory
                 .selectFrom(user1)

@@ -3,7 +3,7 @@ package com.umc_spring.Heart_Hub.user.service;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
 
 public interface UserService {
-    Boolean register(UserDTO.SignUpRequest request);
+    UserDTO.SignUpRespDto register(UserDTO.SignUpRequestDto request);
     Boolean validateDuplicateEmail(String email);
     Boolean validateDuplicateUsername(String id);
     UserDTO.LoginResponse login(UserDTO.LoginRequest request);
@@ -12,9 +12,11 @@ public interface UserService {
     UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request);
     Boolean mateMatching(UserDTO.MateMatchRequest request);
     Boolean changePassword(UserDTO.ChangePasswordRequest request);
-    UserDTO.GetDday getDday(String username);
+    UserDTO.GetRespDatingDateDto getDatingDate(String username);
     UserDTO.MateExistenceDto checkMateExist(String username);
 
     UserDTO.ReissueRespDto reissue(String refreshToken);
+
+    void logout(String accessToken);
 
 }

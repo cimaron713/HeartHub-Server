@@ -16,7 +16,7 @@ public class UserDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SignUpRequest{
+    public static class SignUpRequestDto {
         private String username;
         private String password;
         private String gender;
@@ -24,7 +24,16 @@ public class UserDTO {
         private String nickname;
         private String marketingStatus;
         private String mate;
+        private LocalDate datingDate;
         private LocalDate birth;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class SignUpRespDto {
+        private String nickname;
     }
 
     @Data
@@ -148,13 +157,21 @@ public class UserDTO {
 
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetReqDatingDateDto {
+        private String username;
+    }
+
     @Getter
     @NoArgsConstructor
-    public static class GetDday {
-        private LocalDate dDay;
+    public static class GetRespDatingDateDto {
+        private LocalDate datingDate;
         @Builder
-        public GetDday(LocalDate dDay) {
-            this.dDay = dDay;
+        public GetRespDatingDateDto(LocalDate datingDate) {
+            this.datingDate = datingDate;
         }
     }
 
@@ -188,5 +205,13 @@ public class UserDTO {
         private String newAccessToken;
         private String newRefreshToken;
         private Long accessTokenExpirationTime;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class LogoutReqDto {
+        private String accessToken;
     }
 }
