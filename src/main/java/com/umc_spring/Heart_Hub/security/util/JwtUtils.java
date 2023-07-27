@@ -34,6 +34,8 @@ public final class JwtUtils {
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
     public static final long TOKEN_VALID_TIME = 1000L * 60 * 5; // 5분
     public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 144; // 1주일
+    public static final long REFRESH_TOKEN_VALID_TIME_IN_REDIS = 60 * 60 * 24 * 7; // 1주일
+
 
     public Key getSigningKey(String secretKey){
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));

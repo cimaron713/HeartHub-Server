@@ -1,14 +1,18 @@
 package com.umc_spring.Heart_Hub.security.util;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RedisUtils {
     private final RedisTemplate redisTemplate;
@@ -34,7 +38,7 @@ public class RedisUtils {
         stringRedisTemplate.delete(key);
     }
 
-    public void deleteDataVer2(String key) {
-        redisTemplate.delete(key);
+    public Long getExpiration(String key) {
+        return redisTemplate.getExpire(key);
     }
 }
