@@ -214,4 +214,13 @@ public class UserDTO {
     public static class LogoutReqDto {
         private String accessToken;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class WithdrawReqDto {
+        private String token;
+    }
+
 }

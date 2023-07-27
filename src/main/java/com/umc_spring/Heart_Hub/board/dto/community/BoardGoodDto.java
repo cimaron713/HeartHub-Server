@@ -23,14 +23,14 @@ public class BoardGoodDto {
     @NoArgsConstructor
     public static class Response{
         private Long goodId;
-        private User user;
-        private Board board;
+        private String userName;
+        private Long boardId;
         private String status;
         @Builder
         public Response(BoardGood boardGood){
             this.goodId = boardGood.getGoodId();
-            this.user = boardGood.getUser();
-            this.board = boardGood.getBoard();
+            this.userName = boardGood.getUser().getUsername();
+            this.boardId = boardGood.getBoard().getBoardId();
             this.status = boardGood.getStatus();
         }
     }

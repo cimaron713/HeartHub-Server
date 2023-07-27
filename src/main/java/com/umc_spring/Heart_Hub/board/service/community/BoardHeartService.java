@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
+import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardHeartDto;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.BoardHeart;
@@ -36,24 +37,23 @@ public class BoardHeartService {
         }
     }
 
-    public List<CoupleBoardDto.ScrapResponse> getHeartBoards(String username) {
+    public List<BoardDto.BoardResponseDto> getHeartBoards(String username) {
         return getHeartBoardsByUsername(username);
     }
 
-    public List<CoupleBoardDto.ScrapResponse> getHeartMateBoards(String username) {
-//        User mate = userRepository.findByUser(username);
+    public List<BoardDto.BoardResponseDto> getHeartMateBoards(String username) {
         User mate = userRepository.findByUsername(username);
 
         return getHeartBoardsByUsername(mate.getUsername());
     }
 
-    public List<CoupleBoardDto.ScrapResponse> getHeartBoardsByUsername(String username) {
-        User user =  userRepository.findByUsername(username);
+    public List<BoardDto.BoardResponseDto> getHeartBoardsByUsername(String username) {
+        User user = userRepository.findByUsername(username);
         List<BoardHeart> boardHearts = boardHeartRepository.findByUser(user);
 
         return boardHearts.stream()
                 .sorted(Comparator.comparing((BoardHeart boardHeart) -> boardHeart.getBoard().getCreatedDate()).reversed())
-                .map(boardHeart -> new CoupleBoardDto.ScrapResponse(boardHeart.getBoard()))
+                .map(boardHeart -> new BoardDto.BoardResponseDto(boardHeart.getBoard()))
                 .collect(Collectors.toList());
     }
 }

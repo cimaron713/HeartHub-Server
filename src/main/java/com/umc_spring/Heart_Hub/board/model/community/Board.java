@@ -23,9 +23,9 @@ public class Board extends BaseEntity {
     @Column(length = 200)
     private String content;
 
-    @Column(nullable = false)
-    private String status;
-
+    /**
+     * D: Daily, T: Date, L: Look
+     */
     @Column(nullable = false, length = 1)
     private String theme;
 
@@ -49,4 +49,5 @@ public class Board extends BaseEntity {
     public void update(String content){
         this.content = content;
     }
+
 }

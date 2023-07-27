@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.user.controller;
 
 
+import com.google.protobuf.Api;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
@@ -116,5 +117,11 @@ public class UserController {
         log.info("enter logout controller");
         userService.logout(accessToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Logout Success"));
+    }
+
+    @PostMapping("/delete/user")
+    public ResponseEntity<ApiResponse<Boolean>> withdrawUser(UserDTO.WithdrawReqDto withdrawReqDto){
+        Boolean response = userService.withdrawUser(withdrawReqDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "withdrawUser Success"));
     }
 }

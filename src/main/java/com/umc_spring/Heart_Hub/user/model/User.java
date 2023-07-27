@@ -48,6 +48,9 @@ public class User extends BaseEntity implements UserDetails{
     @Column(nullable = false, length = 45)
     private String nickname;
 
+    @Column(length = 45)
+    private String userMessage;
+
     @Column(nullable = false, length = 1)
     private String marketingStatus;
 
@@ -129,4 +132,13 @@ public class User extends BaseEntity implements UserDetails{
     }
 
     public void modifyUserAuthority() { this.role = Role.ROLE_ADMIN; }
+    public void modifyUserNickName(String nickname){
+        this.nickname = nickname;
+    }
+    public void modifyUserMessage(String userMessage){
+        this.userMessage = userMessage;
+    }
+    public void modifyUserImgUrl(String imgUrl){
+        this.userImgUrl = imgUrl;
+    }
 }

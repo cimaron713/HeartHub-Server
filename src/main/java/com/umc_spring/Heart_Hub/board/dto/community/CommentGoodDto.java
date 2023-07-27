@@ -13,21 +13,21 @@ public class CommentGoodDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Request{
-        private User user;
+        private String userName;
         private Long commentId;
     }
     @Getter
     @NoArgsConstructor
     public static class Response{
         private Long commentGoodId;
-        private User user;
-        private Comment comment;
+        private String userName;
+        private Long commentId;
         private String status;
         @Builder
         public Response(CommentGood commentGood){
             this.commentGoodId = commentGood.getCommentGoodId();
-            this.user = commentGood.getUser();
-            this.comment = commentGood.getComment();
+            this.userName = commentGood.getUser().getUsername();
+            this.commentId = commentGood.getComment().getCommentId();
             this.status = commentGood.getStatus();
         }
     }

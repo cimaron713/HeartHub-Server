@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,7 +39,10 @@ public class BoardService {
 
     @Value("${file.communityImgPath}")
     private String communityImgFolder;
-    //등록
+
+    /**
+     * 게시글 등록
+     */
     @Transactional
     public Long boardRegister(String theme, BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
         User user = userRepository.findByUsername(userName);
@@ -69,11 +73,10 @@ public class BoardService {
                 boardImgRepository.save(boardImg);
             }
         }
-
         return boardRegister.getBoardId();
     }
 
-    /*
+    /**
      게시글 리스트 조회
      */
     @Transactional
@@ -90,6 +93,24 @@ public class BoardService {
         List<BoardDto.BoardResponseDto> responseList = list.stream()
                 .filter(board -> !blockedUsers.contains(board.getUser()))
                 .map(m -> new BoardDto.BoardResponseDto(m)).toList();
+        return responseList;
+    }
+
+    /**
+     * 사용자가 게시한 게시물들 조회하기
+     */
+    public List<BoardDto.BoardResponseDto> findUserBoards(String userName, String theme){
+        List<Board> boardList;
+        User user = userRepository.findByUsername(userName);
+        if(user == null){
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+        Sort sort = Sort.by(Sort.Direction.DESC,"creatAt");
+        boardList = boardRepository.findAllByTheme(sort,theme);
+        List<BoardDto.BoardResponseDto> responseList = new ArrayList<>();
+        for(Board board : boardList){
+            responseList.add(new BoardDto.BoardResponseDto(board));
+        }
         return responseList;
     }
 
@@ -113,7 +134,7 @@ public class BoardService {
         return id;
     }
 
-    /*
+    /**
      게시글 삭제
      */
     @Transactional
@@ -127,6 +148,7 @@ public class BoardService {
     /**
      * 현재 로그인한 유저의 이름 가져오기
      */
+    @Transactional
     public String getLoginUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
@@ -135,6 +157,7 @@ public class BoardService {
     /**
      * 사용자가 작성한 게시물 모두 삭제하기
      */
+    @Transactional
     public void delAllBoard(User user) {
         List<Board> boardList = boardRepository.findAllByUser(user);
         boardRepository.deleteAll(boardList);
