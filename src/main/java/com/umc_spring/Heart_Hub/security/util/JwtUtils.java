@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
@@ -31,7 +32,7 @@ public final class JwtUtils {
     private final String SECRET_KEY = "saldkfjlaksfjlitulkasjgklasghisaouytlasjktkalthlkjas";
 
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
-    public static final long TOKEN_VALID_TIME = 1000L * 60 * 60; // 1시간만 토큰 유효
+    public static final long TOKEN_VALID_TIME = 1000L * 60 * 5; // 5분
     public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 144; // 1주일
 
     public Key getSigningKey(String secretKey){
@@ -74,8 +75,7 @@ public final class JwtUtils {
     }
 
     //
-    public String resolveToken(HttpServletRequest request){
-        String token = request.getHeader("Authorization");
+    public String resolveToken(String token){
         if(token != null){
             return token.substring("Bearer ".length());
         } else {
@@ -83,22 +83,34 @@ public final class JwtUtils {
         }
     }
 
-    public boolean validateToken(String jwtToken){
+    public boolean validateToken(String jwtToken) {
+//        try {
+//            log.info("come in validateToken method");
+//            Claims body = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(jwtToken).getBody();
+//            log.info("email : "+body.get("email"));
+//            return true;
+//        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+//            log.info("잘못된 JWT 서명입니다.");
+//            return false;
+//        } catch (ExpiredJwtException e) {
+//            log.info("만료된 JWT 토큰입니다.");
+//            return false;
+//        } catch (UnsupportedJwtException e) {
+//            log.info("지원되지 않는 JWT 토큰입니다.");
+//            return false;
+//        } catch (IllegalArgumentException e) {
+//            log.info("JWT 토큰이 잘못되었습니다.");
+//        }
+//        return false;
         try {
-            Claims claims = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(jwtToken).getBody();
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-            throw new CustomException(ErrorCode.MALFORMED_JWT);
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
-            throw new CustomException(ErrorCode.EXPIRED_JWT);
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
-            throw new CustomException(ErrorCode.UNSUPPORTED_JWT);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-            throw new CustomException(ErrorCode.BAD_JWT);
+//            String encodedJwtToken = Base64.getEncoder().encodeToString(jwtToken.getBytes());
+            log.info("Enter the validateToken Method");
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(jwtToken);
+            log.info("email : "+claims.getBody().get("email"));
+
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
         }
     }
 

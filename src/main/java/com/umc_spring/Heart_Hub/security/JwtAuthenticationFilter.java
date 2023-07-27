@@ -24,21 +24,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
-        String token = jwtUtils.resolveToken(request);
+        String token = jwtUtils.resolveToken(request.getHeader("Authorization"));
+        log.info("token : "+token);
 
-        // 여기 path 없애도 될거같음
-        if(!path.startsWith("/api/member/reissue") && !path.startsWith("/api/login")
-                && !path.startsWith("/api/join")
-                && token != null && jwtUtils.validateToken(token)){
-            if(jwtUtils.getReportedStatusByToken(token)) {
-                String isLogout = redisUtils.getData(token);
-                if(isLogout == null){
-                    Authentication authentication = jwtUtils.getAuthentication(token);
-                    log.info("filter get Authorities() : "+authentication.getAuthorities().toString());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(token != null && jwtUtils.validateToken(token)){
+            if(!request.getRequestURI().equals("/api/reissue")) {
+                if(jwtUtils.getReportedStatusByToken(token)) {
+                    String isLogout = redisUtils.getData(token);
+                    if(isLogout == null){
+                        log.info("enter the this logic");
+                        Authentication authentication = jwtUtils.getAuthentication(token);
+                        log.info("filter get Authorities() : "+authentication.getAuthorities().toString());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                } else {
+                    throw new CustomException(ErrorCode.NOT_PERMIT);
                 }
-            } else {
-                throw new CustomException(ErrorCode.NOT_PERMIT);
             }
         }
         filterChain.doFilter(request, response);

@@ -13,6 +13,7 @@ import com.umc_spring.Heart_Hub.security.util.JwtUtils;
 import com.umc_spring.Heart_Hub.security.util.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private final JwtUtils jwtUtils;
     private final RedisUtils redisUtils;
     private final EmailService emailService;
+
+    private final RedisTemplate redisTemplate;
 
     @Override
     public  UserDTO.SignUpRespDto register(UserDTO.SignUpRequestDto signUpRequestDto) {
@@ -121,10 +124,12 @@ public class UserServiceImpl implements UserService {
         String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
         String refreshToken = redisUtils.getData("RT:" + user.getEmail());
 
-        if (refreshToken == null) {
+        if (refreshToken.isEmpty()) {
             // refreshToken이 존재하지 않는다면 설정해줘야함
-            refreshToken = jwtUtils.createToken(user.getEmail(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
-            redisUtils.setDataExpire("RT:" + user.getEmail(), refreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            String newRefreshToken = jwtUtils.createToken(user.getEmail(), JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            log.info("newRefreshToken : "+newRefreshToken);
+            redisUtils.setDataExpire("RT:" + user.getEmail(), newRefreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+            refreshToken = newRefreshToken;
         }
 
         return UserDTO.LoginResponse.builder()
@@ -196,20 +201,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO.ReissueRespDto reissue(String refreshToken) {
-        /**
-         * 여기에 resolveToken 넣어야할지도,,,,,,, 내일 해봐야지
-         */
-        jwtUtils.validateToken(refreshToken);
-
-        String email = jwtUtils.getEmailInToken(refreshToken);
+        String resolvedToken = jwtUtils.resolveToken(refreshToken);
+        String email = jwtUtils.getEmailInToken(resolvedToken);
         String savedRefreshToken = redisUtils.getData("RT:" + email);
-
-        if (refreshToken.isEmpty() || !refreshToken.equals(savedRefreshToken)) {
+        log.info("savedRefreshToken : "+savedRefreshToken);
+        log.info("RefreshToken : "+resolvedToken);
+        if (refreshToken.isEmpty() || !resolvedToken.equals(savedRefreshToken)) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         } else {
+            String data1 = redisUtils.getData("RT:" + email);
+            log.info("data1 : "+data1);
+            redisUtils.deleteDataVer2("RT" + email);
+            String data2 = redisUtils.getData("RT:" + email);
+            log.info("data2 : "+data2);
             String newAccessToken = jwtUtils.createToken(email, JwtUtils.TOKEN_VALID_TIME);
             String newRefreshToken = jwtUtils.createToken(email, JwtUtils.REFRESH_TOKEN_VALID_TIME);
-            redisUtils.setDataExpire("RT" + email, newRefreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
+//            redisUtils.setDataExpire("RT" + email, newRefreshToken, JwtUtils.REFRESH_TOKEN_VALID_TIME);
 
             return UserDTO.ReissueRespDto.builder()
                     .newAccessToken(newAccessToken)
@@ -217,19 +224,32 @@ public class UserServiceImpl implements UserService {
                     .accessTokenExpirationTime(JwtUtils.TOKEN_VALID_TIME)
                     .build();
         }
+
     }
 
     @Override
     public void logout(String accessToken) {
-        /**
-         * 여기에 resolveToken 넣어야할지도,,,,,,, 내일 해봐야지
-         */
-        jwtUtils.validateToken(accessToken);
-        String email = jwtUtils.getEmailInToken(accessToken);
+        log.info("accessToken : "+accessToken);
+        String resolvedToken = jwtUtils.resolveToken(accessToken);
+        log.info("resolved accessToken : "+resolvedToken);
 
-        if(!redisUtils.getData("RT"+email).isEmpty()) {
-            redisUtils.deleteData("RT"+email);
+        String email = jwtUtils.getEmailInToken(resolvedToken);
+//        log.info("email : "+email);
+//        String data = redisUtils.getData("RT:" + email);
+//        log.info("data : "+data);
+//        if(!data.isEmpty()) {
+//            redisUtils.deleteData("RT" + email);
+//        } else {
+//            throw new CustomException(ErrorCode.REFRESHTOKEN_NOT_FOUND);
+//        }
+        if(redisTemplate.opsForValue().get("RT:"+email) != null) {
+            log.info("getRefreshToken : " + redisTemplate.opsForValue().get("RT:"+email));
+            redisTemplate.delete("RT:"+email);
         }
+
+        Long expiration = jwtUtils.getExpiration(accessToken);
+        log.info("expiration : " + expiration);
+        redisTemplate.opsForValue().set(accessToken, "logout", expiration);
 
         redisUtils.setDataExpire(accessToken, "logout", jwtUtils.getExpiration(accessToken));
     }

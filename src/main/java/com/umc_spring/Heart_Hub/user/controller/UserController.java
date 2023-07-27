@@ -76,7 +76,7 @@ public class UserController {
     @GetMapping("/user/info")
     public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {
         UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success! Get UserInfo"));
     }
 
     @PostMapping("/set/mate")
@@ -105,15 +105,16 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(mateExist, "Get hasMate Success!"));
     }
 
-    @PostMapping("/member/reissue")
-    public ResponseEntity<ApiResponse<UserDTO.ReissueRespDto>> reissue(UserDTO.ReissueReqDto reissueReqDto) {
-        UserDTO.ReissueRespDto reissueRespDto = userService.reissue(reissueReqDto.getRefreshToken());
+    @PostMapping("/reissue")
+    public ResponseEntity<ApiResponse<UserDTO.ReissueRespDto>> reissue(@RequestHeader("Authorization") String refreshToken) {
+        UserDTO.ReissueRespDto reissueRespDto = userService.reissue(refreshToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(reissueRespDto, "Reissue Success"));
     }
 
     @PostMapping("/member/logout")
-    public ResponseEntity<ApiResponse<String>> logout(UserDTO.LogoutReqDto logoutReqDto) {
-        userService.logout(logoutReqDto.getAccessToken());
+    public ResponseEntity<ApiResponse<String>> logout(@RequestHeader("Authorization") String accessToken) {
+        log.info("enter logout controller");
+        userService.logout(accessToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Logout Success"));
     }
 }

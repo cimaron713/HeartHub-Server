@@ -5,6 +5,7 @@ import com.umc_spring.Heart_Hub.constant.handler.CustomAuthenticationEntryPoint;
 import com.umc_spring.Heart_Hub.security.util.JwtUtils;
 import com.umc_spring.Heart_Hub.security.util.RedisUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
+@Slf4j
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
     private final JwtUtils jwtUtils;
