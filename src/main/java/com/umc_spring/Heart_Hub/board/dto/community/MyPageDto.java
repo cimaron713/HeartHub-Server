@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MyPageDto {
@@ -13,21 +14,21 @@ public class MyPageDto {
     @Builder
     public static class Request{
         private String myImgUrl;
-        private User user;
+        private String userName;
     }
 
     public static class Response{
         private String myImgUrl;
-        private List<Board> myBoards;
-        private User user;
+        private List<BoardDto.BoardResponseDto> myBoards;
         private String userName;
         private String userMessage;
 
         @Builder
         public Response(User user){
             this.myImgUrl = user.getUserImgUrl();
-            this.myBoards = user.getBoardList();
-            this.user = user;
+            this.myBoards = Collections.singletonList((BoardDto.BoardResponseDto) user.getBoardList());
+            this.userName = user.getNickname();
+            this.userMessage = user.getUserMessage();
         }
     }
 }

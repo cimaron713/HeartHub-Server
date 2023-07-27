@@ -20,14 +20,14 @@ public class BoardHeartDto {
     @NoArgsConstructor
     public static class Response{
         private Long heartId;
-        private User user;
-        private Board board;
+        private String userName;
+        private Long boardId;
         private String status;
         @Builder
         public Response(BoardHeart boardHeart){
             this.heartId = boardHeart.getHeartId();
-            this.user = boardHeart.getUser();
-            this.board = boardHeart.getBoard();
+            this.userName = boardHeart.getUser().getUsername();
+            this.boardId = boardHeart.getBoard().getBoardId();
             this.status = boardHeart.getStatus();
         }
     }
