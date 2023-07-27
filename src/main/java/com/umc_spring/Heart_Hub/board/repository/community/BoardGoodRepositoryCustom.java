@@ -7,4 +7,5 @@ import java.util.List;
 public interface BoardGoodRepositoryCustom {
 
     List<Board> findTop3ByBoard();
+    List<Board> findTop3ByBoard_Theme();
 }

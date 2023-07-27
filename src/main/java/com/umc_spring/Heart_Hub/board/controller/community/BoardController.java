@@ -99,4 +99,13 @@ public class BoardController {
         List<BoardDto.BoardResponseDto> hotBoardList = boardGoodService.findHotBoard();
         return ResponseEntity.ok().body(ApiResponse.createSuccess(hotBoardList, "Get Hot Board Success!"));
     }
+
+    /**
+     * Look 랭킹
+     */
+    @GetMapping("/look/lank")
+    public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> getLookLank(){
+        List<BoardDto.BoardResponseDto> lookLankList = boardGoodService.lookLank();
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(lookLankList,"Get Look Top3 Success"));
+    }
 }

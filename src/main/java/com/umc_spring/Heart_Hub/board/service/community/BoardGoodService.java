@@ -57,4 +57,14 @@ public class BoardGoodService {
 
         return hotBoardList.stream().map(BoardDto.BoardResponseDto::new).collect(Collectors.toList());
     }
+
+    /**
+     * 좋아요 기준으로 Look 게시물 상위 3개
+     */
+    @Transactional
+    public List<BoardDto.BoardResponseDto> lookLank(){
+        List<Board> looks = boardGoodRepository.findTop3ByBoard_Theme();
+        List<BoardDto.BoardResponseDto> result = looks.stream().map(BoardDto.BoardResponseDto::new).collect(Collectors.toList());
+        return result;
+    }
 }

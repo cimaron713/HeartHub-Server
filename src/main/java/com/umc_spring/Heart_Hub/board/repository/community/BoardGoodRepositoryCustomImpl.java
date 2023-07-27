@@ -29,4 +29,19 @@ public class BoardGoodRepositoryCustomImpl implements BoardGoodRepositoryCustom{
                 .limit(3)
                 .fetch();
     }
+
+    @Override
+    public List<Board> findTop3ByBoard_Theme(){
+        QBoard lankBoard = QBoard.board;
+        QBoardGood lankGood = QBoardGood.boardGood;
+
+        return jpaQueryFactory.selectFrom(lankBoard)
+                .leftJoin(lankGood).on(lankBoard.boardId.eq(lankGood.board.boardId))
+                .where(lankGood.status.eq("T"))
+                .groupBy(lankBoard.boardId)
+                .having(lankBoard.theme.eq("L"))
+                .orderBy(lankGood.count().desc())
+                .limit(3)
+                .fetch();
+    }
 }

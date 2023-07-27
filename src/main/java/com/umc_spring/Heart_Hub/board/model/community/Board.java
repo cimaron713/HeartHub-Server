@@ -23,6 +23,9 @@ public class Board extends BaseEntity {
     @Column(length = 200)
     private String content;
 
+    /**
+     * D: Daily, T: Date, L: Look
+     */
     @Column(nullable = false, length = 1)
     private String theme;
 
