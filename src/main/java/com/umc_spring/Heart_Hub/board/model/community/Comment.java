@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.board.model.community;
 
+import com.querydsl.core.types.EntityPath;
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Comment extends BaseEntity {
+public class Comment extends BaseEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
@@ -59,5 +60,8 @@ public class Comment extends BaseEntity {
 
     public void updateParent(Comment comment) {
         this.parent = comment;
+    }
+    public void updateChild(List<Comment> child){
+        this.childComment = child;
     }
 }
