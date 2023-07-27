@@ -9,8 +9,10 @@ import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,4 +47,14 @@ public class BoardGoodService {
         return boardGoods.size();
     }
     //좋아요 취소
+
+    /**
+     * 좋아요를 기준으로 상위 3개의 게시물 반환
+     */
+    @Transactional
+    public List<BoardDto.BoardResponseDto> findHotBoard() {
+        List<Board> hotBoardList = boardGoodRepository.findTop3ByBoard();
+
+        return hotBoardList.stream().map(BoardDto.BoardResponseDto::new).collect(Collectors.toList());
+    }
 }

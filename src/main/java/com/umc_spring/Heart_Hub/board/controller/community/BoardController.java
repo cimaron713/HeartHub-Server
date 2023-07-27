@@ -3,6 +3,7 @@ package com.umc_spring.Heart_Hub.board.controller.community;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardImageUploadDto;
 import com.umc_spring.Heart_Hub.board.service.community.BlockUserService;
+import com.umc_spring.Heart_Hub.board.service.community.BoardGoodService;
 import com.umc_spring.Heart_Hub.board.service.community.BoardService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 public class BoardController {
     private BoardService boardService;
     private BlockUserService blockUserService;
+    private BoardGoodService boardGoodService;
     //게시글 작성
 
     //게시글 작성
@@ -87,5 +89,14 @@ public class BoardController {
         String username = authentication.getName();
         blockUserService.unblockUser(username, unblockReqDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Unblock user success"));
+    }
+
+    /**
+     * 핫한 게시물 조회
+     */
+    @GetMapping("/api/hot-board")
+    public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> getHotBoardList() {
+        List<BoardDto.BoardResponseDto> hotBoardList = boardGoodService.findHotBoard();
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(hotBoardList, "Get Hot Board Success!"));
     }
 }

@@ -24,12 +24,6 @@ public class Board extends BaseEntity {
     private String content;
 
     @Column(nullable = false, length = 1)
-    private String goodStatus;
-
-    @Column(nullable = false, length = 1)
-    private String heartStatus;
-
-    @Column(nullable = false, length = 1)
     private String theme;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,16 +42,9 @@ public class Board extends BaseEntity {
         this.theme = theme;
         this.content = content;
         this.user = user;
-        this.goodStatus = "T";
-        this.heartStatus = "T";
     }
     public void update(String content){
         this.content = content;
     }
-    public void deleteGoodStatus(){
-        this.goodStatus="F";
-    }
-    public void deleteHeartStatus(){
-        this.heartStatus="F";
-    }
+
 }

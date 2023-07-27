@@ -42,16 +42,4 @@ public class CoupleBoardDto {
         }
     }
 
-    @Getter
-    @NoArgsConstructor
-    public static class ScrapResponse {
-        private Board board;
-
-        @Builder
-        public ScrapResponse(Board board) {
-            this.board = board;
-        }
-
-    }
-
 }
