@@ -49,25 +49,4 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.createError(HttpStatus.INTERNAL_SERVER_ERROR, "accessDeniedException"));
     }
-
-//    @ExceptionHandler(ExpiredJwtException.class)
-//    public ResponseEntity<ApiResponse<String>> handleExpiredJwtException(Exception e) {
-//        log.error(e.getMessage());
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                .body(ApiResponse.createError(HttpStatus.UNAUTHORIZED, "Token Expired"));
-//    }
-//
-//    @ExceptionHandler(UnsupportedJwtException.class)
-//    public ResponseEntity<ApiResponse<String>> handleUnsupportedJwtException(Exception e) {
-//        log.error(e.getMessage());
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                .body(ApiResponse.createError(HttpStatus.UNAUTHORIZED, "Token Unsupported"));
-//    }
-//
-//    @ExceptionHandler(value = { SecurityException.class, MalformedJwtException.class })
-//    public ResponseEntity<ApiResponse<String>> handleMalformedJwtException(Exception e) {
-//        log.error(e.getMessage());
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                .body(ApiResponse.createError(HttpStatus.UNAUTHORIZED, "Token Malformed"));
-//    }
 }
