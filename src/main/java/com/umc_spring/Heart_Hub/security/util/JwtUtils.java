@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.security.util;
 
+import com.umc_spring.Heart_Hub.Report.model.enums.ReportStatus;
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
@@ -128,9 +129,12 @@ public final class JwtUtils {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
-        if(user.getReportedStatus().equals("ACCOUNT_SUSPENDED")) {
+        log.info("user Reported Status : "+user.getReportedStatus().toString());
+        if(user.getReportedStatus().equals(ReportStatus.ACCOUNT_SUSPENDED)) {
+            log.info("Reported Status bad");
             return false;
         } else {
+            log.info("Reported Status good");
             return true;
         }
     }

@@ -141,4 +141,8 @@ public class User extends BaseEntity implements UserDetails{
     public void modifyUserImgUrl(String imgUrl){
         this.userImgUrl = imgUrl;
     }
+
+    public void modifyUserReportStatus() {
+        this.reportedStatus = ReportStatus.ACCOUNT_SUSPENDED;
+    }
 }

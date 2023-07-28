@@ -119,6 +119,9 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.LOGIN_FAILED);
         }
 
+        if(user.getReportedStatus().equals(ReportStatus.ACCOUNT_SUSPENDED)) {
+            throw new CustomException(ErrorCode.NOT_PERMIT);
+        }
         String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
         String refreshToken = redisUtils.getData("RT:" + user.getEmail());
 
@@ -135,6 +138,7 @@ public class UserServiceImpl implements UserService {
                 .refreshToken(refreshToken)
                 .accessTokenExpirationTime(JwtUtils.TOKEN_VALID_TIME)
                 .build();
+
     }
 
     public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
@@ -245,6 +249,14 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
         logout(response.getToken());
         return true;
+    }
+
+    @Override
+    public void modifyUserReportStatus(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
+        user.modifyUserReportStatus();
     }
 
 
