@@ -223,21 +223,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(String accessToken) {
-        log.info("accessToken : "+accessToken);
         String resolvedToken = jwtUtils.resolveToken(accessToken);
-        log.info("resolved accessToken : "+resolvedToken);
 
         String email = jwtUtils.getEmailInToken(resolvedToken);
-        log.info("email : "+email);
         String data = redisUtils.getData("RT:" + email);
-        log.info("data : "+data);
-        if(!data.isEmpty()) {
+        if(data != null) {
             redisUtils.deleteData("RT:" + email);
         } else {
             throw new CustomException(ErrorCode.REFRESHTOKEN_NOT_FOUND);
         }
 
-        redisUtils.setDataExpire(accessToken, "logout", jwtUtils.getExpiration(accessToken));
+        redisUtils.setDataExpire(resolvedToken, "logout", jwtUtils.getExpiration(resolvedToken));
     }
 
     @Override
