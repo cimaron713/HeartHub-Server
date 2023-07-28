@@ -23,9 +23,9 @@ public class BoardGoodService {
 
 
     //좋아요 생성
-    public void goodRegister(BoardDto.BoardRequestDto boardRequest, String userName){
+    public void goodRegister(BoardDto.BoardRequestDto boardRequest, String userName, Long boardId){
         User user = userRepository.findByUsername(userName);
-        Board board = boardRepository.findById(boardRequest.getBoardId()).orElseThrow();
+        Board board = boardRepository.findById(boardId).orElseThrow();
 
         //좋아요 안누른 게시글만 좋아요 누르게 허용
         if(boardGoodRepository.findByUserAndBoard(user, board) == null){

@@ -16,7 +16,7 @@ public class BoardGoodDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Request{
-        Long userId;
+        Long userName;
         Long boardId;
     }
     @Getter

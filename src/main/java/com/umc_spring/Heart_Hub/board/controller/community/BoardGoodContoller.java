@@ -12,18 +12,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/board/good")
+@RequestMapping("/board")
 public class BoardGoodContoller {
     private BoardGoodService boardGoodService;
     //좋아요 등록
-    @PostMapping
-    public ResponseEntity<ApiResponse<String>> good(@RequestBody BoardDto.BoardRequestDto params, Authentication authentication){
+    @PostMapping("/{boardId}/good")
+    public ResponseEntity<ApiResponse<String>> good(@PathVariable Long boardId, @RequestBody BoardDto.BoardRequestDto params,
+                                                    Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        boardGoodService.goodRegister(params, userDetails.getUsername());
+        boardGoodService.goodRegister(params, userDetails.getUsername(),boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("register good success"));
     }
 
-    @GetMapping("/{id}/counts")
+    @GetMapping("/{id}/good/count")
     public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable Long id,@RequestBody BoardGoodDto.Request params){
         int goodCnt = boardGoodService.goodCount(id);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(goodCnt,"Count good success"));
