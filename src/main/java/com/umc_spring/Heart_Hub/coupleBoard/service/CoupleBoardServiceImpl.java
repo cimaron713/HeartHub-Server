@@ -1,5 +1,7 @@
 package com.umc_spring.Heart_Hub.coupleBoard.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
@@ -21,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,8 +38,10 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
     private final CoupleBoardRepository coupleBoardRepository;
     private final ImageRepository imageRepository;
 
-    @Value("${file.boardImgPath}")
-    private String uploadFolder;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    private final AmazonS3 amazonS3;
 
     @Override
     public Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) {
@@ -51,28 +57,41 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
         coupleBoardRepository.save(result);
 
-        if(boardImageUploadDto.getFiles() != null && !boardImageUploadDto.getFiles().isEmpty()) {
-            for (MultipartFile file : boardImageUploadDto.getFiles()) {
-                UUID uuid = UUID.randomUUID();
-                String imgFileName = uuid + "_" + file.getOriginalFilename();
+        if(boardImageUploadDto.getFiles() != null && boardImageUploadDto.getFiles().length > 0) {
+            try {
+                List<String> fileUrls = upload(boardImageUploadDto.getFiles(), user.getUsername());
 
-                File destinationFile = new File(uploadFolder + imgFileName);
+                for (String fileUrl : fileUrls) {
+                    CoupleBoardImage img = CoupleBoardImage.builder()
+                            .imgUrl(fileUrl)
+                            .coupleBoard(result)
+                            .build();
 
-                try {
-                    file.transferTo(destinationFile);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    imageRepository.save(img);
                 }
-
-                CoupleBoardImage img = CoupleBoardImage.builder()
-                        .imgUrl("/coupleBoardImgs/" + imgFileName)
-                        .coupleBoard(result)
-                        .build();
-
-                imageRepository.save(img);
+            } catch (IOException e) {
+                throw new CustomException(ErrorCode.IMAGE_NOT_UPLOAD);
             }
         }
+
         return result.getPostId();
+    }
+
+    public List<String> upload(MultipartFile[] multipartFile, String username) throws IOException {
+        List<String> fileUrls = new ArrayList<>();
+
+        for(MultipartFile mf : multipartFile) {
+            String formatDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("/yyyy-MM-dd HH:mm"));
+            String s3FileName = "CoupleCommunity/"+ username + formatDate + mf.getOriginalFilename();
+
+            ObjectMetadata objMeta = new ObjectMetadata();
+            objMeta.setContentLength(mf.getInputStream().available());
+            amazonS3.putObject(bucket, s3FileName, mf.getInputStream(), objMeta);
+
+            fileUrls.add(amazonS3.getUrl(bucket, s3FileName).toString());
+        }
+
+        return fileUrls;
     }
 
     @Override

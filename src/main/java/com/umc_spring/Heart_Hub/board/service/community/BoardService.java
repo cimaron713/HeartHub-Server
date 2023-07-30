@@ -1,5 +1,7 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardImageUploadDto;
 import com.umc_spring.Heart_Hub.board.model.community.BlockedList;
@@ -10,6 +12,7 @@ import com.umc_spring.Heart_Hub.board.repository.community.BoardImgRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
 import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
+import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -37,8 +42,10 @@ public class BoardService {
     private final BlockedListRepository blockedListRepository;
     private final BoardImgRepository boardImgRepository;
 
-    @Value("${file.communityImgPath}")
-    private String communityImgFolder;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    private final AmazonS3 amazonS3;
 
     /**
      * 게시글 등록
@@ -56,24 +63,41 @@ public class BoardService {
                 .theme(params.getTheme())
                 .build();
         boardRepository.save(boardRegister);
-        if(boardImageUploadDto.getCommunityFiles() != null && !boardImageUploadDto.getCommunityFiles().isEmpty()){
-            for(MultipartFile file : boardImageUploadDto.getCommunityFiles()){
-                UUID uuid = UUID.randomUUID();
-                String communityImgFileName = uuid+"_"+file.getOriginalFilename();
-                File imgPath = new File(communityImgFolder+communityImgFileName);
-                try{
-                    file.transferTo(imgPath);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+        if(boardImageUploadDto.getCommunityFiles() != null && boardImageUploadDto.getCommunityFiles().length > 0){
+            try {
+                List<String> fileUrls = upload(boardImageUploadDto.getCommunityFiles(), user.getUsername());
+
+                for (String fileUrl : fileUrls) {
+                    BoardImg img = BoardImg.builder()
+                            .postImgUrl(fileUrl)
+                            .board(boardRegister)
+                            .build();
+
+                    boardImgRepository.save(img);
                 }
-                BoardImg boardImg = BoardImg.builder()
-                        .postImgUrl("/boardImgs/"+communityImgFileName)
-                        .board(boardRegister)
-                        .build();
-                boardImgRepository.save(boardImg);
+            } catch (IOException e) {
+                throw new CustomException(ErrorCode.IMAGE_NOT_UPLOAD);
             }
         }
+
         return boardRegister.getBoardId();
+    }
+
+    public List<String> upload(MultipartFile[] multipartFile, String username) throws IOException {
+        List<String> fileUrls = new ArrayList<>();
+
+        for(MultipartFile mf : multipartFile) {
+            String formatDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("/yyyy-MM-dd HH:mm"));
+            String s3FileName = "Community/"+ username + formatDate + mf.getOriginalFilename();
+
+            ObjectMetadata objMeta = new ObjectMetadata();
+            objMeta.setContentLength(mf.getInputStream().available());
+            amazonS3.putObject(bucket, s3FileName, mf.getInputStream(), objMeta);
+
+            fileUrls.add(amazonS3.getUrl(bucket, s3FileName).toString());
+        }
+
+        return fileUrls;
     }
 
     /**
