@@ -21,7 +21,13 @@ public class BoardHeartService {
     private BoardRepository boardRepository;
     private UserRepository userRepository;
     private BoardHeartRepository boardHeartRepository;
-    public void heartRegister(@RequestBody BoardHeartDto.Request params, String userName){
+
+    /**
+     * 스크랩 등록
+     * @param params
+     * @param userName
+     */
+    public void heartRegister(BoardHeartDto.Request params, String userName){
         User user = userRepository.findByUsername(userName);
         Board board = boardRepository.findById(params.getBoardId()).orElseThrow();
         if(boardHeartRepository.findByUserAndBoard(user,board) == null){
@@ -35,6 +41,14 @@ public class BoardHeartService {
             BoardHeart boardHeart = boardHeartRepository.findByUserAndBoard(user,board).orElseThrow();
             boardHeartRepository.delete(boardHeart);
         }
+    }
+
+    /**
+     * 스크랩 개수 가져오기
+     */
+    public int getHeartCount(Long id){
+        int heartCount = boardHeartRepository.countHeart(id).size();
+        return heartCount;
     }
 
     public List<BoardDto.BoardResponseDto> getHeartBoards(String username) {

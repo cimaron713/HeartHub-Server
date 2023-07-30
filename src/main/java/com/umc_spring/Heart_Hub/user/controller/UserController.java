@@ -3,8 +3,12 @@ package com.umc_spring.Heart_Hub.user.controller;
 
 import com.google.protobuf.Api;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
+import com.umc_spring.Heart_Hub.user.model.User;
+import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import com.umc_spring.Heart_Hub.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -106,7 +111,7 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(mateExist, "Get hasMate Success!"));
     }
 
-    @PostMapping("/reissue")
+    @PostMapping("/member/reissue")
     public ResponseEntity<ApiResponse<UserDTO.ReissueRespDto>> reissue(@RequestHeader("Authorization") String refreshToken) {
         UserDTO.ReissueRespDto reissueRespDto = userService.reissue(refreshToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(reissueRespDto, "Reissue Success"));
@@ -123,5 +128,12 @@ public class UserController {
     public ResponseEntity<ApiResponse<Boolean>> withdrawUser(UserDTO.WithdrawReqDto withdrawReqDto){
         Boolean response = userService.withdrawUser(withdrawReqDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "withdrawUser Success"));
+    }
+
+    @GetMapping("/modi/user/{userId}")
+    @Transactional
+    public ResponseEntity<ApiResponse<String>> modifyUserReportStatus(@PathVariable Long userId) {
+        userService.modifyUserReportStatus(userId);
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("modify User Report Status Success"));
     }
 }
