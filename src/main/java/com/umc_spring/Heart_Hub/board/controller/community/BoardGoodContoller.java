@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/board")
+@RequestMapping("/api/user/board")
 public class BoardGoodContoller {
     private BoardGoodService boardGoodService;
     //좋아요 등록

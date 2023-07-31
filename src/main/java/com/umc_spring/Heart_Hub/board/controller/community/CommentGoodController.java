@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CommentGoodController {
     private CommentGoodService commentGoodService;
-    @PostMapping("/board//{commentId}")
+    @PostMapping("/api/user/board//{commentId}")
     public ResponseEntity<ApiResponse<String>> commentGood(@PathVariable Long commentId,
                                                            @RequestBody CommentDto.Request request, Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
@@ -20,7 +20,7 @@ public class CommentGoodController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Good Comment Success"));
     }
 
-    @GetMapping("/board/{commentId}")
+    @GetMapping("/api/user/board/{commentId}")
     public ResponseEntity<ApiResponse<Integer>> commentGoodCount(@PathVariable Long commentId){
         int cnt = commentGoodService.commentGoodCnt(commentId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(cnt,"Get GoodCount Success"));

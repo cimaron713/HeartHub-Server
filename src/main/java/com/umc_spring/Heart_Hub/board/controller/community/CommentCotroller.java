@@ -24,7 +24,7 @@ public class CommentCotroller {
     /*
     해당 게시글의 댓글 조회
      */
-    @GetMapping("/board/{theme}/{boardid}/comments")
+    @GetMapping("/api/user/board/{theme}/{boardid}/comments")
     public ResponseEntity<ApiResponse<List<CommentDto.Response>>> getComments(@PathVariable String theme, @PathVariable Long boardId, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -35,7 +35,7 @@ public class CommentCotroller {
     /*
     해당 게시글의 댓글 등록
      */
-    @PostMapping("/board/{theme}/{boardid}/comments")
+    @PostMapping("/api/user/board/{theme}/{boardid}/comments")
     public ResponseEntity<ApiResponse<Long>> getComments(@RequestBody CommentDto.Request request, @PathVariable Long boardId,
                                                          Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

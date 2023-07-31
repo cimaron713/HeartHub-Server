@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @NoArgsConstructor
-@RequestMapping("/board")
+@RequestMapping("/api/user/board")
 public class BoardController {
     private BoardService boardService;
     private BlockUserService blockUserService;
@@ -74,7 +74,7 @@ public class BoardController {
     /**
      * 상대방 차단하기
      */
-    @PostMapping("/api/block")
+    @PostMapping("/block")
     public ResponseEntity<ApiResponse<String>> blockUser(@RequestBody BoardDto.BlockUserReqDto blockReqDto, Authentication authentication) {
         String username = authentication.getName();
         blockUserService.blockUser(username, blockReqDto);
@@ -84,7 +84,7 @@ public class BoardController {
     /**
      * 상대방 차단 해제
      */
-    @PostMapping("/api/unblock")
+    @PostMapping("/unblock")
     public ResponseEntity<ApiResponse<String>> unblockUser(@RequestBody BoardDto.UnblockUserReqDto unblockReqDto, Authentication authentication) {
         String username = authentication.getName();
         blockUserService.unblockUser(username, unblockReqDto);
@@ -94,7 +94,7 @@ public class BoardController {
     /**
      * 핫한 게시물 조회
      */
-    @GetMapping("/api/hot-board")
+    @GetMapping("/hot-board")
     public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> getHotBoardList() {
         List<BoardDto.BoardResponseDto> hotBoardList = boardGoodService.findHotBoard();
         return ResponseEntity.ok().body(ApiResponse.createSuccess(hotBoardList, "Get Hot Board Success!"));

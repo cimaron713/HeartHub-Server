@@ -31,7 +31,7 @@ import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class CoupleBoardController {
 
     private static final Logger logger = LoggerFactory.getLogger(CoupleBoardController.class);
