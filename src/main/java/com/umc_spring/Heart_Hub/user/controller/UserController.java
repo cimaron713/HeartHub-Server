@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(registeredUser, "Success Join"));
     }
 
-    @PostMapping(value = "/check/email")
+    @GetMapping(value = "/check/email")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email) {
         Boolean response = userService.validateDuplicateEmail(email.getEmail());
