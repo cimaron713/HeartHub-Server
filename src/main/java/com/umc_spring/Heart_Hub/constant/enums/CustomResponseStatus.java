@@ -30,7 +30,11 @@ public enum CustomResponseStatus {
     POST_NOT_FOUND(false, 4001, "게시물 정보를 찾을 수 없습니다."),
     MISSION_NOT_FOUND(false, 4002, "미션 정보를 찾을 수 없습니다."),
     USER_MISSION_STATUS_NOT_FOUND(false, 4003, "UMS 정보를 찾을 수 없습니다."),
-    IMAGE_NOT_UPLOAD(false, 4004, "이미지가 업로드되지 않았습니다.");
+    IMAGE_NOT_UPLOAD(false, 4004, "이미지가 업로드되지 않았습니다."),
+
+    // 5000 : SERVER ERROR
+    INTERNAL_SERVER_ERROR(false, 5000, "내부 서버 오류입니다.");
+
 
     private final boolean isSuccess;
     private final int code;

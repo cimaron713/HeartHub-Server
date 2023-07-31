@@ -29,24 +29,24 @@ public class CustomExceptionHandler {
     public ResponseEntity<ApiResponse<String>> handleCustomException(CustomException e) {
 //        log.error(e.getErrorCode().getMessage());
         log.info("handleCustomException실행");
-        log.info("e.getHpptStatus : "+e.getErrorCode().getHttpStatus().toString());
-        log.info("e.getMessage : "+e.getErrorCode().getMessage());
-        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
-                .body(ApiResponse.createError(e.getErrorCode().getHttpStatus(), e.getErrorCode().getMessage()));
+        log.info("e.getStatus : "+e.getResponseStatus().toString());
+        log.info("e.getMessage : "+e.getResponseStatus().getMessage());
+        return ResponseEntity.status(e.getResponseStatus().getCode())
+                .body(ApiResponse.createError(e.getResponseStatus()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<String>> handleException(Exception e) {
+    public ResponseEntity<ApiResponse<String>> handleException(CustomException e) {
         log.error(e.getMessage());
         log.info("handleException실행");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.createError(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류입니다."));
+        return ResponseEntity.status(e.getResponseStatus().getCode())
+                .body(ApiResponse.createError(e.getResponseStatus()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse<String>> handleAccessDeniedException(Exception e) {
+    public ResponseEntity<ApiResponse<String>> handleAccessDeniedException(CustomException e) {
         log.error(e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.createError(HttpStatus.INTERNAL_SERVER_ERROR, "accessDeniedException"));
+        return ResponseEntity.status(e.getResponseStatus().getCode())
+                .body(ApiResponse.createError(e.getResponseStatus()));
     }
 }
