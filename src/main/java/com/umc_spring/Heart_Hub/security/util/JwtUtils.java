@@ -32,12 +32,17 @@ public final class JwtUtils {
     private final String SECRET_KEY = "saldkfjlaksfjlitulkasjgklasghisaouytlasjktkalthlkjas";
 
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
-    @Value("${jwt.token-valid-time}")
-    public static long TOKEN_VALID_TIME;
-    @Value("${jwt.refresh-token-valid-time}")
-    public static long REFRESH_TOKEN_VALID_TIME;
-    @Value("${jwt.refresh-token-valid-time-in-redis}")
-    public static long REFRESH_TOKEN_VALID_TIME_IN_REDIS;
+//    @Value("${jwt.token-valid-time}")
+//    public static long TOKEN_VALID_TIME;
+//    @Value("${jwt.refresh-token-valid-time}")
+//    public static long REFRESH_TOKEN_VALID_TIME;
+//    @Value("${jwt.refresh-token-valid-time-in-redis}")
+//    public static long REFRESH_TOKEN_VALID_TIME_IN_REDIS;
+
+    public static final long TOKEN_VALID_TIME = 1000L * 60 * 5;
+    public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 144;
+    public static final long REFRESH_TOKEN_VALID_TIME_IN_REDIS = 60 * 60 * 24 * 7;
+
 
     public Key getSigningKey(String secretKey) {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
