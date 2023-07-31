@@ -1,7 +1,5 @@
 package com.umc_spring.Heart_Hub.constant.handler;
 
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
-import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

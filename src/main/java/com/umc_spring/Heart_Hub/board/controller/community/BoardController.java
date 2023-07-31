@@ -6,6 +6,7 @@ import com.umc_spring.Heart_Hub.board.service.community.BlockUserService;
 import com.umc_spring.Heart_Hub.board.service.community.BoardGoodService;
 import com.umc_spring.Heart_Hub.board.service.community.BoardService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class BoardController {
                                                         Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         Long boardId = boardService.boardRegister(theme, params, userDetails.getUsername(), boardImageUploadDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId,"Register board success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId, CustomResponseStatus.SUCCESS));
     }
 
     /*
@@ -42,14 +43,14 @@ public class BoardController {
     @GetMapping("/{theme}/articles")
     public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> articleList(@PathVariable String theme){
         List<BoardDto.BoardResponseDto> boards = boardService.findAll(theme);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(boards,"Search total boards success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boards,CustomResponseStatus.SUCCESS));
     }
 
     //특정 게시물
     @GetMapping("/{theme}/articles/{boardId}")
     public ResponseEntity<ApiResponse<BoardDto.BoardResponseDto>> detailBoard(@PathVariable String theme, @PathVariable Long boardId){
         BoardDto.BoardResponseDto boardResponseDto = boardService.findBoard(theme,boardId);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardResponseDto,"Find board success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardResponseDto,CustomResponseStatus.SUCCESS));
     }
     /**
      * 게시글 수정
@@ -59,7 +60,7 @@ public class BoardController {
     public ResponseEntity<ApiResponse<Long>> updateBoard(@PathVariable Long boardId,
                                                          @RequestBody BoardDto.BoardRequestDto boardRequestDto){
         Long id = boardService.updateBoard(boardId,boardRequestDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(id,"Update board success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(id,CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -68,7 +69,7 @@ public class BoardController {
     @DeleteMapping("/{theme}/articles/{boardId}")
     public ResponseEntity<ApiResponse<String>> delBoard(@PathVariable Long boardId){
         boardService.delBoard(boardId);
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Delete board success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -78,7 +79,7 @@ public class BoardController {
     public ResponseEntity<ApiResponse<String>> blockUser(@RequestBody BoardDto.BlockUserReqDto blockReqDto, Authentication authentication) {
         String username = authentication.getName();
         blockUserService.blockUser(username, blockReqDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Block user success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -88,7 +89,7 @@ public class BoardController {
     public ResponseEntity<ApiResponse<String>> unblockUser(@RequestBody BoardDto.UnblockUserReqDto unblockReqDto, Authentication authentication) {
         String username = authentication.getName();
         blockUserService.unblockUser(username, unblockReqDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Unblock user success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -97,7 +98,7 @@ public class BoardController {
     @GetMapping("/hot-board")
     public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> getHotBoardList() {
         List<BoardDto.BoardResponseDto> hotBoardList = boardGoodService.findHotBoard();
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(hotBoardList, "Get Hot Board Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(hotBoardList, CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -106,6 +107,6 @@ public class BoardController {
     @GetMapping("/look/lank")
     public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> getLookLank(){
         List<BoardDto.BoardResponseDto> lookLankList = boardGoodService.lookLank();
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(lookLankList,"Get Look Top3 Success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(lookLankList,CustomResponseStatus.SUCCESS));
     }
 }

@@ -4,6 +4,7 @@ import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardGoodDto;
 import com.umc_spring.Heart_Hub.board.service.community.BoardGoodService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,13 +22,13 @@ public class BoardGoodContoller {
                                                     Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         boardGoodService.goodRegister(params, userDetails.getUsername(),boardId);
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("register good success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
     @GetMapping("/{id}/good/count")
     public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable Long id,@RequestBody BoardGoodDto.Request params){
         int goodCnt = boardGoodService.goodCount(id);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(goodCnt,"Count good success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(goodCnt,CustomResponseStatus.SUCCESS));
     }
 
 }

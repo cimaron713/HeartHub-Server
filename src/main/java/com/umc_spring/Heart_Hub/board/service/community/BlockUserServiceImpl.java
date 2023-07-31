@@ -2,13 +2,12 @@ package com.umc_spring.Heart_Hub.board.service.community;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.model.community.BlockedList;
-import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.BoardGood;
 import com.umc_spring.Heart_Hub.board.model.community.BoardHeart;
 import com.umc_spring.Heart_Hub.board.repository.community.BlockedListRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardGoodRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
@@ -26,7 +25,7 @@ public class BlockUserServiceImpl implements BlockUserService{
         User blocker = userRepository.findByUsername(username);
         User blockedUser = userRepository.findByUsername(blockReqDto.getBlockedUserName());
         if(blocker == null || blockedUser == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
         if(blockedListRepository.findByBlockerAndBlockedUser(blocker, blockedUser) == null) {
@@ -54,7 +53,7 @@ public class BlockUserServiceImpl implements BlockUserService{
         User blocker = userRepository.findByUsername(username);
         User blockedUser = userRepository.findByUsername(unblockReqDto.getBlockedUserName());
         if(blocker == null || blockedUser == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
         BlockedList blockedList = blockedListRepository.findByBlockerAndBlockedUser(blocker, blockedUser);

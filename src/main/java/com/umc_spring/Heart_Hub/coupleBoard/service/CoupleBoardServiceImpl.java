@@ -2,7 +2,7 @@ package com.umc_spring.Heart_Hub.coupleBoard.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardImageUploadDto;
@@ -14,20 +14,16 @@ import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +43,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
     public Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) {
         User user = userRepository.findByUsername(userName);
         if(user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
         CoupleBoard result = CoupleBoard.builder()
@@ -70,7 +66,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
                     imageRepository.save(img);
                 }
             } catch (IOException e) {
-                throw new CustomException(ErrorCode.IMAGE_NOT_UPLOAD);
+                throw new CustomException(CustomResponseStatus.IMAGE_NOT_UPLOAD);
             }
         }
 
@@ -96,7 +92,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public CoupleBoardDto.Response detailBoard(Long postId) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.POST_NOT_FOUND);});
+        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);});
         CoupleBoardDto.Response result = CoupleBoardDto.Response.builder()
                 .board(coupleBoard)
                 .build();
@@ -109,7 +105,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
         List<CoupleBoard> boardList;
         User user  = userRepository.findByUsername(username);
         if(user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
         User mate = user.getUser();
@@ -130,7 +126,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public Long updateBoard(Long postId, CoupleBoardDto.Request requestDto) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.POST_NOT_FOUND);});
+        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);});
         coupleBoard.update(requestDto.getContent());
         coupleBoardRepository.save(coupleBoard);
 
@@ -139,7 +135,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public void deleteBoard(Long postId) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(ErrorCode.POST_NOT_FOUND);});
+        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);});
         coupleBoardRepository.delete(coupleBoard);
     }
 

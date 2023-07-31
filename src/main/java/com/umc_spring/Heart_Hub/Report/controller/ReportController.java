@@ -3,6 +3,7 @@ package com.umc_spring.Heart_Hub.Report.controller;
 import com.umc_spring.Heart_Hub.Report.dto.ReportDto;
 import com.umc_spring.Heart_Hub.Report.service.UserReportService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,6 @@ public class ReportController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         ReportDto.UserReportResDto resDto = userReportService.reportUser(reqDto, userDetails.getUsername());
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(resDto, "Report Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(resDto, CustomResponseStatus.SUCCESS));
     }
 }

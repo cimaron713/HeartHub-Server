@@ -1,7 +1,7 @@
 package com.umc_spring.Heart_Hub.user.service.impl;
 
 import com.umc_spring.Heart_Hub.Report.model.enums.ReportStatus;
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.dto.UserDTO;
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean validateDuplicateEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
         if (user != null) {
             return true; // 존재한다면 true 반환
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean findUsername(UserDTO.FindUsernameRequest request) throws Exception {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
         emailService.sendUsername(request.getEmail(), user.getUsername());
         return true;
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean findPw(UserDTO.FindPwRequest request) throws Exception {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
         if (user.getUsername().equals(request.getUsername())) {
             String code = emailService.sendTemporaryPasswd(request.getEmail());
@@ -112,15 +112,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(loginRequest.getUsername());
 
         if (user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new CustomException(ErrorCode.LOGIN_FAILED);
+            throw new CustomException(CustomResponseStatus.LOGIN_FAILED);
         }
 
         if(user.getReportedStatus().equals(ReportStatus.ACCOUNT_SUSPENDED)) {
-            throw new CustomException(ErrorCode.NOT_PERMIT);
+            throw new CustomException(CustomResponseStatus.NOT_PERMIT);
         }
         String accessToken = jwtUtils.createToken(user.getEmail(), JwtUtils.TOKEN_VALID_TIME);
         String refreshToken = redisUtils.getData("RT:" + user.getEmail());
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
         User user = userRepository.findByUserId(request.getUserId());
         if (user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
         return UserDTO.GetUserInfoResponse.of(user);
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
     public Boolean changePassword(UserDTO.ChangePasswordRequest request) {
         String email = jwtUtils.getEmailInToken(request.getToken());
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
         log.info("email : " + email);
         log.info("user : " + user);
@@ -209,7 +209,7 @@ public class UserServiceImpl implements UserService {
         log.info("savedRefreshToken : "+savedRefreshToken);
         log.info("RefreshToken : "+resolvedToken);
         if (refreshToken.isEmpty() || !resolvedToken.equals(savedRefreshToken)) {
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+            throw new CustomException(CustomResponseStatus.INVALID_REFRESH_TOKEN);
         } else {
             String newAccessToken = jwtUtils.createToken(email, JwtUtils.TOKEN_VALID_TIME);
             String newRefreshToken = jwtUtils.createToken(email, JwtUtils.REFRESH_TOKEN_VALID_TIME);
@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService {
         if(data != null) {
             redisUtils.deleteData("RT:" + email);
         } else {
-            throw new CustomException(ErrorCode.REFRESHTOKEN_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.REFRESHTOKEN_NOT_FOUND);
         }
 
         redisUtils.setDataExpire(resolvedToken, "logout", jwtUtils.getExpiration(resolvedToken));
@@ -244,7 +244,7 @@ public class UserServiceImpl implements UserService {
     public Boolean withdrawUser(UserDTO.WithdrawReqDto response){
         String email = jwtUtils.getEmailInToken(response.getToken());
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
         userRepository.delete(user);
         logout(response.getToken());
@@ -254,7 +254,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modifyUserReportStatus(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
         user.modifyUserReportStatus();
     }

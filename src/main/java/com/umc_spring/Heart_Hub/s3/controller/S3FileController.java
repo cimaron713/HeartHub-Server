@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.s3.controller;
 
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.s3.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ public class S3FileController {
 
     @PostMapping(value = "/upload", consumes = "multipart/*")
     public ResponseEntity<ApiResponse<List<String>>> uploadFile(String parentCode, @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(s3Upload.upload(multipartFiles, parentCode), "File Upload Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(s3Upload.upload(multipartFiles, parentCode), CustomResponseStatus.SUCCESS));
     }
 
     @DeleteMapping(value = "/delete")
     public ResponseEntity<ApiResponse<String>> deleteFile(String filePath) throws IOException {
         s3Upload.remove(filePath);
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("File Delete Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
     @GetMapping(value = "/download")

@@ -5,6 +5,7 @@ import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardHeartDto;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.user.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,7 @@ public class BoardHeartController {
                                                      Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         boardHeartService.heartRegister(params, userDetails.getUsername());
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Register Heart Success"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
 

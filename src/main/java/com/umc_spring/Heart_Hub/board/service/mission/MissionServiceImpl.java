@@ -5,7 +5,7 @@ import com.umc_spring.Heart_Hub.board.model.mission.Mission;
 import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
 import com.umc_spring.Heart_Hub.board.repository.mission.MissionRepository;
 import com.umc_spring.Heart_Hub.board.repository.mission.ums.UserMissionStatusRepository;
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
@@ -78,7 +78,7 @@ public class MissionServiceImpl implements MissionService{
         Long userId = userRepository.getUserIdByUserName(username);
         Long umsId = umsRepository.findUMSByMissionIdAndUserId(missionId, userId);
         UserMissionStatus userMissionStatus = umsRepository.findById(umsId).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.USER_MISSION_STATUS_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_MISSION_STATUS_NOT_FOUND);
         });
 
         userMissionStatus.checkStatusModify();
@@ -91,7 +91,7 @@ public class MissionServiceImpl implements MissionService{
     @Override
     public void deleteMission(Long missionId) {
         Mission mission = missionRepository.findById(missionId).orElseThrow(()-> {
-            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.MISSION_NOT_FOUND);
         });
         mission.deleteStatusModify();
     }

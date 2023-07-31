@@ -5,6 +5,7 @@ import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardImageUploadDto;
 import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
@@ -53,7 +54,7 @@ public class CoupleBoardController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Long postId = coupleBoardService.saveBoard(requestDto, boardImageUploadDto, userDetails.getUsername());
 
-        return ResponseEntity.ok(ApiResponse.createSuccess(postId.toString(), "Create Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -65,7 +66,7 @@ public class CoupleBoardController {
         List<CoupleBoardDto.Response> boardList = coupleBoardService.searchBoardList(createAt, username);
         Collections.sort(boardList, Comparator.comparing(CoupleBoardDto.Response::getCreateAt));
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardList, "Search Couple board Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardList, CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -78,12 +79,12 @@ public class CoupleBoardController {
         CoupleBoardDto.Response result = coupleBoardService.detailBoard(postId);
         if(!Objects.equals(result.getUserName(), userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(ApiResponse.createError(HttpStatus.FORBIDDEN, "You are not allowed to update this board"));
+                    .body(ApiResponse.createError(CustomResponseStatus.AUTHORIZATION_FAILED));
         }
 
         coupleBoardService.updateBoard(postId, requestDto);
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), "Update Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -95,12 +96,12 @@ public class CoupleBoardController {
         CoupleBoardDto.Response result = coupleBoardService.detailBoard(postId);
         if(!Objects.equals(result.getUserName(), userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(ApiResponse.createError(HttpStatus.FORBIDDEN, "You are not allowed to delete this board"));
+                    .body(ApiResponse.createError(CustomResponseStatus.AUTHORIZATION_FAILED));
         }
 
         coupleBoardService.deleteBoard(postId);
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), "Delete Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -111,7 +112,7 @@ public class CoupleBoardController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<BoardDto.BoardResponseDto> scrapBoardList = boardHeartService.getHeartBoards(userDetails.getUsername());
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, "Search Scrap board Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -122,7 +123,7 @@ public class CoupleBoardController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<BoardDto.BoardResponseDto> scrapBoardList = boardHeartService.getHeartMateBoards(userDetails.getUsername());
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, "Search Mate's Scrap board Success!"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(scrapBoardList, CustomResponseStatus.SUCCESS));
     }
 
 }

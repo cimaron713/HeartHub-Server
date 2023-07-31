@@ -4,6 +4,7 @@ import com.umc_spring.Heart_Hub.board.dto.mission.MissionDto;
 import com.umc_spring.Heart_Hub.board.service.mission.MissionService;
 import com.umc_spring.Heart_Hub.board.service.mission.MissionServiceImpl;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,14 +29,14 @@ public class MissionController {
         log.info("missionRequestDto : " + missionRequestDto.getContent());
         missionService.addMissionToUser(missionRequestDto);
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent("Success add Mission To User"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
     @GetMapping("/user/missions")
     public ResponseEntity<ApiResponse<List<MissionDto.RandomMissionRespDto>>> getMissions() {
         List<MissionDto.RandomMissionRespDto> randomMissionRespDtos = missionService.getMissions();
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(randomMissionRespDtos, "Success Get Missions"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(randomMissionRespDtos, CustomResponseStatus.SUCCESS));
     }
 
     /**
@@ -47,7 +48,7 @@ public class MissionController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
         Long umsId = missionService.checkStatusModify(missionId, username);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(umsId, "Success Modify checkStatus"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(umsId, CustomResponseStatus.SUCCESS));
 
     }
 

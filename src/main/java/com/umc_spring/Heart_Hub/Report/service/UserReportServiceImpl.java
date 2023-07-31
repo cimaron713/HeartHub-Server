@@ -4,15 +4,12 @@ import com.umc_spring.Heart_Hub.Report.dto.ReportDto;
 import com.umc_spring.Heart_Hub.Report.model.UserReport;
 import com.umc_spring.Heart_Hub.Report.repository.UserReportRepository;
 import com.umc_spring.Heart_Hub.board.service.community.BoardService;
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.email.EmailService;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +29,7 @@ public class UserReportServiceImpl implements UserReportService{
         User reported = userRepository.findByUsername(reqDto.getReportedUsername());
 
         if (reporter == null || reported == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
         UserReport userReport;
@@ -42,7 +39,7 @@ public class UserReportServiceImpl implements UserReportService{
             userReportRepository.save(userReport);
         } else {
             //이미 신고를 했을 경우
-            throw new CustomException(ErrorCode.ALREADY_REPORTED);
+            throw new CustomException(CustomResponseStatus.ALREADY_REPORTED);
         }
 
         List<UserReport> userReports = userReportRepository.findByReported(reported);

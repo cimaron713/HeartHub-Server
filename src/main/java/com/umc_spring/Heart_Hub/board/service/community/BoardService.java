@@ -10,9 +10,8 @@ import com.umc_spring.Heart_Hub.board.model.community.BoardImg;
 import com.umc_spring.Heart_Hub.board.repository.community.BlockedListRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardImgRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
-import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -54,7 +51,7 @@ public class BoardService {
     public Long boardRegister(String theme, BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
         User user = userRepository.findByUsername(userName);
         if(user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
         Board boardRegister = Board.builder()
                 .theme(theme)
@@ -76,7 +73,7 @@ public class BoardService {
                     boardImgRepository.save(img);
                 }
             } catch (IOException e) {
-                throw new CustomException(ErrorCode.IMAGE_NOT_UPLOAD);
+                throw new CustomException(CustomResponseStatus.IMAGE_NOT_UPLOAD);
             }
         }
 
@@ -127,7 +124,7 @@ public class BoardService {
         List<Board> boardList;
         User user = userRepository.findByUsername(userName);
         if(user == null){
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
         Sort sort = Sort.by(Sort.Direction.DESC,"creatAt");
         boardList = boardRepository.findAllByTheme(sort,theme);
@@ -153,7 +150,7 @@ public class BoardService {
      */
     @Transactional
     public Long updateBoard(Long id, BoardDto.BoardRequestDto requestDto){
-        Board board = boardRepository.findByBoardIdAndTheme(id, requestDto.getTheme()).orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+        Board board = boardRepository.findByBoardIdAndTheme(id, requestDto.getTheme()).orElseThrow(()->new CustomException(CustomResponseStatus.POST_NOT_FOUND));
         board.update(requestDto.getContent());
         return id;
     }

@@ -1,6 +1,6 @@
 package com.umc_spring.Heart_Hub.security;
 
-import com.umc_spring.Heart_Hub.constant.enums.ErrorCode;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.security.util.JwtUtils;
 import com.umc_spring.Heart_Hub.security.util.RedisUtils;
@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -44,15 +43,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             SecurityContextHolder.getContext().setAuthentication(authentication);
                         }
                     } else {
-                        throw new CustomException(ErrorCode.NOT_PERMIT);
+                        throw new CustomException(CustomResponseStatus.NOT_PERMIT);
                     }
                 }
             } catch (ExpiredJwtException e) {
                 log.info("expired Token");
-                request.setAttribute("exception", ErrorCode.EXPIRED_JWT.getMessage());
+                request.setAttribute("exception", CustomResponseStatus.EXPIRED_JWT.getMessage());
             } catch (JwtException e) {
                 log.info("invalid token");
-                request.setAttribute("exception", ErrorCode.BAD_JWT.getMessage());
+                request.setAttribute("exception", CustomResponseStatus.BAD_JWT.getMessage());
             }
         } else {
             filterChain.doFilter(request, response);
