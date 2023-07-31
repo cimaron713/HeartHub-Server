@@ -59,7 +59,7 @@ public class MissionController {
     public ResponseEntity<ApiResponse<Long>> deleteMission(@PathVariable Long missionId) {
         missionService.deleteMission(missionId);
 
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(missionId, "Success Delete Mission"));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(missionId, CustomResponseStatus.SUCCESS));
 
     }
 
