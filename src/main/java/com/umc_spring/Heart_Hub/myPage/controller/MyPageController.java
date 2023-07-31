@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/myPage")
+@RequestMapping("/api/user/myPage")
 public class MyPageController {
     private UserService userService;
     private BoardService boardService;

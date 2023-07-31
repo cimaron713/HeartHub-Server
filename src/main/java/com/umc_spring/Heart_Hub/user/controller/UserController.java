@@ -85,13 +85,13 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success! Get UserInfo"));
     }
 
-    @PostMapping("/set/mate")
+    @PostMapping("/user/set/mate")
     public ResponseEntity<ApiResponse<Boolean>> mateMatchingUser(@RequestBody UserDTO.MateMatchRequest request) {
         Boolean response = userService.mateMatching(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Success!"));
     }
 
-    @PostMapping("/change/passwd")
+    @PostMapping("/user/change/passwd")
     public ResponseEntity<ApiResponse<Boolean>> changePassword(@RequestBody UserDTO.ChangePasswordRequest request) {
         Boolean response = userService.changePassword(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, "Change Success!"));
@@ -104,20 +104,20 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(dDay, "Get D-Day Success!"));
     }
 
-    @GetMapping("/exist-mate")
+    @GetMapping("/user/exist-mate")
     public ResponseEntity<ApiResponse<UserDTO.MateExistenceDto>> checkMateExist(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         UserDTO.MateExistenceDto mateExist = userService.checkMateExist(userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(mateExist, "Get hasMate Success!"));
     }
 
-    @PostMapping("/member/reissue")
+    @PostMapping("/user/member/reissue")
     public ResponseEntity<ApiResponse<UserDTO.ReissueRespDto>> reissue(@RequestHeader("Authorization") String refreshToken) {
         UserDTO.ReissueRespDto reissueRespDto = userService.reissue(refreshToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(reissueRespDto, "Reissue Success"));
     }
 
-    @PostMapping("/member/logout")
+    @PostMapping("/user/member/logout")
     public ResponseEntity<ApiResponse<String>> logout(@RequestHeader("Authorization") String accessToken) {
         log.info("enter logout controller");
         userService.logout(accessToken);
