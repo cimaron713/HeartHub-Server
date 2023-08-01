@@ -29,9 +29,10 @@ public class CustomExceptionHandler {
     public ResponseEntity<ApiResponse<String>> handleCustomException(CustomException e) {
 //        log.error(e.getErrorCode().getMessage());
         log.info("handleCustomException실행");
+        log.info("e.getCode : "+e.getResponseStatus().getCode());
         log.info("e.getStatus : "+e.getResponseStatus().toString());
         log.info("e.getMessage : "+e.getResponseStatus().getMessage());
-        return ResponseEntity.status(e.getResponseStatus().getCode())
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.createError(e.getResponseStatus()));
     }
 
@@ -39,14 +40,14 @@ public class CustomExceptionHandler {
     public ResponseEntity<ApiResponse<String>> handleException(CustomException e) {
         log.error(e.getMessage());
         log.info("handleException실행");
-        return ResponseEntity.status(e.getResponseStatus().getCode())
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.createError(e.getResponseStatus()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<String>> handleAccessDeniedException(CustomException e) {
         log.error(e.getMessage());
-        return ResponseEntity.status(e.getResponseStatus().getCode())
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.createError(e.getResponseStatus()));
     }
 }
