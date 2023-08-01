@@ -83,9 +83,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/info")
-    public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {
-        UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
+    @GetMapping("/user/info/{userId}")
+    public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@PathVariable Long userId) {
+        UserDTO.GetUserInfoResponse response = userService.getUserInfo(userId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 

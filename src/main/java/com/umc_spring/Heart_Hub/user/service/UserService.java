@@ -9,7 +9,7 @@ public interface UserService {
     UserDTO.LoginResponse login(UserDTO.LoginRequest request);
     Boolean findUsername(UserDTO.FindUsernameRequest request) throws Exception;
     Boolean findPw(UserDTO.FindPwRequest request) throws Exception;
-    UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request);
+    UserDTO.GetUserInfoResponse getUserInfo(Long userId);
     Boolean mateMatching(UserDTO.MateMatchRequest request);
     Boolean changePassword(UserDTO.ChangePasswordRequest request);
     UserDTO.GetRespDatingDateDto getDatingDate(String username);
