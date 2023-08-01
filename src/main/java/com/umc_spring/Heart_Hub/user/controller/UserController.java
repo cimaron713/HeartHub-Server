@@ -126,7 +126,7 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
-    @GetMapping("/modi/user/{userId}")
+    @PostMapping("/modi/user/{userId}")
     @Transactional
     public ResponseEntity<ApiResponse<String>> modifyUserReportStatus(@PathVariable Long userId) {
         userService.modifyUserReportStatus(userId);

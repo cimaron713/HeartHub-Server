@@ -55,7 +55,7 @@ public class MissionController {
     /**
      * deleteStatus 상태 변경 api (mission 삭제)
      */
-    @DeleteMapping("/admin/mission/{missionId}")
+    @PostMapping("/admin/mission/{missionId}")
     public ResponseEntity<ApiResponse<Long>> deleteMission(@PathVariable Long missionId) {
         missionService.deleteMission(missionId);
 
