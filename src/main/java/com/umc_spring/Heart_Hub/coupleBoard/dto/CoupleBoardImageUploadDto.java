@@ -8,4 +8,10 @@ import java.util.List;
 @Getter
 public class CoupleBoardImageUploadDto {
     private MultipartFile[] files;
+
+    public static CoupleBoardImageUploadDto setFiles(MultipartFile[] files) {
+        CoupleBoardImageUploadDto uploadDto = new CoupleBoardImageUploadDto();
+        uploadDto.files = files;
+        return uploadDto;
+    }
 }

@@ -6,6 +6,7 @@ import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardImageUploadDto;
 import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
@@ -17,11 +18,14 @@ import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,14 +48,15 @@ public class CoupleBoardController {
     /**
      * 게시물 작성
      */
-    @PostMapping(value = "/couple-board/write",
-            consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart CoupleBoardDto.Request requestDto,
-                                                           @RequestPart("files") CoupleBoardImageUploadDto boardImageUploadDto,
+    @PostMapping(value = "/couple-board/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart(value = "requestDto") CoupleBoardDto.Request requestDto,
+                                                           @RequestPart(value = "files") MultipartFile[] files,
                                                            Authentication authentication) {
 
-        logger.info("boardImageDTO is {}", boardImageUploadDto);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CoupleBoardImageUploadDto boardImageUploadDto = new CoupleBoardImageUploadDto();
+        logger.info("boardImageDTO is {}", boardImageUploadDto);
+        boardImageUploadDto.setFiles(files);
         Long postId = coupleBoardService.saveBoard(requestDto, boardImageUploadDto, userDetails.getUsername());
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(postId.toString(), CustomResponseStatus.SUCCESS));

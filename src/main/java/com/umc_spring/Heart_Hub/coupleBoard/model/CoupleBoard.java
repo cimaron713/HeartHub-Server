@@ -28,9 +28,6 @@ public class CoupleBoard extends BaseEntity {
     @JoinColumn(name = "userId")
     private User user;
 
-    @Column(nullable = false, length = 1)
-    private String status;
-
     @OneToMany(mappedBy = "coupleBoard", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private final List<CoupleBoardImage> boardImages = new ArrayList<>();
 
@@ -40,10 +37,6 @@ public class CoupleBoard extends BaseEntity {
 
     public void update(String content) {
         this.content = content;
-    }
-
-    public void delete() {
-        this.status = String.valueOf('N');
     }
 
 }
