@@ -24,6 +24,10 @@ public enum CustomResponseStatus {
     EXPIRED_JWT(false, 3000, "만료된 토큰입니다."),
     LOGIN_FAILED(false, 3001, "로그인에 실패하였습니다."),
     AUTHORIZATION_FAILED(false, 3002, "권한이 없습니다."),
+    DUPLICATION_EMAIL(false, 2007, "중복된 Email입니다"),
+    DUPLICATION_USERNAME(false, 2008, "중복된 Username입니다"),
+
+
 
     // 4000 : NOT FOUND
     USER_NOT_FOUND(false, 4000, "사용자 정보를 찾을 수 없습니다."),

@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -61,10 +63,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean validateDuplicateEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> {
-            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
-        });
-        if (user != null) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (!user.isEmpty()) {
             return true; // 존재한다면 true 반환
         } else {
             return false; // 존재하지 않으면 false 반환

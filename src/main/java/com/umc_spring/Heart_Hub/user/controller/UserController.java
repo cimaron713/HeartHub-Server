@@ -36,14 +36,22 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email) {
         Boolean response = userService.validateDuplicateEmail(email.getEmail());
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
+        if(response) {
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
+        } else {
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(false, CustomResponseStatus.DUPLICATION_EMAIL));
+        }
     }
 
     @GetMapping(value = "/check/username")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id) {
         Boolean response = userService.validateDuplicateUsername(id.getUsername());
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
+        if(response) {
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
+        } else {
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(false, CustomResponseStatus.DUPLICATION_USERNAME));
+        }
     }
 
     @PostMapping(value = "/login")
