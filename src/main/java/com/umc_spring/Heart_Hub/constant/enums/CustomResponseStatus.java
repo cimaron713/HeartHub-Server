@@ -19,15 +19,13 @@ public enum CustomResponseStatus {
     REFRESHTOKEN_NOT_FOUND(false, 2004, "해당 RefreshToken이 존재하지 않습니다."),
     NOT_PERMIT(false, 2005, "누적 신고수 때문에 로그인 못합니다"),
     ALREADY_REPORTED(false, 2006, "이미 신고한 사용자입니다."),
+    DUPLICATION_EMAIL(false, 2007, "중복된 Email입니다"),
+    DUPLICATION_USERNAME(false, 2008, "중복된 Username입니다"),
 
     // 3000 : UNAUTHORIZED
     EXPIRED_JWT(false, 3000, "만료된 토큰입니다."),
     LOGIN_FAILED(false, 3001, "로그인에 실패하였습니다."),
     AUTHORIZATION_FAILED(false, 3002, "권한이 없습니다."),
-    DUPLICATION_EMAIL(false, 2007, "중복된 Email입니다"),
-    DUPLICATION_USERNAME(false, 2008, "중복된 Username입니다"),
-
-
 
     // 4000 : NOT FOUND
     USER_NOT_FOUND(false, 4000, "사용자 정보를 찾을 수 없습니다."),

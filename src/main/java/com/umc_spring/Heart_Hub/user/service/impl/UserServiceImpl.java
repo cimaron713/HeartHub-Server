@@ -111,10 +111,16 @@ public class UserServiceImpl implements UserService {
         log.info(loginRequest.toString());
         User user = userRepository.findByUsername(loginRequest.getUsername());
 
+        /**
+         * id가 잘못된경우
+         */
         if (user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
+        /**
+         * id는 맞는데 pwd가 잘못된 경우
+         */
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new CustomException(CustomResponseStatus.LOGIN_FAILED);
         }
