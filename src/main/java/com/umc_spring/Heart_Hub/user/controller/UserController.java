@@ -36,7 +36,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email) {
         Boolean response = userService.validateDuplicateEmail(email.getEmail());
-        if(response) {
+        if(!response) {
             return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
         } else {
             return ResponseEntity.ok().body(ApiResponse.createSuccess(false, CustomResponseStatus.DUPLICATION_EMAIL));
@@ -47,7 +47,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id) {
         Boolean response = userService.validateDuplicateUsername(id.getUsername());
-        if(response) {
+        if(!response) {
             return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
         } else {
             return ResponseEntity.ok().body(ApiResponse.createSuccess(false, CustomResponseStatus.DUPLICATION_USERNAME));
