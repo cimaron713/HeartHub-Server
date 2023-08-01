@@ -39,7 +39,7 @@ public final class JwtUtils {
 //    @Value("${jwt.refresh-token-valid-time-in-redis}")
 //    public static long REFRESH_TOKEN_VALID_TIME_IN_REDIS;
 
-    public static final long TOKEN_VALID_TIME = 1000L * 60 * 5;
+    public static final long TOKEN_VALID_TIME = 1000L * 60 * 5 * 12; // 1시간
     public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 144;
     public static final long REFRESH_TOKEN_VALID_TIME_IN_REDIS = 60 * 60 * 24 * 7;
 
