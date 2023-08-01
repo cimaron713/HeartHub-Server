@@ -115,14 +115,14 @@ public class UserServiceImpl implements UserService {
          * id가 잘못된경우
          */
         if (user == null) {
-            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
+            throw new CustomException(CustomResponseStatus.LOGIN_FAILED_USERNAME);
         }
 
         /**
          * id는 맞는데 pwd가 잘못된 경우
          */
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new CustomException(CustomResponseStatus.LOGIN_FAILED);
+            throw new CustomException(CustomResponseStatus.LOGIN_FAILED_PWD);
         }
 
         if(user.getReportedStatus().equals(ReportStatus.ACCOUNT_SUSPENDED)) {
