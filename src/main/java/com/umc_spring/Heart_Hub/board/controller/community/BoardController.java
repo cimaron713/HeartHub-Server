@@ -9,6 +9,7 @@ import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 @RequestMapping("/api/user/board")
 public class BoardController {
     private BoardService boardService;
@@ -31,6 +33,7 @@ public class BoardController {
     public ResponseEntity<ApiResponse<Long>> boardWrite(@RequestBody BoardDto.BoardRequestDto params,
                                                         @RequestPart("files")BoardImageUploadDto boardImageUploadDto,
                                                         Authentication authentication){
+        log.info("boardRequestDto: "+ params.getContent());
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         Long boardId = boardService.boardRegister(params, userDetails.getUsername(), boardImageUploadDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId, CustomResponseStatus.SUCCESS));
