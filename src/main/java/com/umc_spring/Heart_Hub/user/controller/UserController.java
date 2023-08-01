@@ -32,10 +32,10 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(registeredUser, CustomResponseStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/check/email")
+    @GetMapping(value = "/check/email/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@RequestBody UserDTO.DuplicateEmailCheckRequest email) {
-        Boolean response = userService.validateDuplicateEmail(email.getEmail());
+    public ResponseEntity<ApiResponse<Boolean>> duplicateEmailCheck(@PathVariable String email) {
+        Boolean response = userService.validateDuplicateEmail(email);
         if(!response) {
             return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
         } else {
@@ -43,10 +43,10 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/check/username")
+    @GetMapping(value = "/check/username/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@RequestBody UserDTO.DuplicateUsernameCheckRequest id) {
-        Boolean response = userService.validateDuplicateUsername(id.getUsername());
+    public ResponseEntity<ApiResponse<Boolean>> duplicateUsernameCheck(@PathVariable String id) {
+        Boolean response = userService.validateDuplicateUsername(id);
         if(!response) {
             return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
         } else {
@@ -61,10 +61,10 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/email-verification")
+    @GetMapping(value = "/email-verification/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<String>> sendVerificationCode(@RequestBody UserDTO.sendVerificationCode email) throws Exception {
-        String response = emailService.sendVerificationCode(email.getEmail());
+    public ResponseEntity<ApiResponse<String>> sendVerificationCode(@PathVariable String email) throws Exception {
+        String response = emailService.sendVerificationCode(email);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
@@ -83,9 +83,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/info")
-    public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@RequestBody UserDTO.GetUserInfoRequest user) {
-        UserDTO.GetUserInfoResponse response = userService.getUserInfo(user);
+    @GetMapping("/user/info/{userId}")
+    public ResponseEntity<ApiResponse<UserDTO.GetUserInfoResponse>> getUserInfo(@PathVariable Long userId) {
+        UserDTO.GetUserInfoResponse response = userService.getUserInfo(userId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
