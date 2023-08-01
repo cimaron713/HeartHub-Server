@@ -50,12 +50,6 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(user);
 
-        UserDTO.MateMatchRequest request = UserDTO.MateMatchRequest.builder()
-                .mateName(signUpRequestDto.getMate())
-                .currentUsername(signUpRequestDto.getUsername())
-                .build();
-        mateMatching(request);
-
         return UserDTO.SignUpRespDto.builder()
                 .nickname(user.getNickname())
                 .build();
@@ -147,8 +141,8 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
-        User user = userRepository.findByUserId(request.getUserId());
+    public UserDTO.GetUserInfoResponse getUserInfo(Long userId) {
+        User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }

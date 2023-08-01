@@ -23,7 +23,6 @@ public class UserDTO {
         private String email;
         private String nickname;
         private String marketingStatus;
-        private String mate;
         private LocalDate datingDate;
         private LocalDate birth;
     }
@@ -53,42 +52,13 @@ public class UserDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class DuplicateEmailCheckRequest{
-        private String email;
-    }
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class DuplicateUsernameCheckRequest{
-        private String username;
-    }
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
     public static class LoginResponse{
         private String accessToken;
         private String refreshToken;
         private Long accessTokenExpirationTime;
     }
 
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class sendVerificationCode{
-        private String email;
-    }
 
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class emailVerification{
-        private String code;
-    }
     @Data
     @Builder
     @AllArgsConstructor
@@ -157,14 +127,6 @@ public class UserDTO {
 
     }
 
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class GetReqDatingDateDto {
-        private String username;
-    }
-
     @Getter
     @NoArgsConstructor
     public static class GetRespDatingDateDto {
@@ -193,34 +155,9 @@ public class UserDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ReissueReqDto {
-        private String refreshToken;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
     public static class ReissueRespDto {
         private String newAccessToken;
         private String newRefreshToken;
         private Long accessTokenExpirationTime;
     }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class LogoutReqDto {
-        private String accessToken;
-    }
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class WithdrawReqDto {
-        private String token;
-    }
-
 }
