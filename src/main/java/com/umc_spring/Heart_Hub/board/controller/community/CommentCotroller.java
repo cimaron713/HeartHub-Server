@@ -25,22 +25,23 @@ public class CommentCotroller {
     /*
     해당 게시글의 댓글 조회
      */
-    @GetMapping("/api/user/board/{theme}/{boardid}/comments")
-    public ResponseEntity<ApiResponse<List<CommentDto.Response>>> getComments(@PathVariable String theme, @PathVariable Long boardId, Authentication authentication) {
+    @GetMapping("/api/user/board/{boardid}/comments")
+    public ResponseEntity<ApiResponse<List<CommentDto.Response>>> getComments(@PathVariable(value = "boardId") Long boardId,
+                                                                              Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        BoardDto.BoardResponseDto board = boardService.findBoard(theme,boardId);
+        BoardDto.BoardResponseDto board = boardService.findBoard(boardId);
         List<CommentDto.Response> comments = commentService.findComments(board, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(comments, CustomResponseStatus.SUCCESS));
     }
     /*
     해당 게시글의 댓글 등록
      */
-    @PostMapping("/api/user/board/{theme}/{boardid}/comments")
-    public ResponseEntity<ApiResponse<Long>> getComments(@RequestBody CommentDto.Request request, @PathVariable Long boardId,
+    @PostMapping("/api/user/board/comments")
+    public ResponseEntity<ApiResponse<Long>> getComments(@RequestBody CommentDto.Request request,
                                                          Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long id = commentService.createComment(boardId, request, userDetails.getUsername());
+        Long id = commentService.createComment(request.getBoardId(), request, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(id,CustomResponseStatus.SUCCESS));
     }
 }

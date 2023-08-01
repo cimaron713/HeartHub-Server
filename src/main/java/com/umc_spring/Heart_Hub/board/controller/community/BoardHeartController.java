@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class BoardHeartController {
     private BoardHeartService boardHeartService;
 
-    @PostMapping("/{boardId}/heart")
-    public ResponseEntity<ApiResponse<String>> heart(@PathVariable Long boardId, @RequestBody BoardHeartDto.Request params,
+    @PostMapping("/heart")
+    public ResponseEntity<ApiResponse<String>> heart(@RequestBody BoardHeartDto.Request params,
                                                      Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         boardHeartService.heartRegister(params, userDetails.getUsername());

@@ -27,12 +27,12 @@ public class BoardController {
     //게시글 작성
 
     //게시글 작성
-    @PostMapping("/{theme}/articles/write")
-    public ResponseEntity<ApiResponse<Long>> boardWrite(@PathVariable String theme, @RequestBody BoardDto.BoardRequestDto params,
+    @PostMapping("/articles/write")
+    public ResponseEntity<ApiResponse<Long>> boardWrite(@RequestBody BoardDto.BoardRequestDto params,
                                                         @RequestPart("files")BoardImageUploadDto boardImageUploadDto,
                                                         Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        Long boardId = boardService.boardRegister(theme, params, userDetails.getUsername(), boardImageUploadDto);
+        Long boardId = boardService.boardRegister(params, userDetails.getUsername(), boardImageUploadDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId, CustomResponseStatus.SUCCESS));
     }
 
@@ -41,23 +41,23 @@ public class BoardController {
      */
     //전체
     @GetMapping("/{theme}/articles")
-    public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> articleList(@PathVariable String theme){
+    public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> articleList(@PathVariable(value = "theme") String theme){
         List<BoardDto.BoardResponseDto> boards = boardService.findAll(theme);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boards,CustomResponseStatus.SUCCESS));
     }
 
-    //특정 게시물
-    @GetMapping("/{theme}/articles/{boardId}")
-    public ResponseEntity<ApiResponse<BoardDto.BoardResponseDto>> detailBoard(@PathVariable String theme, @PathVariable Long boardId){
-        BoardDto.BoardResponseDto boardResponseDto = boardService.findBoard(theme,boardId);
+    //특정 게시물 조회
+    @GetMapping("/articles/{boardId}")
+    public ResponseEntity<ApiResponse<BoardDto.BoardResponseDto>> detailBoard(@PathVariable(value = "boardId") Long boardId){
+        BoardDto.BoardResponseDto boardResponseDto = boardService.findBoard(boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardResponseDto,CustomResponseStatus.SUCCESS));
     }
     /**
      * 게시글 수정
      */
     //특정 게시물
-    @PutMapping("/{theme}/articles/{boardId}")
-    public ResponseEntity<ApiResponse<Long>> updateBoard(@PathVariable Long boardId,
+    @PutMapping("/articles/{boardId}")
+    public ResponseEntity<ApiResponse<Long>> updateBoard(@PathVariable(value = "boardId") Long boardId,
                                                          @RequestBody BoardDto.BoardRequestDto boardRequestDto){
         Long id = boardService.updateBoard(boardId,boardRequestDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(id,CustomResponseStatus.SUCCESS));
@@ -66,8 +66,8 @@ public class BoardController {
     /**
     게시글 삭제
      */
-    @DeleteMapping("/{theme}/articles/{boardId}")
-    public ResponseEntity<ApiResponse<String>> delBoard(@PathVariable Long boardId){
+    @DeleteMapping("/articles/{boardId}")
+    public ResponseEntity<ApiResponse<String>> delBoard(@PathVariable(value = "boardId") Long boardId){
         boardService.delBoard(boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }

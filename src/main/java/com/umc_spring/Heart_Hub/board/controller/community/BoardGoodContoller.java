@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 public class BoardGoodContoller {
     private BoardGoodService boardGoodService;
     //좋아요 등록
-    @PostMapping("/{boardId}/good")
-    public ResponseEntity<ApiResponse<String>> good(@PathVariable Long boardId, @RequestBody BoardDto.BoardRequestDto params,
+    @PostMapping("/good")
+    public ResponseEntity<ApiResponse<String>> good(@RequestBody BoardDto.BoardRequestDto params,
                                                     Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        boardGoodService.goodRegister(params, userDetails.getUsername(),boardId);
+        boardGoodService.goodRegister(params, userDetails.getUsername(),params.getBoardId());
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
