@@ -5,6 +5,7 @@ import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoard;
 import com.umc_spring.Heart_Hub.coupleBoard.model.CoupleBoardImage;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,9 @@ public class CoupleBoardDto {
     public static class Response {
         private Long postId;
         private Long userId;
+        private String status;
         private String content;
-        private LocalDateTime createAt;
+        private LocalDate createAt;
         private String userName;
         private List<String> imageUrls;
 
@@ -33,6 +35,7 @@ public class CoupleBoardDto {
         public Response(CoupleBoard board) {
             this.postId = board.getPostId();
             this.userId = board.getUser().getUserId();
+            this.status = board.getStatus();
             this.content = board.getContent();
             this.createAt = board.getCreatedDate();
             this.userName = board.getUser().getUsername();

@@ -1,5 +1,7 @@
 package com.umc_spring.Heart_Hub.coupleBoard.service;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
@@ -13,6 +15,7 @@ import com.umc_spring.Heart_Hub.coupleBoard.repository.ImageRepository;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     private final UserRepository userRepository;
@@ -40,7 +44,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
     private final AmazonS3 amazonS3;
 
     @Override
-    public Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) {
+    public Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) throws IOException {
         User user = userRepository.findByUsername(userName);
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
@@ -48,12 +52,14 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
         CoupleBoard result = CoupleBoard.builder()
                 .content(requestDto.getContent())
+                .status("Y")
                 .user(user)
                 .build();
 
         coupleBoardRepository.save(result);
+        log.info("File save successfully to the bucket {}", bucket);
 
-        if(boardImageUploadDto.getFiles() != null && boardImageUploadDto.getFiles().length > 0) {
+        if(boardImageUploadDto.getFiles() != null) {
             try {
                 List<String> fileUrls = upload(boardImageUploadDto.getFiles(), user.getUsername());
 
@@ -65,8 +71,13 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
                     imageRepository.save(img);
                 }
+                log.info("File upload successfully to the bucket {}", bucket);
             } catch (IOException e) {
                 throw new CustomException(CustomResponseStatus.IMAGE_NOT_UPLOAD);
+            } catch (AmazonServiceException e) {
+                System.err.println(e.getErrorMessage());
+            } catch (SdkClientException e) {
+                System.err.println(e.getMessage());
             }
         }
 

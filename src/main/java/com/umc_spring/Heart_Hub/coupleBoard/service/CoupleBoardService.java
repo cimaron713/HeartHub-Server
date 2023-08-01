@@ -3,6 +3,7 @@ package com.umc_spring.Heart_Hub.coupleBoard.service;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardImageUploadDto;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface CoupleBoardService {
      * @param userName 사용자 아이디
      * @return 게시물 ID
      */
-    Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName);
+    Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) throws IOException;
 
     /**
      * 게시물 상세 조회

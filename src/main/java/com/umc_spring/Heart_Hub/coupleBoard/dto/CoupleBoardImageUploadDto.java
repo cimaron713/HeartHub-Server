@@ -9,9 +9,15 @@ import java.util.List;
 public class CoupleBoardImageUploadDto {
     private MultipartFile[] files;
 
-    public static CoupleBoardImageUploadDto setFiles(MultipartFile[] files) {
-        CoupleBoardImageUploadDto uploadDto = new CoupleBoardImageUploadDto();
-        uploadDto.files = files;
-        return uploadDto;
+    public void setFiles(MultipartFile[] files) {
+        if (files == null) {
+            throw new IllegalArgumentException("files cannot be null");
+        }
+        for (MultipartFile file : files) {
+            if (file == null) {
+                throw new IllegalArgumentException("file in files cannot be null");
+            }
+        }
+        this.files = files;
     }
 }

@@ -48,10 +48,10 @@ public class CoupleBoardController {
     /**
      * 게시물 작성
      */
-    @PostMapping(value = "/couple-board/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/couple-board/write", consumes = "multipart/*")
     public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart(value = "requestDto") CoupleBoardDto.Request requestDto,
                                                            @RequestPart(value = "files") MultipartFile[] files,
-                                                           Authentication authentication) {
+                                                           Authentication authentication) throws IOException {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         CoupleBoardImageUploadDto boardImageUploadDto = new CoupleBoardImageUploadDto();
