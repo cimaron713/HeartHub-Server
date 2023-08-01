@@ -32,7 +32,7 @@ public class MissionController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
-    @GetMapping("/user/missions")
+    @GetMapping("/missions")
     public ResponseEntity<ApiResponse<List<MissionDto.RandomMissionRespDto>>> getMissions() {
         List<MissionDto.RandomMissionRespDto> randomMissionRespDtos = missionService.getMissions();
 
@@ -55,7 +55,7 @@ public class MissionController {
     /**
      * deleteStatus 상태 변경 api (mission 삭제)
      */
-    @PostMapping("/admin/mission/{missionId}")
+    @PutMapping("/admin/mission/{missionId}")
     public ResponseEntity<ApiResponse<Long>> deleteMission(@PathVariable Long missionId) {
         missionService.deleteMission(missionId);
 

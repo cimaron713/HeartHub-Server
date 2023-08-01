@@ -57,6 +57,7 @@ public class MissionServiceImpl implements MissionService{
                 String contentById = missionRepository.getContentById(missionId);
 
                 MissionDto.RandomMissionRespDto randomMissionRespDto = MissionDto.RandomMissionRespDto.builder()
+                        .missionId(missionId)
                         .missionContent(contentById)
                         .user(user)
                         .build();

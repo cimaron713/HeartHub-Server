@@ -38,11 +38,13 @@ public class MissionDto {
     @Getter
     @NoArgsConstructor
     public static class RandomMissionRespDto {
+        private Long missionId;
         private String missionContent;
         private Long userId;
 
         @Builder
-        public RandomMissionRespDto(String missionContent, User user) {
+        public RandomMissionRespDto(Long missionId, String missionContent, User user) {
+            this.missionId = missionId;
             this.missionContent = missionContent;
             this.userId = user.getUserId();
         }
