@@ -95,7 +95,7 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
-    @PostMapping("/user/change/passwd")
+    @PutMapping("/user/change/passwd")
     public ResponseEntity<ApiResponse<Boolean>> changePassword(@RequestBody UserDTO.ChangePasswordRequest request) {
         Boolean response = userService.changePassword(request);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
@@ -127,19 +127,19 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
-    @PostMapping("/member/delete/user")
+    @PutMapping("/member/delete/user")
     public ResponseEntity<ApiResponse<Boolean>> withdrawUser(@RequestHeader("Authorization") String accessToken){
         Boolean response = userService.withdrawUser(accessToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
-    @PostMapping("/modi/user/{userId}")
+    @PutMapping("/modi/user/{userId}")
     public ResponseEntity<ApiResponse<String>> modifyUserReportStatus(@PathVariable Long userId) {
         userService.modifyUserReportStatus(userId);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
-    @PostMapping("/modi/auth/user/{userId}")
+    @PutMapping("/modi/auth/user/{userId}")
     public ResponseEntity<ApiResponse<String>> modifyUserAuthority(@PathVariable Long userId) {
         userService.modifyUserAuthority(userId);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
