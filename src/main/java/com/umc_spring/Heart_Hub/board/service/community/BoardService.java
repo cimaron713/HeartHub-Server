@@ -48,13 +48,13 @@ public class BoardService {
      * 게시글 등록
      */
     @Transactional
-    public Long boardRegister(String theme, BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
+    public Long boardRegister(BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
         User user = userRepository.findByUsername(userName);
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
         Board boardRegister = Board.builder()
-                .theme(theme)
+                .theme(params.getTheme())
                 .user(user)
                 .content(params.getContent())
                 .theme(params.getTheme())
@@ -139,8 +139,8 @@ public class BoardService {
      * 특정 게시물 조회
      */
     @Transactional
-    public BoardDto.BoardResponseDto findBoard(String theme, Long id){
-        Board findBoard = boardRepository.findByBoardIdAndTheme(id,theme).orElseThrow();
+    public BoardDto.BoardResponseDto findBoard(Long id){
+        Board findBoard = boardRepository.findById(id).orElseThrow();
         BoardDto.BoardResponseDto boardResponseDto = new BoardDto.BoardResponseDto(findBoard);
         return boardResponseDto;
     }
