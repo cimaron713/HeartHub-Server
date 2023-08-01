@@ -17,7 +17,9 @@ public interface UserService {
 
     UserDTO.ReissueRespDto reissue(String refreshToken);
     void logout(String accessToken);
-    Boolean withdrawUser(UserDTO.WithdrawReqDto withdrawReqDto);
+    Boolean withdrawUser(String accessToken);
 
     void modifyUserReportStatus(Long userId);
+
+    void modifyUserAuthority(Long userId);
 }

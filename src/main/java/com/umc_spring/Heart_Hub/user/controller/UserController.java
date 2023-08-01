@@ -115,29 +115,33 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(mateExist, CustomResponseStatus.SUCCESS));
     }
 
-    @PostMapping("/user/member/reissue")
+    @PostMapping("/member/reissue")
     public ResponseEntity<ApiResponse<UserDTO.ReissueRespDto>> reissue(@RequestHeader("Authorization") String refreshToken) {
         UserDTO.ReissueRespDto reissueRespDto = userService.reissue(refreshToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(reissueRespDto, CustomResponseStatus.SUCCESS));
     }
 
-    @PostMapping("/user/member/logout")
+    @PostMapping("/member/logout")
     public ResponseEntity<ApiResponse<String>> logout(@RequestHeader("Authorization") String accessToken) {
-        log.info("enter logout controller");
         userService.logout(accessToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
-    @PostMapping("/delete/user")
-    public ResponseEntity<ApiResponse<Boolean>> withdrawUser(UserDTO.WithdrawReqDto withdrawReqDto){
-        Boolean response = userService.withdrawUser(withdrawReqDto);
+    @PostMapping("/member/delete/user")
+    public ResponseEntity<ApiResponse<Boolean>> withdrawUser(@RequestHeader("Authorization") String accessToken){
+        Boolean response = userService.withdrawUser(accessToken);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
     @PostMapping("/modi/user/{userId}")
-    @Transactional
     public ResponseEntity<ApiResponse<String>> modifyUserReportStatus(@PathVariable Long userId) {
         userService.modifyUserReportStatus(userId);
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
+    }
+
+    @PostMapping("/modi/auth/user/{userId}")
+    public ResponseEntity<ApiResponse<String>> modifyUserAuthority(@PathVariable Long userId) {
+        userService.modifyUserAuthority(userId);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 }

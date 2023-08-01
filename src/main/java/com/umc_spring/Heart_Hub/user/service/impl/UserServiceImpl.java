@@ -241,13 +241,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean withdrawUser(UserDTO.WithdrawReqDto response){
-        String email = jwtUtils.getEmailInToken(response.getToken());
+    public Boolean withdrawUser(String accessToken){
+        String resolveToken = jwtUtils.resolveToken(accessToken);
+        String email = jwtUtils.getEmailInToken(resolveToken);
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
-        userRepository.delete(user);
-        logout(response.getToken());
+        user.modifyUserDeleteStatus();
+        logout(accessToken);
         return true;
     }
 
@@ -257,6 +258,14 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         });
         user.modifyUserReportStatus();
+    }
+
+    @Override
+    public void modifyUserAuthority(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
+        });
+        user.modifyUserAuthority();
     }
 
 
