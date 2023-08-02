@@ -12,7 +12,6 @@ public class ReportDto {
     @NoArgsConstructor
     public static class UserReportReqDto {
         private String reportedUsername;
-        private String email;
         private ReportReason reason;
         private String detail; //기타 사유
 
