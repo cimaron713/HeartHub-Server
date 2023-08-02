@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class ReportController {
 
     private final UserService userService;
@@ -27,7 +27,7 @@ public class ReportController {
         this.userReportService = userReportService;
     }
 
-    @PostMapping("/report/user")
+    @PostMapping("/report")
     public ResponseEntity<ApiResponse<ReportDto.UserReportResDto>> userReport(@RequestBody ReportDto.UserReportReqDto reqDto, Authentication authentication) throws Exception {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         ReportDto.UserReportResDto resDto = userReportService.reportUser(reqDto, userDetails.getUsername());
