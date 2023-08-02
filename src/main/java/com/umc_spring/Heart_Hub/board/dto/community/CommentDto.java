@@ -48,5 +48,21 @@ public class CommentDto {
 
     }
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DeleteRequest {
+        private Long commentId;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DeleteResponse {
+        private Long deletedCommentId;
+    }
+
 
 }

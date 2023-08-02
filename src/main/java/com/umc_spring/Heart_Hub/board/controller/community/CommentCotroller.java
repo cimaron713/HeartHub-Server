@@ -40,7 +40,15 @@ public class CommentCotroller {
     public ResponseEntity<ApiResponse<String>> getComments(@RequestBody CommentDto.Request request,
                                                          Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long id = commentService.createComment(request.getBoardId(), request, userDetails.getUsername());
+        Long id = commentService.createComment(request, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(id.toString(),CustomResponseStatus.SUCCESS));
+    }
+
+    @DeleteMapping("/api/user/board")
+    public ResponseEntity<ApiResponse<CommentDto.DeleteResponse>> deleteComment(CommentDto.DeleteRequest deleteRequest,
+                                                             Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CommentDto.DeleteResponse deleteResponse = commentService.deleteComment(deleteRequest, userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(deleteResponse, CustomResponseStatus.SUCCESS));
     }
 }

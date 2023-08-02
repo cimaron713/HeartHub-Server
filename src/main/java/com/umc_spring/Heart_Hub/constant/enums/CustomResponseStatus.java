@@ -1,8 +1,6 @@
 package com.umc_spring.Heart_Hub.constant.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public enum CustomResponseStatus {
@@ -20,7 +18,8 @@ public enum CustomResponseStatus {
     NOT_PERMIT(false, 2005, "누적 신고수 때문에 로그인 못합니다"),
     ALREADY_REPORTED(false, 2006, "이미 신고한 사용자입니다."),
     DUPLICATION_EMAIL(false, 2007, "중복된 Email입니다"),
-    DUPLICATION_USERNAME(false, 2008, "중복된 Username입니다"),
+    DUPLICATION_USERNAME(false, 2008, "중복된 Username입니다."),
+    USER_NOT_MATCH(false, 2009, "유저가 일치하지 않습니다."),
 
     // 3000 : UNAUTHORIZED
     EXPIRED_JWT(false, 3000, "만료된 토큰입니다."),
@@ -31,9 +30,12 @@ public enum CustomResponseStatus {
     // 4000 : NOT FOUND
     USER_NOT_FOUND(false, 4000, "사용자 정보를 찾을 수 없습니다."),
     POST_NOT_FOUND(false, 4001, "게시물 정보를 찾을 수 없습니다."),
-    MISSION_NOT_FOUND(false, 4002, "미션 정보를 찾을 수 없습니다."),
-    USER_MISSION_STATUS_NOT_FOUND(false, 4003, "UMS 정보를 찾을 수 없습니다."),
-    IMAGE_NOT_UPLOAD(false, 4004, "이미지가 업로드되지 않았습니다."),
+    COMMENT_NOT_FOUND(false, 4002, "댓글 정보를 찾을 수 없습니다."),
+    COMMENT_PARENT_NOT_FOUND(false, 4002, "부모 댓글 정보를 찾을 수 없습니다."),
+
+    MISSION_NOT_FOUND(false, 4003, "미션 정보를 찾을 수 없습니다."),
+    USER_MISSION_STATUS_NOT_FOUND(false, 4004, "UMS 정보를 찾을 수 없습니다."),
+    IMAGE_NOT_UPLOAD(false, 4005, "이미지가 업로드되지 않았습니다."),
 
     // 5000 : SERVER ERROR
     INTERNAL_SERVER_ERROR(false, 5000, "내부 서버 오류입니다.");

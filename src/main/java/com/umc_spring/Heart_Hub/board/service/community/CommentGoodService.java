@@ -1,11 +1,12 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
 import com.umc_spring.Heart_Hub.board.dto.community.CommentDto;
-import com.umc_spring.Heart_Hub.board.dto.community.CommentGoodDto;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.board.model.community.CommentGood;
 import com.umc_spring.Heart_Hub.board.repository.community.CommentGoodRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.CommentRepository;
+import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
+import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,13 @@ public class CommentGoodService {
      */
     public void commentGood(Long id,CommentDto.Request request, String username){
         User user = userRepository.findByUsername(username);
-        Comment comment= commentRepository.findById(id).orElseThrow();
+        if(user == null) {
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
+        }
+        Comment comment= commentRepository.findById(id).orElseThrow(() -> {
+            throw new CustomException(CustomResponseStatus.COMMENT_NOT_FOUND);
+        });
+
         if(comment.getParent() != null){
             return;
         }
