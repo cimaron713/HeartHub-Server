@@ -35,6 +35,7 @@ public class Comment extends BaseEntity  {
     private String content;
 
     @OneToMany(mappedBy = "comment",cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @Builder.Default
     private List<CommentGood> goods = new ArrayList<>();
 
     /*

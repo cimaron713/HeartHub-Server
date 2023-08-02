@@ -17,6 +17,7 @@ import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
@@ -59,6 +61,7 @@ public class BoardService {
                 .theme(params.getTheme())
                 .user(user)
                 .content(params.getContent())
+                .status("Y")
                 .build();
 
         boardRepository.save(boardRegister);
@@ -70,7 +73,6 @@ public class BoardService {
                     BoardImg img = BoardImg.builder()
                             .postImgUrl(fileUrl)
                             .board(boardRegister)
-                            .status("Y")
                             .build();
 
                     boardImgRepository.save(img);
@@ -107,9 +109,10 @@ public class BoardService {
     /**
      게시글 리스트 조회
      */
-    @Transactional
+
     public List<BoardDto.BoardResponseDto> findAll(String theme) {
         String username = getLoginUsername();
+        log.info("-------------------------------userName: "+username);
         User user = userRepository.findByUsername(username);
         //로그인한 사용자가 차단한 사용자들의 목록 가져오기
         List<User> blockedUsers = blockedListRepository.findAllByBlocker(user).stream()
@@ -118,10 +121,18 @@ public class BoardService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         List<Board> list = boardRepository.findAllByTheme(sort,theme);
-        List<BoardDto.BoardResponseDto> responseList = list.stream()
-                .filter(board -> !blockedUsers.contains(board.getUser()))
-                .map(m -> new BoardDto.BoardResponseDto(m)).toList();
-        return responseList;
+        if(list.isEmpty()){
+            List<BoardDto.BoardResponseDto> responseList = new ArrayList<>();
+            return responseList;
+        }
+        else{
+            List<BoardDto.BoardResponseDto> responseList = new ArrayList<>();
+            responseList = list.stream()
+                    .filter(board -> !blockedUsers.contains(board.getUser()))
+                    .map(BoardDto.BoardResponseDto::new).toList();
+            return responseList;
+        }
+
     }
 
     /**

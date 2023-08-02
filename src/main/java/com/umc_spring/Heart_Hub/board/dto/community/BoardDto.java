@@ -3,10 +3,7 @@ package com.umc_spring.Heart_Hub.board.dto.community;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.BoardImg;
 import com.umc_spring.Heart_Hub.user.model.User;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +11,8 @@ import java.util.stream.Collectors;
 
 
 public class BoardDto {
-    @Getter
+
+    @AllArgsConstructor
     @Data
     @NoArgsConstructor
     public static class BoardRequestDto{
@@ -25,8 +23,9 @@ public class BoardDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class BoardResponseDto {
-        private final Long boardId;
+        private Long boardId;
         private String content;
         private String goodStatus;
         private String heartStatus;

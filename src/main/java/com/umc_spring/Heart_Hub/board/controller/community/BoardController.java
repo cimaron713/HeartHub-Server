@@ -33,8 +33,8 @@ public class BoardController {
 
     //게시글 작성
     @PostMapping(value = "/articles/write", consumes = "multipart/*")
-    public ResponseEntity<ApiResponse<String>> boardWrite(@RequestPart(value = "params") BoardDto.BoardRequestDto params,
-                                                        @RequestPart(value = "files") MultipartFile[] files,
+    public ResponseEntity<ApiResponse<String>> boardWrite(@RequestPart(value = "params",required = false) BoardDto.BoardRequestDto params,
+                                                        @RequestPart(value = "files", required = false) MultipartFile[] files,
                                                         Authentication authentication) throws IOException {
         log.info("files: "+files);
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
@@ -51,7 +51,9 @@ public class BoardController {
     //전체
     @GetMapping("/{theme}/articles")
     public ResponseEntity<ApiResponse<List<BoardDto.BoardResponseDto>>> articleList(@PathVariable(value = "theme") String theme){
+        log.info("theme: "+ theme);
         List<BoardDto.BoardResponseDto> boards = boardService.findAll(theme);
+        log.info("boardsList : "+ boards);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boards,CustomResponseStatus.SUCCESS));
     }
 
