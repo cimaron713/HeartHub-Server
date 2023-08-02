@@ -12,6 +12,7 @@ import com.umc_spring.Heart_Hub.board.repository.community.CommentGoodRepository
 import com.umc_spring.Heart_Hub.board.repository.community.CommentRepository;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -21,12 +22,13 @@ import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
-    private CommentRepository commentRepository;
-    private BoardRepository boardRepository;
-    private UserRepository userRepository;
-    private CommentGoodRepository commentGoodRepository;
-    private BlockedListRepository blockedListRepository;
+    private final CommentRepository commentRepository;
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
+    private final CommentGoodRepository commentGoodRepository;
+    private final BlockedListRepository blockedListRepository;
 
     /**
     해당 게시글 댓글 목록 조회

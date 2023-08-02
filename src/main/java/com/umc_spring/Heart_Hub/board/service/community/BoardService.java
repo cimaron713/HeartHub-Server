@@ -1,5 +1,7 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
@@ -47,7 +50,6 @@ public class BoardService {
     /**
      * 게시글 등록
      */
-    @Transactional
     public Long boardRegister(BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto){
         User user = userRepository.findByUsername(userName);
         if(user == null) {
@@ -57,10 +59,10 @@ public class BoardService {
                 .theme(params.getTheme())
                 .user(user)
                 .content(params.getContent())
-                .theme(params.getTheme())
                 .build();
+
         boardRepository.save(boardRegister);
-        if(boardImageUploadDto.getCommunityFiles() != null && boardImageUploadDto.getCommunityFiles().length > 0){
+        if(boardImageUploadDto.getCommunityFiles() != null ){
             try {
                 List<String> fileUrls = upload(boardImageUploadDto.getCommunityFiles(), user.getUsername());
 
@@ -68,12 +70,17 @@ public class BoardService {
                     BoardImg img = BoardImg.builder()
                             .postImgUrl(fileUrl)
                             .board(boardRegister)
+                            .status("Y")
                             .build();
 
                     boardImgRepository.save(img);
                 }
             } catch (IOException e) {
                 throw new CustomException(CustomResponseStatus.IMAGE_NOT_UPLOAD);
+            } catch (AmazonServiceException e) {
+                System.err.println(e.getErrorMessage());
+            } catch (SdkClientException e) {
+                System.err.println(e.getMessage());
             }
         }
 

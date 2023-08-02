@@ -21,8 +21,7 @@ public class BoardDto {
         private String content;
         private String theme;
         private String userName;
-        private Long boardId;
-        private List<CommentDto.Request> commentList;
+
     }
 
     @Getter

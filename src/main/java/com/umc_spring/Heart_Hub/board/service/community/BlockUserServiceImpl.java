@@ -11,9 +11,16 @@ import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class BlockUserServiceImpl implements BlockUserService{
 
     private UserRepository userRepository;

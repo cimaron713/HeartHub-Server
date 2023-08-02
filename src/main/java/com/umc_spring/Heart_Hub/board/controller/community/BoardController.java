@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.board.controller.community;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
+
 import com.umc_spring.Heart_Hub.board.dto.community.BoardImageUploadDto;
 import com.umc_spring.Heart_Hub.board.service.community.BlockUserService;
 import com.umc_spring.Heart_Hub.board.service.community.BoardGoodService;
@@ -9,34 +10,39 @@ import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/api/user/board")
 public class BoardController {
-    private BoardService boardService;
-    private BlockUserService blockUserService;
-    private BoardGoodService boardGoodService;
+    private final BoardService boardService;
+    private final BlockUserService blockUserService;
+    private final BoardGoodService boardGoodService;
     //게시글 작성
 
     //게시글 작성
-    @PostMapping("/articles/write")
-    public ResponseEntity<ApiResponse<Long>> boardWrite(@RequestBody BoardDto.BoardRequestDto params,
-                                                        @RequestPart("files")BoardImageUploadDto boardImageUploadDto,
-                                                        Authentication authentication){
-        log.info("boardRequestDto: "+ params.getContent());
+    @PostMapping(value = "/articles/write", consumes = "multipart/*")
+    public ResponseEntity<ApiResponse<String>> boardWrite(@RequestPart(value = "params") BoardDto.BoardRequestDto params,
+                                                        @RequestPart(value = "files") MultipartFile[] files,
+                                                        Authentication authentication) throws IOException {
+        log.info("files: "+files);
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        BoardImageUploadDto boardImageUploadDto = new BoardImageUploadDto();
+        boardImageUploadDto.setFiles(files);
+        log.info("boardImageUploadDto: "+ boardImageUploadDto);
         Long boardId = boardService.boardRegister(params, userDetails.getUsername(), boardImageUploadDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId, CustomResponseStatus.SUCCESS));
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId.toString(), CustomResponseStatus.SUCCESS));
     }
 
     /*
