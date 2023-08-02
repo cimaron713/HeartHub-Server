@@ -1,24 +1,17 @@
 package com.umc_spring.Heart_Hub.coupleBoard.controller;
 
-import com.google.protobuf.Api;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
-import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
-import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardDto;
 import com.umc_spring.Heart_Hub.coupleBoard.dto.CoupleBoardImageUploadDto;
 import com.umc_spring.Heart_Hub.coupleBoard.service.CoupleBoardService;
-import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,8 +24,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
-import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequiredArgsConstructor

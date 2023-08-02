@@ -1,12 +1,10 @@
 package com.umc_spring.Heart_Hub.board.controller.community;
 
 
-import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardHeartDto;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
-import com.umc_spring.Heart_Hub.user.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
