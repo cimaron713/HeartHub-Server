@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class BoardHeart extends BaseEntity {
     @Id
     @JoinColumn
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long heartId;
 
     @ManyToOne(fetch = FetchType.LAZY)

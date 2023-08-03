@@ -17,4 +17,6 @@ public interface BoardGoodRepository extends JpaRepository<BoardGood,Long>, Boar
     public List<BoardGood> countGood(@Param(value = "id") Long id);
 
     List<BoardGood> findAllByUserAndBoard_User(User user, User blockedUser);
+
+    List<BoardGood> findAllByBoard(Board board);
 }

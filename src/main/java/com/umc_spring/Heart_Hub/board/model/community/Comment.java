@@ -5,8 +5,10 @@ import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,8 @@ public class Comment extends BaseEntity  {
 
     @Column(nullable = false, length = 1)
     private String status;
+    @ColumnDefault(value = "0")
+    private int count;
 
     /*
     대댓글

@@ -14,6 +14,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class BoardGood extends BaseEntity {
     @Id
     @JoinColumn
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long goodId;
 
     @ManyToOne(fetch = FetchType.LAZY)

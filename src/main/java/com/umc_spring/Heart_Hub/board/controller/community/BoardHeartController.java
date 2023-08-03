@@ -5,6 +5,7 @@ import com.umc_spring.Heart_Hub.board.dto.community.BoardHeartDto;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/user/board")
+@RequiredArgsConstructor
 public class BoardHeartController {
-    private BoardHeartService boardHeartService;
+    private final BoardHeartService boardHeartService;
 
     @PostMapping("/heart")
-    public ResponseEntity<ApiResponse<String>> heart(@RequestBody BoardHeartDto.Request params,
+    public ResponseEntity<ApiResponse<String>> heart(@RequestPart BoardHeartDto.Request request,
                                                      Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        boardHeartService.heartRegister(params, userDetails.getUsername());
+        boardHeartService.heartRegister(request, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 

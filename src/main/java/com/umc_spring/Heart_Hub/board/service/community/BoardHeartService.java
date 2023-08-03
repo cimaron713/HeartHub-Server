@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface BoardHeartService {
-    void heartRegister(BoardHeartDto.Request params, String userName);
+    void heartRegister(BoardHeartDto.Request request, String userName);
     List<BoardDto.BoardResponseDto> getHeartBoards(String username);
     List<BoardDto.BoardResponseDto> getHeartMateBoards(String username);
     List<BoardDto.BoardResponseDto> getHeartBoardsByUsername(String username);

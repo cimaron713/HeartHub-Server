@@ -6,16 +6,17 @@ import com.umc_spring.Heart_Hub.board.service.community.BoardGoodService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/user/board")
 public class BoardGoodContoller {
-    private BoardGoodService boardGoodService;
+    private final BoardGoodService boardGoodService;
     //좋아요 등록
     @PostMapping("/{boardId}/good")
     public ResponseEntity<ApiResponse<String>> good(@PathVariable(value = "boardId") Long boardId,
@@ -25,9 +26,9 @@ public class BoardGoodContoller {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
-    @GetMapping("/{id}/good/count")
-    public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable Long id){
-        int goodCnt = boardGoodService.goodCount(id);
+    @GetMapping("/{boardId}/good/count")
+    public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable Long boardId){
+        int goodCnt = boardGoodService.goodCount(boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(goodCnt,CustomResponseStatus.SUCCESS));
     }
 

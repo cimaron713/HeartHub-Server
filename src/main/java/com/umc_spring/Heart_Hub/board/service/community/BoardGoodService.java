@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BoardGoodService {
-    private BoardRepository boardRepository;
-    private BoardGoodRepository boardGoodRepository;
-    private UserRepository userRepository;
+    private final BoardRepository boardRepository;
+    private final BoardGoodRepository boardGoodRepository;
+    private final UserRepository userRepository;
 
 
     //좋아요 생성
@@ -28,7 +28,7 @@ public class BoardGoodService {
         Board board = boardRepository.findById(boardId).orElseThrow();
 
         //좋아요 안누른 게시글만 좋아요 누르게 허용
-        if(boardGoodRepository.findByUserAndBoard(user, board) == null){
+        if(boardGoodRepository.findByUserAndBoard(user, board).isEmpty()){
             BoardGood boardGood = BoardGood.builder()
                     .user(user)
                     .board(board)
@@ -42,9 +42,10 @@ public class BoardGoodService {
         }
     }
 
-    public int goodCount(Long id){
-        List<BoardGood> boardGoods = boardGoodRepository.countGood(id);
-        return boardGoods.size();
+    public int goodCount(Long boardId){
+        Board board = boardRepository.findById(boardId).orElseThrow();
+        List<BoardGood> boards = boardGoodRepository.findAllByBoard(board);
+        return boards.size();
     }
     //좋아요 취소
 

@@ -34,11 +34,12 @@ public class CommentGoodService {
         if(comment.getParent() != null){
             return;
         }
-        if(commentGoodRepository.findByUserAndComment(user, comment) == null){
+        if(commentGoodRepository.findByUserAndComment(user, comment).isEmpty()){
             //좋아요 안누른 유저만 좋아요
             CommentGood commentGood = CommentGood.builder()
                     .comment(comment)
                     .user(user)
+                    .status("Y")
                     .build();
             commentGoodRepository.save(commentGood);
         }
@@ -49,8 +50,16 @@ public class CommentGoodService {
         }
     }
 
-    public int commentGoodCnt(Long id){
-        int goodCount = commentGoodRepository.commentGoodCount(id).size();
-        return goodCount;
+    public String commentGoodCnt(Long id){
+        Comment comment = commentRepository.findById(id).orElseThrow();
+        if(comment == null){
+            return "0";
+        }
+        else{
+            int goodCount = commentGoodRepository.findAllByComment(comment).size();
+            String cnt = String.valueOf(goodCount);
+            return cnt;
+        }
+
     }
 }

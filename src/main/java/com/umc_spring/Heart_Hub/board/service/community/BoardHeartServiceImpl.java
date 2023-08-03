@@ -29,17 +29,18 @@ public class BoardHeartServiceImpl implements BoardHeartService{
 
     /**
      * 스크랩 등록
-     * @param params
+     *
      * @param userName
      */
     @Override
-    public void heartRegister(BoardHeartDto.Request params, String userName){
+    public void heartRegister(BoardHeartDto.Request request, String userName){
         User user = userRepository.findByUsername(userName);
-        Board board = boardRepository.findById(params.getBoardId()).orElseThrow();
-        if(boardHeartRepository.findByUserAndBoard(user,board) == null){
+        Board board = boardRepository.findById(request.getBoardId()).orElseThrow();
+        if(boardHeartRepository.findByUserAndBoard(user, board).isEmpty()){
             BoardHeart boardHeart = BoardHeart.builder()
                     .board(board)
                     .user(user)
+                    .status("Y")
                     .build();
             boardHeartRepository.save(boardHeart);
         }

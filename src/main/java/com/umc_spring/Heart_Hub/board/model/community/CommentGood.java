@@ -17,6 +17,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class CommentGood extends BaseEntity {
     @Id
     @JoinColumn
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentGoodId;
 
     @ManyToOne(fetch = FetchType.LAZY)
