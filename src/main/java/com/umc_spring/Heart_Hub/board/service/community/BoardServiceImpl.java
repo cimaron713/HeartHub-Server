@@ -62,6 +62,7 @@ public class BoardServiceImpl implements BoardService {
                 .user(user)
                 .status("Y")
                 .content(params.getContent())
+                .likeCount(0)
                 .build();
 
         boardRepository.save(boardRegister);
