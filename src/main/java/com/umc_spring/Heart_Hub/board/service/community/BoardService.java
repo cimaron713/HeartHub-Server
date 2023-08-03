@@ -121,17 +121,13 @@ public class BoardService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         List<Board> list = boardRepository.findAllByTheme(sort,theme);
-        if(list.isEmpty()){
-            List<BoardDto.BoardResponseDto> responseList = new ArrayList<>();
-            return responseList;
-        }
-        else{
-            List<BoardDto.BoardResponseDto> responseList = new ArrayList<>();
+        List<BoardDto.BoardResponseDto> responseList = new ArrayList<>();
+        if (!list.isEmpty()) {
             responseList = list.stream()
                     .filter(board -> !blockedUsers.contains(board.getUser()))
                     .map(BoardDto.BoardResponseDto::new).toList();
-            return responseList;
         }
+        return responseList;
 
     }
 
