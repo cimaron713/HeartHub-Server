@@ -13,15 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CommentGoodController {
     private CommentGoodService commentGoodService;
-    @PostMapping("/api/user/board//{commentId}")
-    public ResponseEntity<ApiResponse<String>> commentGood(@PathVariable Long commentId,
-                                                           @RequestBody CommentDto.Request request, Authentication authentication){
+    @PostMapping("/api/user/board/{commentId}/good")
+    public ResponseEntity<ApiResponse<String>> commentGood(@PathVariable Long commentId, Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        commentGoodService.commentGood(commentId,request, userDetails.getUsername());
+        commentGoodService.commentGood(commentId, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
-    @GetMapping("/api/user/board/{commentId}")
+    @GetMapping("/api/user/board/{commentId}/counts")
     public ResponseEntity<ApiResponse<Integer>> commentGoodCount(@PathVariable Long commentId){
         int cnt = commentGoodService.commentGoodCnt(commentId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(cnt, CustomResponseStatus.SUCCESS));

@@ -2,6 +2,7 @@ package com.umc_spring.Heart_Hub.board.dto.community;
 
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
+import com.umc_spring.Heart_Hub.user.dto.UserDTO;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.*;
@@ -9,6 +10,8 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.umc_spring.Heart_Hub.board.model.community.QComment.comment;
 
 public class CommentDto {
     private UserRepository userRepository;
@@ -22,28 +25,33 @@ public class CommentDto {
         private String userName;
         private String content;
         private Long parentId;
+
+        public Request(String content){
+            this.content = content;
+        }
     }
 
     @Getter
     public static class Response{
         private Long commentId;
-        private Long boardId;
         private String userName;
         private String content;
-        private List<Response> responseList = new ArrayList<>();
+        private List<CommentDto.Response> responseList = new ArrayList<>();
         private int count;
 
         @Builder
         public Response(Comment comment){
             this.commentId = comment.getCommentId();
             this.userName = comment.getUser().getUsername();
-            this.boardId = comment.getBoard().getBoardId();
             this.content = comment.getContent();
             this.count = comment.getGoods().size();
         }
 
         public static Response convertCommentToDto(Comment comment) {
-            return new Response(comment);
+
+            return comment.getStatus().equals("N") ?
+                    new CommentDto.Response(comment) :
+                    new CommentDto.Response(comment);
         }
 
     }

@@ -14,7 +14,6 @@ public class CommentGoodDto {
     @AllArgsConstructor
     public static class Request{
         private String userName;
-        private Long commentId;
     }
     @Getter
     @NoArgsConstructor
@@ -23,6 +22,7 @@ public class CommentGoodDto {
         private String userName;
         private Long commentId;
         private String status;
+
         @Builder
         public Response(CommentGood commentGood){
             this.commentGoodId = commentGood.getCommentGoodId();

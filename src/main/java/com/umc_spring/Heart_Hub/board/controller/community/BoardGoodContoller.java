@@ -18,16 +18,15 @@ public class BoardGoodContoller {
     private BoardGoodService boardGoodService;
     //좋아요 등록
     @PostMapping("/{boardId}/good")
-    public ResponseEntity<ApiResponse<String>> good(@RequestBody BoardDto.BoardRequestDto params,
-                                                    @PathVariable(value = "boardId") Long boardId,
+    public ResponseEntity<ApiResponse<String>> good(@PathVariable(value = "boardId") Long boardId,
                                                     Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        boardGoodService.goodRegister(params, userDetails.getUsername(),boardId);
+        boardGoodService.goodRegister(userDetails.getUsername(),boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
     @GetMapping("/{id}/good/count")
-    public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable Long id,@RequestBody BoardGoodDto.Request params){
+    public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable Long id){
         int goodCnt = boardGoodService.goodCount(id);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(goodCnt,CustomResponseStatus.SUCCESS));
     }

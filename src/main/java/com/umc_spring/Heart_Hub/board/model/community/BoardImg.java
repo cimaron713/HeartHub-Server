@@ -20,9 +20,6 @@ public class BoardImg extends BaseEntity {
 
     private String postImgUrl;
 
-    @Column(nullable = false, length = 1)
-    private String status;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;

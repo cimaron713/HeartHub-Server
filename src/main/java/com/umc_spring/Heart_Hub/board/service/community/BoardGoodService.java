@@ -23,7 +23,7 @@ public class BoardGoodService {
 
 
     //좋아요 생성
-    public void goodRegister(BoardDto.BoardRequestDto boardRequest, String userName, Long boardId){
+    public void goodRegister(String userName, Long boardId){
         User user = userRepository.findByUsername(userName);
         Board board = boardRepository.findById(boardId).orElseThrow();
 

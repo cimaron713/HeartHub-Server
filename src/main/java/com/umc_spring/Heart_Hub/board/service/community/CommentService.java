@@ -5,15 +5,13 @@ import com.umc_spring.Heart_Hub.board.dto.community.CommentDto;
 import com.umc_spring.Heart_Hub.board.model.community.BlockedList;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
-import com.umc_spring.Heart_Hub.board.repository.community.BlockedListRepository;
-import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
-import com.umc_spring.Heart_Hub.board.repository.community.CommentGoodRepository;
-import com.umc_spring.Heart_Hub.board.repository.community.CommentRepository;
+import com.umc_spring.Heart_Hub.board.repository.community.*;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +22,10 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final CommentRepositoryCustom commentRepositoryCustom;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final CommentGoodRepository commentGoodRepository;
@@ -49,11 +49,11 @@ public class CommentService {
             throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);
         });
 
-        List<Comment> comments = commentRepository.findAllByBoard(board);
+        List<CommentDto.Response> comments = commentRepositoryCustom.findByBoardId(board.getBoardId());
         List<CommentDto.Response> commentResponse = new ArrayList<>();
-        for (Comment c : comments) {
-            if (!blockedUsers.contains(c.getUser())) {
-                commentResponse.add(new CommentDto.Response(c));
+        for (CommentDto.Response c : comments) {
+            if (!blockedUsers.contains(userRepository.findByUsername(c.getUserName()))) {
+                commentResponse.add(c);
             }
         }
         return commentResponse;
@@ -76,6 +76,8 @@ public class CommentService {
                 .content(replyRequest.getContent())
                 .user(user)
                 .board(board)
+                .parent(null)
+                .status("Y")
                 .build();
 
         Comment parent;
@@ -84,7 +86,10 @@ public class CommentService {
                 throw new CustomException(CustomResponseStatus.COMMENT_PARENT_NOT_FOUND);
             });
             replyComment.updateParent(parent);
+            log.info("대댓글 목록: "+replyComment.getChildComment());
         }
+        replyComment.updateBoard(board);
+        replyComment.updateUser(user);
 
         commentRepository.save(replyComment);
         return replyComment.getCommentId();

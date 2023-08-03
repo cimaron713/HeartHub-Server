@@ -24,11 +24,10 @@ public class CommentCotroller {
     /*
     해당 게시글의 댓글 조회
      */
-    @GetMapping("/api/user/board/{boardid}/comments")
+    @GetMapping("/api/user/board/{boardId}/comments")
     public ResponseEntity<ApiResponse<List<CommentDto.Response>>> getComments(@PathVariable(value = "boardId") Long boardId,
                                                                               Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
         BoardDto.BoardResponseDto board = boardService.findBoard(boardId);
         List<CommentDto.Response> comments = commentService.findComments(board, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(comments, CustomResponseStatus.SUCCESS));
@@ -36,7 +35,7 @@ public class CommentCotroller {
     /*
     해당 게시글의 댓글 등록
      */
-    @PostMapping("/api/user/board/comments")
+    @PostMapping("/api/user/boardId/comments")
     public ResponseEntity<ApiResponse<String>> getComments(@RequestBody CommentDto.Request request,
                                                          Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
