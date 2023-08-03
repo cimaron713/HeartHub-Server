@@ -60,6 +60,7 @@ public class BoardServiceImpl implements BoardService {
         Board boardRegister = Board.builder()
                 .theme(params.getTheme())
                 .user(user)
+                .status("Y")
                 .content(params.getContent())
                 .build();
 
@@ -72,7 +73,6 @@ public class BoardServiceImpl implements BoardService {
                     BoardImg img = BoardImg.builder()
                             .postImgUrl(fileUrl)
                             .board(boardRegister)
-                            .status("Y")
                             .build();
 
                     boardImgRepository.save(img);
