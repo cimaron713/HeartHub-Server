@@ -50,7 +50,7 @@ public class CommentDto {
         public static Response convertCommentToDto(Comment comment) {
 
             return comment.getStatus().equals("N") ?
-                    new CommentDto.Response(comment) :
+                    new CommentDto.Response(null) :
                     new CommentDto.Response(comment);
         }
 
@@ -70,6 +70,13 @@ public class CommentDto {
     @Builder
     public static class DeleteResponse {
         private Long deletedCommentId;
+    }
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class readRequest{
+        private Long boardId;
     }
 
 

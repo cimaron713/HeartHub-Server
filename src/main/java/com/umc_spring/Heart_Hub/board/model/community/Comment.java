@@ -78,4 +78,5 @@ public class Comment extends BaseEntity  {
     public void modifyStatus(String status){
         this.status = status;
     }
+
 }

@@ -15,10 +15,26 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CommentGoodController {
     private final CommentGoodService commentGoodService;
-    @PostMapping("/api/user/board/comment/{commentId}/good")
-    public ResponseEntity<ApiResponse<String>> commentGood(@PathVariable Long commentId, Authentication authentication){
+    /**
+     * 게시글 좋아요
+     */
+    @PostMapping("/api/user/board/comment/good")
+    public ResponseEntity<ApiResponse<String>> commentGood(@RequestBody CommentGoodDto.goodRequest request, Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        commentGoodService.commentGood(commentId, userDetails.getUsername());
+        commentGoodService.commentGood(request.getCommentId(), userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
+    }
+
+    /**
+     * 좋아요 취소
+     * @param request
+     * @param authentication
+     * @return
+     */
+    @DeleteMapping("/api/user/board/comment/unGood")
+    public ResponseEntity<ApiResponse<String>> deleteGood(@RequestBody CommentGoodDto.goodRequest request, Authentication authentication){
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        commentGoodService.commentGoodDelete(request.getCommentId(), userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 

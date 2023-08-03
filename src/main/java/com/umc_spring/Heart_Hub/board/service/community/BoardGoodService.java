@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardGoodService {
     private final BoardRepository boardRepository;
     private final BoardGoodRepository boardGoodRepository;
@@ -52,7 +53,6 @@ public class BoardGoodService {
     /**
      * 좋아요를 기준으로 상위 3개의 게시물 반환
      */
-    @Transactional
     public List<BoardDto.BoardResponseDto> findHotBoard() {
         List<Board> hotBoardList = boardGoodRepository.findTop3ByBoard();
 
@@ -62,7 +62,6 @@ public class BoardGoodService {
     /**
      * 좋아요 기준으로 Look 게시물 상위 3개
      */
-    @Transactional
     public List<BoardDto.BoardResponseDto> lookLank(){
         List<Board> looks = boardGoodRepository.findTop3ByBoard_Theme();
         List<BoardDto.BoardResponseDto> result = looks.stream().map(BoardDto.BoardResponseDto::new).collect(Collectors.toList());

@@ -12,6 +12,7 @@ import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CommentService {
+
     private final CommentRepository commentRepository;
     private final CommentRepositoryCustom commentRepositoryCustom;
     private final BoardRepository boardRepository;
@@ -34,7 +37,7 @@ public class CommentService {
     /**
      * 해당 게시글 댓글 목록 조회
      */
-    @Transactional
+
     public List<CommentDto.Response> findComments(BoardDto.BoardResponseDto boardResponse, String username) {
         User user = userRepository.findByUsername(username);
         if(user == null) {
@@ -43,13 +46,13 @@ public class CommentService {
 
         List<User> blockedUsers = blockedListRepository.findAllByBlocker(user).stream()
                 .map(BlockedList::getBlockedUser)
-                .collect(Collectors.toList());
+                .toList();
 
         Board board = boardRepository.findById(boardResponse.getBoardId()).orElseThrow(() -> {
             throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);
         });
 
-        List<CommentDto.Response> comments = commentRepositoryCustom.findByBoardId(board.getBoardId());
+        List<CommentDto.Response> comments = commentRepository.findByBoardId(board.getBoardId());
         List<CommentDto.Response> commentResponse = new ArrayList<>();
         for (CommentDto.Response c : comments) {
             if (!blockedUsers.contains(userRepository.findByUsername(c.getUserName()))) {
@@ -62,7 +65,7 @@ public class CommentService {
     /**
      * 댓글 등록
      */
-    @Transactional
+
     public Long createComment(CommentDto.Request replyRequest, String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -76,8 +79,8 @@ public class CommentService {
                 .content(replyRequest.getContent())
                 .user(user)
                 .board(board)
-                .parent(null)
                 .status("Y")
+                .count(0)
                 .build();
 
         Comment parent;
@@ -108,7 +111,7 @@ public class CommentService {
             throw new CustomException(CustomResponseStatus.COMMENT_NOT_FOUND);
         });
 
-        if(user.getUsername() != findComment.getUser().getUsername()) {
+        if(!user.getUsername().equals(findComment.getUser().getUsername())) {
             throw new CustomException(CustomResponseStatus.USER_NOT_MATCH);
         }
 

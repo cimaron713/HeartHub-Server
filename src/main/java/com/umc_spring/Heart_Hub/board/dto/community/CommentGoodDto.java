@@ -14,6 +14,7 @@ public class CommentGoodDto {
     @AllArgsConstructor
     public static class Request{
         private String userName;
+        private Long commentId;
     }
     @Getter
     @NoArgsConstructor
@@ -30,5 +31,12 @@ public class CommentGoodDto {
             this.commentId = commentGood.getComment().getCommentId();
             this.status = commentGood.getStatus();
         }
+    }
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class goodRequest{
+        private Long commentId;
     }
 }

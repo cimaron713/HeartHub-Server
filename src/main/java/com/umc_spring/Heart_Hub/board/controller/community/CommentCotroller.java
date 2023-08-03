@@ -24,11 +24,11 @@ public class CommentCotroller {
     /*
     해당 게시글의 댓글 조회
      */
-    @GetMapping("/api/user/board/{boardId}/comments")
-    public ResponseEntity<ApiResponse<List<CommentDto.Response>>> getComments(@PathVariable(value = "boardId") Long boardId,
+    @GetMapping("/api/user/board/comments")
+    public ResponseEntity<ApiResponse<List<CommentDto.Response>>> getCommentsList(@RequestBody CommentDto.readRequest request,
                                                                               Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        BoardDto.BoardResponseDto board = boardService.findBoard(boardId);
+        BoardDto.BoardResponseDto board = boardService.findBoard(request.getBoardId());
         List<CommentDto.Response> comments = commentService.findComments(board, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccess(comments, CustomResponseStatus.SUCCESS));
     }
