@@ -9,18 +9,20 @@ import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CommentGoodService {
-    private CommentRepository commentRepository;
-    private CommentGoodRepository commentGoodRepository;
-    private UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final CommentGoodRepository commentGoodRepository;
+    private final UserRepository userRepository;
 
     /**
      * 댓글 좋아요
      */
-    public void commentGood(Long id,CommentDto.Request request, String username){
+    public void commentGood(Long id, String username){
         User user = userRepository.findByUsername(username);
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
