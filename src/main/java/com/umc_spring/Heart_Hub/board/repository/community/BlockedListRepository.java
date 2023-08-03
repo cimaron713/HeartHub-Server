@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface BlockedListRepository extends JpaRepository<BlockedList, Long> {
 
     BlockedList findByBlockerAndBlockedUser(User blocker, User blockedUser);
