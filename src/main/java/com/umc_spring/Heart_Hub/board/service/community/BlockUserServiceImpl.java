@@ -23,10 +23,10 @@ import java.util.List;
 @Slf4j
 public class BlockUserServiceImpl implements BlockUserService{
 
-    private UserRepository userRepository;
-    private BlockedListRepository blockedListRepository;
-    private BoardHeartRepository boardHeartRepository;
-    private BoardGoodRepository boardGoodRepository;
+    private final UserRepository userRepository;
+    private final BlockedListRepository blockedListRepository;
+    private final BoardHeartRepository boardHeartRepository;
+    private final BoardGoodRepository boardGoodRepository;
 
     public void blockUser(String username, BoardDto.BlockUserReqDto blockReqDto) {
         User blocker = userRepository.findByUsername(username);
