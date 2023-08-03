@@ -28,6 +28,7 @@ public class BlockUserServiceImpl implements BlockUserService{
     private final BoardHeartRepository boardHeartRepository;
     private final BoardGoodRepository boardGoodRepository;
 
+    @Override
     public void blockUser(String username, BoardDto.BlockUserReqDto blockReqDto) {
         User blocker = userRepository.findByUsername(username);
         User blockedUser = userRepository.findByUsername(blockReqDto.getBlockedUserName());
@@ -56,6 +57,7 @@ public class BlockUserServiceImpl implements BlockUserService{
         }
     }
 
+    @Override
     public void unblockUser(String username, BoardDto.UnblockUserReqDto unblockReqDto) {
         User blocker = userRepository.findByUsername(username);
         User blockedUser = userRepository.findByUsername(unblockReqDto.getBlockedUserName());
