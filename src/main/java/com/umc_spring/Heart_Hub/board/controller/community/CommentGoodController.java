@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CommentGoodController {
     private CommentGoodService commentGoodService;
-    @PostMapping("/api/user/board//{commentId}")
+    @PostMapping("/api/user/board/{commentId}/good")
     public ResponseEntity<ApiResponse<String>> commentGood(@PathVariable Long commentId,
                                                            @RequestBody CommentDto.Request request, Authentication authentication){
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();

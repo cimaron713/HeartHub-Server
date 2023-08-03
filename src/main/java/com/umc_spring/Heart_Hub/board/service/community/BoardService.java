@@ -62,6 +62,7 @@ public class BoardService {
                 .user(user)
                 .content(params.getContent())
                 .status("Y")
+                .likeCount(0)
                 .build();
 
         boardRepository.save(boardRegister);

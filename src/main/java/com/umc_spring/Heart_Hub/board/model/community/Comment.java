@@ -38,6 +38,9 @@ public class Comment extends BaseEntity  {
     @Builder.Default
     private List<CommentGood> goods = new ArrayList<>();
 
+    @Column(nullable = false, length = 1)
+    private String status;
+
     /*
     대댓글
      */
@@ -64,5 +67,11 @@ public class Comment extends BaseEntity  {
     }
     public void updateChild(List<Comment> child){
         this.childComment = child;
+    }
+    public void updateUser(User user){
+        this.user = user;
+    }
+    public void modifyStatus(String status){
+        this.status = status;
     }
 }

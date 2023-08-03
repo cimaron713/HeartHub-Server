@@ -35,7 +35,7 @@ public class CommentCotroller {
     /*
     해당 게시글의 댓글 등록
      */
-    @PostMapping("/api/user/board/comments")
+    @PostMapping("/api/user/boardId/comments")
     public ResponseEntity<ApiResponse<String>> getComments(@RequestBody CommentDto.Request request,
                                                          Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

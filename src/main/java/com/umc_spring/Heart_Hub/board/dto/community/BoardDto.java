@@ -1,11 +1,15 @@
 package com.umc_spring.Heart_Hub.board.dto.community;
 
 import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.board.model.community.BoardGood;
 import com.umc_spring.Heart_Hub.board.model.community.BoardImg;
+import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.user.model.User;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,13 +31,13 @@ public class BoardDto {
     public static class BoardResponseDto {
         private Long boardId;
         private String content;
-        private String goodStatus;
-        private String heartStatus;
+        private String status;
         private String theme;
         private String userName;
         private List<CommentDto.Response> commentList;
         private List<String> communityImgUrl;
-        private LocalDateTime createdDate;
+        private LocalDate createdDate;
+        private int count;
         @Builder
         public BoardResponseDto(Board board){
             this.boardId = board.getBoardId();
@@ -42,7 +46,12 @@ public class BoardDto {
             this.userName = board.getUser().getUsername();
             this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());
             this.communityImgUrl = board.getCommunity().stream().map(BoardImg::getPostImgUrl).collect(Collectors.toList());
+            this.createdDate = board.getCreatedDate();
+            this.count = board.getLikeCount();
         }
+
+
+
     }
 
     @Getter
