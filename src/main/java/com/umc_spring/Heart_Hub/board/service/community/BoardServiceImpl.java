@@ -124,7 +124,7 @@ public class BoardServiceImpl implements BoardService {
         List<Board> list = boardRepository.findAllByTheme(sort,theme);
         List<BoardDto.BoardResponseDto> responseList = list.stream()
                 .filter(board -> !blockedUsers.contains(board.getUser()))
-                .map(m -> new BoardDto.BoardResponseDto(m)).toList();
+                .map(BoardDto.BoardResponseDto::new).toList();
         return responseList;
     }
 
@@ -153,6 +153,9 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardDto.BoardResponseDto findBoard(Long id){
         Board findBoard = boardRepository.findById(id).orElseThrow();
+        if(findBoard == null){
+            throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);
+        }
         BoardDto.BoardResponseDto boardResponseDto = new BoardDto.BoardResponseDto(findBoard);
         return boardResponseDto;
     }
