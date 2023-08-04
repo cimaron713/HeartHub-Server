@@ -138,7 +138,7 @@ public class BoardServiceImpl implements BoardService {
         if(user == null){
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
-        Sort sort = Sort.by(Sort.Direction.DESC,"creatAt");
+        Sort sort = Sort.by(Sort.Direction.DESC,"createdDate");
         boardList = boardRepository.findAllByTheme(sort,theme);
         List<BoardDto.BoardResponseDto> responseList = new ArrayList<>();
         for(Board board : boardList){

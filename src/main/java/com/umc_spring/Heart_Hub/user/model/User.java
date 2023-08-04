@@ -148,4 +148,5 @@ public class User extends BaseEntity implements UserDetails{
     public void modifyUserDeleteStatus() {
         status = "F";
     }
+
 }

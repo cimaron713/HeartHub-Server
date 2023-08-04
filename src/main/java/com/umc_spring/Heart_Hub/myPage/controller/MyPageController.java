@@ -5,23 +5,27 @@ import com.umc_spring.Heart_Hub.board.service.community.BoardService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.myPage.dto.MyPageDto;
+import com.umc_spring.Heart_Hub.myPage.dto.MyPageImgUploadDto;
 import com.umc_spring.Heart_Hub.myPage.service.MyPageService;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import com.umc_spring.Heart_Hub.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/user/myPage")
 public class MyPageController {
-    private UserService userService;
-    private BoardService boardService;
-    private MyPageService myPageService;
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final BoardService boardService;
+    private final MyPageService myPageService;
+    private final UserRepository userRepository;
     @GetMapping("/first")
     public ResponseEntity<ApiResponse<MyPageDto.MyPage>> myPageMenu(Authentication authentication){
         String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
@@ -42,10 +46,14 @@ public class MyPageController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardResult,CustomResponseStatus.SUCCESS));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse<String>> myProfileUpdate(@RequestBody MyPageDto.Request request, Authentication authentication){
+    @PutMapping(value = "/update",consumes = "multipart/*")
+    public ResponseEntity<ApiResponse<MyPageDto.Response>> myProfileUpdate(@RequestPart(value = "request") MyPageDto.Request request,
+                                                               @RequestPart(value = "file") MultipartFile file,
+                                                               Authentication authentication){
         String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
-        myPageService.myPageProfileUpdate(userName, request);
-        return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
+        MyPageImgUploadDto myPageImgUploadDto = new MyPageImgUploadDto();
+        myPageImgUploadDto.setFiles(file);
+        MyPageDto.Response response = myPageService.myPageProfileUpdate(userName, request, myPageImgUploadDto);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 }
