@@ -44,7 +44,7 @@ public class CommentCotroller {
     }
 
     @DeleteMapping("/api/user/board")
-    public ResponseEntity<ApiResponse<CommentDto.DeleteResponse>> deleteComment(CommentDto.DeleteRequest deleteRequest,
+    public ResponseEntity<ApiResponse<CommentDto.DeleteResponse>> deleteComment(@RequestBody CommentDto.DeleteRequest deleteRequest,
                                                              Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         CommentDto.DeleteResponse deleteResponse = commentService.deleteComment(deleteRequest, userDetails.getUsername());

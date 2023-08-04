@@ -51,8 +51,8 @@ public class Board extends BaseEntity {
     public void update(String content){
         this.content = content;
     }
-    public void delete() {
-        this.status = String.valueOf('N');
-    }
+    //public void delete() {
+        //this.status = String.valueOf('N');
+    //}
 
 }
