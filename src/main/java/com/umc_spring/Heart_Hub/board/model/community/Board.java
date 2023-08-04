@@ -23,6 +23,7 @@ public class Board extends BaseEntity {
     private String content;
 
     @Column(nullable = false, length = 1)
+    @ColumnDefault("N")
     private String status;
 
     /**
