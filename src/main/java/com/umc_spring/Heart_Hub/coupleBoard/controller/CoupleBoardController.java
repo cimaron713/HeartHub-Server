@@ -40,8 +40,8 @@ public class CoupleBoardController {
      * 게시물 작성
      */
     @PostMapping(value = "/couple-board/write", consumes = "multipart/*")
-    public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart(value = "requestDto") CoupleBoardDto.Request requestDto,
-                                                           @RequestPart(value = "files") MultipartFile[] files,
+    public ResponseEntity<ApiResponse<String>> createBoard(@RequestPart(value = "requestDto", required = false) CoupleBoardDto.Request requestDto,
+                                                           @RequestPart(value = "files", required = false) MultipartFile[] files,
                                                            Authentication authentication) throws IOException {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
