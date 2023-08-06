@@ -1,6 +1,10 @@
 package com.umc_spring.Heart_Hub.user.service.impl;
 
 import com.umc_spring.Heart_Hub.Report.model.enums.ReportStatus;
+import com.umc_spring.Heart_Hub.board.model.mission.Mission;
+import com.umc_spring.Heart_Hub.board.model.mission.UserMissionStatus;
+import com.umc_spring.Heart_Hub.board.repository.mission.MissionRepository;
+import com.umc_spring.Heart_Hub.board.repository.mission.ums.UserMissionStatusRepository;
 import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.constant.exception.CustomException;
 import com.umc_spring.Heart_Hub.email.EmailService;
@@ -18,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -25,7 +30,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
+    private final UserMissionStatusRepository userMissionStatusRepository;
     private final UserRepository userRepository;
+    private final MissionRepository missionRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final RedisUtils redisUtils;
@@ -49,6 +56,15 @@ public class UserServiceImpl implements UserService {
                 .reportedStatus(ReportStatus.NORMAL)
                 .build();
         userRepository.save(user);
+
+        List<Mission> missions = missionRepository.findAll();
+
+        if(missions != null && !missions.isEmpty()) {
+            for(Mission mission : missions) {
+                UserMissionStatus ums = new UserMissionStatus(mission, user);
+                userMissionStatusRepository.save(ums);
+            }
+        }
 
         return UserDTO.SignUpRespDto.builder()
                 .nickname(user.getNickname())
@@ -141,8 +157,8 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public UserDTO.GetUserInfoResponse getUserInfo(Long userId) {
-        User user = userRepository.findByUserId(userId);
+    public UserDTO.GetUserInfoResponse getUserInfo(UserDTO.GetUserInfoRequest request) {
+        User user = userRepository.findByUserId(request.getUserId());
         if (user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
