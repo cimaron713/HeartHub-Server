@@ -31,7 +31,6 @@ public class BoardDto {
     public static class BoardResponseDto {
         private Long boardId;
         private String content;
-        private String status;
         private String theme;
         private String userName;
         private List<CommentDto.Response> commentList;

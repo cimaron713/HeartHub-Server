@@ -60,7 +60,6 @@ public class BoardServiceImpl implements BoardService {
         Board boardRegister = Board.builder()
                 .theme(params.getTheme())
                 .user(user)
-                .status("Y")
                 .content(params.getContent())
                 .likeCount(0)
                 .build();

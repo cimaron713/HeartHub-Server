@@ -23,7 +23,7 @@ public class Board extends BaseEntity {
     private String content;
 
     @Column(nullable = false, length = 1)
-    @ColumnDefault("N")
+    @ColumnDefault("0")
     private String status;
 
     /**
@@ -51,8 +51,6 @@ public class Board extends BaseEntity {
     public void update(String content){
         this.content = content;
     }
-    //public void delete() {
-        //this.status = String.valueOf('N');
-    //}
+
 
 }
