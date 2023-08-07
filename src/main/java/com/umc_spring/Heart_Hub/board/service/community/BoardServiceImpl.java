@@ -163,19 +163,26 @@ public class BoardServiceImpl implements BoardService {
      * 게시글 수정
      */
     @Override
-    public Long updateBoard(Long id, BoardDto.BoardRequestDto requestDto){
-        Board board = boardRepository.findByBoardIdAndTheme(id, requestDto.getTheme()).orElseThrow(()->new CustomException(CustomResponseStatus.POST_NOT_FOUND));
+    public BoardDto.BoardResponseDto updateBoard(BoardDto.BoardRequestDto requestDto, String userName){
+        if(!requestDto.getUserName().equals(userName)){
+            throw new CustomException(CustomResponseStatus.AUTHORIZATION_FAILED);
+        }
+        Board board = boardRepository.findByBoardIdAndTheme(requestDto.getBoardId(), requestDto.getTheme()).orElseThrow(()->new CustomException(CustomResponseStatus.POST_NOT_FOUND));
         board.update(requestDto.getContent());
-        return id;
+        BoardDto.BoardResponseDto response = new BoardDto.BoardResponseDto(board);
+        return response;
     }
 
     /**
      게시글 삭제
      */
     @Override
-    public void delBoard(final Long id){
-        if (boardRepository.findById(id).isPresent()){
-            Board board = boardRepository.findById(id).get();
+    public void delBoard(BoardDto.BoardRequestDto requestDto, String userName){
+        if(!requestDto.getUserName().equals(userName)){
+            throw new CustomException(CustomResponseStatus.AUTHORIZATION_FAILED);
+        }
+        if (boardRepository.findById(requestDto.getBoardId()).isPresent()){
+            Board board = boardRepository.findById(requestDto.getBoardId()).get();
             boardRepository.delete(board);
         }
     }

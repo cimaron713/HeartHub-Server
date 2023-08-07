@@ -15,8 +15,8 @@ public interface BoardService {
     List<BoardDto.BoardResponseDto> findAll(String theme);
     List<BoardDto.BoardResponseDto> findUserBoards(String userName, String theme);
     BoardDto.BoardResponseDto findBoard(Long id);
-    Long updateBoard(Long id, BoardDto.BoardRequestDto requestDto);
-    void delBoard(final Long id);
+    BoardDto.BoardResponseDto updateBoard(BoardDto.BoardRequestDto requestDto, String userName);
+    void delBoard(BoardDto.BoardRequestDto requestDto, String userName);
     String getLoginUsername();
     void delAllBoard(User user);
 }

@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.board.controller.community;
 
+import com.google.rpc.context.AttributeContext;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardImageUploadDto;
@@ -68,18 +69,19 @@ public class BoardController {
      */
     //특정 게시물
     @PutMapping("/articles/{boardId}")
-    public ResponseEntity<ApiResponse<Long>> updateBoard(@PathVariable(value = "boardId") Long boardId,
-                                                         @RequestBody BoardDto.BoardRequestDto boardRequestDto){
-        Long id = boardService.updateBoard(boardId,boardRequestDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(id,CustomResponseStatus.SUCCESS));
+    public ResponseEntity<ApiResponse<BoardDto.BoardResponseDto>> updateBoard(@RequestBody BoardDto.BoardRequestDto boardRequestDto, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        BoardDto.BoardResponseDto result = boardService.updateBoard(boardRequestDto, userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(result,CustomResponseStatus.SUCCESS));
     }
 
     /**
     게시글 삭제
      */
     @DeleteMapping("/articles/{boardId}")
-    public ResponseEntity<ApiResponse<String>> delBoard(@PathVariable(value = "boardId") Long boardId){
-        boardService.delBoard(boardId);
+    public ResponseEntity<ApiResponse<String>> delBoard(@RequestBody BoardDto.BoardRequestDto boardRequestDto, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        boardService.delBoard(boardRequestDto, userDetails.getUsername());
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
