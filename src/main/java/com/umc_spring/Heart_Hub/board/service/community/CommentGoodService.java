@@ -65,7 +65,6 @@ public class CommentGoodService {
                 .orElseThrow(() -> new NotFoundException("Could not found comment id"));
 
         commentGoodRepository.delete(commentGood);
-        //comment.updateCount(comment.getCount()-1);
         commentRepository.subLikeCount(comment);
     }
 
