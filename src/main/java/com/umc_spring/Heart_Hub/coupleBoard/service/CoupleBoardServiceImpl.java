@@ -27,10 +27,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class CoupleBoardServiceImpl implements CoupleBoardService {
 
@@ -43,6 +43,18 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     private final AmazonS3 amazonS3;
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isAuthorized(Long postId, String username) {
+        CoupleBoard coupleBoard = getCoupleBoardById(postId);
+        return Objects.equals(coupleBoard.getUser().getUsername(), username);
+    }
+
+    private CoupleBoard getCoupleBoardById(Long postId) {
+        return coupleBoardRepository.findById(postId).orElseThrow(() -> new CustomException(CustomResponseStatus.POST_NOT_FOUND));
+    }
+
+    @Transactional
     @Override
     public Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) throws IOException {
         User user = userRepository.findByUsername(userName);
@@ -101,6 +113,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
         return fileUrls;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CoupleBoardDto.Response detailBoard(Long postId) {
         CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);});
@@ -111,6 +124,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt, String username) {
         List<CoupleBoard> boardList = new ArrayList<>();
@@ -135,18 +149,18 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
         return resultList;
     }
 
+    @Transactional
     @Override
-    public Long updateBoard(Long postId, CoupleBoardDto.Request requestDto) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);});
+    public void updateBoard(Long postId, CoupleBoardDto.Request requestDto) {
+        CoupleBoard coupleBoard = getCoupleBoardById(postId);
         coupleBoard.update(requestDto.getContent());
         coupleBoardRepository.save(coupleBoard);
-
-        return coupleBoard.getPostId();
     }
 
+    @Transactional
     @Override
     public void deleteBoard(Long postId) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);});
+        CoupleBoard coupleBoard = getCoupleBoardById(postId);
         coupleBoardRepository.delete(coupleBoard);
     }
 

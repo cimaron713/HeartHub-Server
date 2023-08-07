@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface CoupleBoardService {
 
+    boolean isAuthorized(Long postId, String username);
+
     /**
      * 게시물 작성
      * @param requestDto 게시물 작성 정보
@@ -38,7 +40,7 @@ public interface CoupleBoardService {
      * @param requestDto 수정 정보
      * @return 게시물 ID
      */
-    Long updateBoard(Long postId, CoupleBoardDto.Request requestDto);
+    void updateBoard(Long postId, CoupleBoardDto.Request requestDto);
 
     /**
      * 게시물 삭제

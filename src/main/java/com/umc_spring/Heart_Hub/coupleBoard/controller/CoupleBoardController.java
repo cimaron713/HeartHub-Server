@@ -72,8 +72,8 @@ public class CoupleBoardController {
     public ResponseEntity<ApiResponse<String>> updateBoard(@PathVariable Long postId, @RequestBody CoupleBoardDto.Request requestDto,
                                                            Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        CoupleBoardDto.Response result = coupleBoardService.detailBoard(postId);
-        if(!Objects.equals(result.getUserName(), userDetails.getUsername())) {
+
+        if (!coupleBoardService.isAuthorized(postId, userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.createError(CustomResponseStatus.AUTHORIZATION_FAILED));
         }
@@ -89,8 +89,8 @@ public class CoupleBoardController {
     @DeleteMapping("/couple-board/{postId}/delete")
     public ResponseEntity<ApiResponse<String>> deleteBoard(@PathVariable Long postId, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        CoupleBoardDto.Response result = coupleBoardService.detailBoard(postId);
-        if(!Objects.equals(result.getUserName(), userDetails.getUsername())) {
+
+        if (!coupleBoardService.isAuthorized(postId, userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.createError(CustomResponseStatus.AUTHORIZATION_FAILED));
         }
