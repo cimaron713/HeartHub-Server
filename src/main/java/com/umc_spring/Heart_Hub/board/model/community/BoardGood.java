@@ -1,5 +1,6 @@
 package com.umc_spring.Heart_Hub.board.model.community;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
@@ -24,6 +25,7 @@ public class BoardGood extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
+    @JsonIgnore
     private Board board;
 
     @Column(nullable = false, length = 1)
