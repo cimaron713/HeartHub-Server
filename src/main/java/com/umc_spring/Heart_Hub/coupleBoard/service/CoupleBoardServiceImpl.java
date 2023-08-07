@@ -113,17 +113,17 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Override
     public List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt, String username) {
-        List<CoupleBoard> boardList;
+        List<CoupleBoard> boardList = new ArrayList<>();
         User user  = userRepository.findByUsername(username);
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
 
+        boardList.addAll(coupleBoardRepository.findAllByUserAndCreatedDate(user, createAt));
+
         User mate = user.getUser();
-        if(mate == null) {
-            boardList = coupleBoardRepository.findAllByUserAndCreatedDate(user, createAt);
-        } else {
-            boardList = coupleBoardRepository.findAllByUserOrUserAndCreatedDate(user, mate, createAt);
+        if(mate != null) {
+            boardList.addAll(coupleBoardRepository.findAllByUserAndCreatedDate(user, createAt));
         }
 
         List<CoupleBoardDto.Response> resultList = new ArrayList<>();
