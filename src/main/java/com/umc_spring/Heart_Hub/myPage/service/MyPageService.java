@@ -72,6 +72,7 @@ public class MyPageService {
                 }
             }
         }
+        userRepository.save(user);
         MyPageDto.Response result = MyPageDto.Response.builder()
                 .user(user)
                 .build();
