@@ -61,6 +61,7 @@ public class BoardServiceImpl implements BoardService {
                 .theme(params.getTheme())
                 .user(user)
                 .content(params.getContent())
+                .status("Y")
                 .likeCount(0)
                 .build();
 
@@ -74,7 +75,6 @@ public class BoardServiceImpl implements BoardService {
                             .postImgUrl(fileUrl)
                             .board(boardRegister)
                             .build();
-
                     boardImgRepository.save(img);
                 }
             } catch (IOException e) {
@@ -85,7 +85,6 @@ public class BoardServiceImpl implements BoardService {
                 System.err.println(e.getMessage());
             }
         }
-
         return boardRegister.getBoardId();
     }
 
@@ -103,7 +102,6 @@ public class BoardServiceImpl implements BoardService {
 
             fileUrls.add(amazonS3.getUrl(bucket, s3FileName).toString());
         }
-
         return fileUrls;
     }
 
@@ -120,7 +118,8 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList());
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-        List<Board> list = boardRepository.findAllByTheme(sort,theme);
+        List<Board> list;
+        list = boardRepository.findAllByTheme(sort,theme);
         List<BoardDto.BoardResponseDto> responseList = list.stream()
                 .filter(board -> !blockedUsers.contains(board.getUser()))
                 .map(BoardDto.BoardResponseDto::new).toList();
