@@ -22,6 +22,8 @@ public class CoupleBoard extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
+    private  String title;
+
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,11 +36,13 @@ public class CoupleBoard extends BaseEntity {
     @OneToMany(mappedBy = "coupleBoard", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private final List<CoupleBoardImage> boardImages = new ArrayList<>();
 
-    public CoupleBoard(String content) {
+    public CoupleBoard(String title, String content) {
+        this.title = title;
         this.content = content;
     }
 
-    public void update(String content) {
+    public void update(String title, String content) {
+        this.title = title;
         this.content = content;
     }
 

@@ -16,6 +16,7 @@ public class CoupleBoardDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Request {
+        private String title;
         private String content;
 
     }
@@ -26,6 +27,7 @@ public class CoupleBoardDto {
         private Long postId;
         private Long userId;
         private String status;
+        private String title;
         private String content;
         private LocalDate createAt;
         private String userName;
@@ -36,6 +38,7 @@ public class CoupleBoardDto {
             this.postId = board.getPostId();
             this.userId = board.getUser().getUserId();
             this.status = board.getStatus();
+            this.title = board.getTitle();
             this.content = board.getContent();
             this.createAt = board.getCreatedDate();
             this.userName = board.getUser().getUsername();

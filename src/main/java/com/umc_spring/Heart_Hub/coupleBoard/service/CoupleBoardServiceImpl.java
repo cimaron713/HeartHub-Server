@@ -63,6 +63,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
         }
 
         CoupleBoard result = CoupleBoard.builder()
+                .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .status("Y")
                 .user(user)
@@ -153,7 +154,7 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
     @Override
     public void updateBoard(Long postId, CoupleBoardDto.Request requestDto) {
         CoupleBoard coupleBoard = getCoupleBoardById(postId);
-        coupleBoard.update(requestDto.getContent());
+        coupleBoard.update(requestDto.getTitle(), requestDto.getContent());
         coupleBoardRepository.save(coupleBoard);
     }
 
