@@ -13,4 +13,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findByBoardIdAndTheme(Long id, String theme);
     List<Board> findAllByUser(User user);
     List<Board> findAllByTheme(String theme);
+    Board findByBoardId(Long boardId);
+    void deleteByBoardId(Long boardId);
 }

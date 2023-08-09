@@ -18,5 +18,4 @@ public interface BoardService {
     BoardDto.BoardResponseDto updateBoard(BoardDto.BoardRequestDto requestDto, String userName);
     void delBoard(BoardDto.BoardRequestDto requestDto, String userName);
     String getLoginUsername();
-    void delAllBoard(User user);
 }

@@ -1,15 +1,18 @@
 package com.umc_spring.Heart_Hub.Report.model;
 
-import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.Report.model.enums.ReportReason;
+import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.constant.entity.BaseEntity;
 import com.umc_spring.Heart_Hub.user.model.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserReport extends BaseEntity {
+public class BoardReport extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +23,8 @@ public class UserReport extends BaseEntity {
     private User reporter;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "reported", nullable = false)
-    private User reported;
+    @JoinColumn(name = "reportedBoard", nullable = false)
+    private Board reportedBoard;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -30,9 +33,9 @@ public class UserReport extends BaseEntity {
     @Column(length = 500)
     private String detail;  //기타 사유
 
-    public UserReport(User reporter, User reported, ReportReason reason, String detail) {
+    public BoardReport(User reporter, Board reportedBoard, ReportReason reason, String detail) {
         this.reporter = reporter;
-        this.reported = reported;
+        this.reportedBoard = reportedBoard;
         this.reason = reason;
         this.detail = detail;
     }

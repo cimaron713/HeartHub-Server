@@ -195,13 +195,5 @@ public class BoardServiceImpl implements BoardService {
         return authentication.getName();
     }
 
-    /**
-     * 사용자가 작성한 게시물 모두 삭제하기
-     */
-    @Override
-    public void delAllBoard(User user) {
-        List<Board> boardList = boardRepository.findAllByUser(user);
-        boardRepository.deleteAll(boardList);
-    }
 }
 

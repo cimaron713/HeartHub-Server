@@ -48,6 +48,8 @@ public class Board extends BaseEntity {
     @Column(nullable = false)
     private int likeCount;
 
+    private int reportedCount;
+
     public void update(String content){
         this.content = content;
     }
