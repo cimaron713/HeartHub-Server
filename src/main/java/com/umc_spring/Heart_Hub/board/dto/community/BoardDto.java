@@ -33,6 +33,7 @@ public class BoardDto {
         private String content;
         private String theme;
         private String userName;
+        private String nickName;
         private List<CommentDto.Response> commentList;
         private List<String> communityImgUrl;
         private LocalDate createdDate;
@@ -43,6 +44,7 @@ public class BoardDto {
             this.content = board.getContent();
             this.theme = board.getTheme();
             this.userName = board.getUser().getUsername();
+            this.nickName = board.getUser().getNickname();
             this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());
             this.communityImgUrl = board.getCommunity().stream().map(BoardImg::getPostImgUrl).collect(Collectors.toList());
             this.createdDate = board.getCreatedDate();

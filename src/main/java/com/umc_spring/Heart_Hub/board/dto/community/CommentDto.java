@@ -35,6 +35,7 @@ public class CommentDto {
     public static class Response{
         private Long commentId;
         private String userName;
+        private String nickName;
         private String content;
         private List<CommentDto.Response> responseList = new ArrayList<>();
         private int count;
@@ -44,6 +45,7 @@ public class CommentDto {
         public Response(Comment comment){
             this.commentId = comment.getCommentId();
             this.userName = comment.getUser().getUsername();
+            this.nickName = comment.getUser().getNickname();
             this.content = comment.getContent();
             this.count = comment.getGoods().size();
             this.userImgUrl = comment.getUser().getUserImgUrl();

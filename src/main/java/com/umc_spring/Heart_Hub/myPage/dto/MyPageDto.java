@@ -22,7 +22,7 @@ public class MyPageDto {
         private String userImgUrl;
         @Builder
         public Response(User user){
-            this.userNickName = user.getUsername();
+            this.userNickName = user.getNickname();
             this.userMessage = user.getUserMessage();
             this.userImgUrl = user.getUserImgUrl();
         }
@@ -32,11 +32,11 @@ public class MyPageDto {
     @Getter
     public static class MyPage{
         private String myImgUrl;
-        private String userName;
+        private String userNickName;
         @Builder
         public MyPage(User user){
             this.myImgUrl = user.getUserImgUrl();
-            this.userName = user.getNickname();
+            this.userNickName = user.getNickname();
         }
     }
 }
