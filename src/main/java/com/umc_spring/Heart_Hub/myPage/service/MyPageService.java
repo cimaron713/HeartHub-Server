@@ -36,7 +36,7 @@ public class MyPageService {
      */
     public MyPageDto.Response myPageDetail(String userName) {
         User user = userRepository.findByUsername(userName);
-        if(user.getUserImgUrl().isEmpty()){
+        if(user.getUserImgUrl() == null){
             user.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img.png");
         }
         MyPageDto.Response response = MyPageDto.Response
@@ -112,12 +112,11 @@ public class MyPageService {
     public MyPageDto.MyPage myProfileMenu (String userName){
         User user = userRepository.findByUsername(userName);
 
-        if(user.getUserImgUrl().isEmpty()){
+        if(user.getUserImgUrl() == null){
             user.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img.png");
         }
         MyPageDto.MyPage result = MyPageDto.MyPage.builder()
                     .user(user)
-                    .myImgUrl(user.getUserImgUrl())
                     .build();
 
         return result;

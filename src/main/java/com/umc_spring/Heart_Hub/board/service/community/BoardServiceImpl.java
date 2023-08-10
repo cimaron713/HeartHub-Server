@@ -57,7 +57,7 @@ public class BoardServiceImpl implements BoardService {
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
-        if(user.getUserImgUrl().isEmpty()){
+        if(user.getUserImgUrl() == null){
             user.modifyUserImgUrl(" https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
         }
         Board boardRegister = Board.builder()
