@@ -26,9 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -143,8 +145,11 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList());
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-        List<Board> list;
-        list = boardRepository.findAllByTheme(sort,theme);
+        List<Board> list = boardRepository.findAllByTheme(sort,theme);
+
+        if(theme.equals("L")){
+            list = filterLookBoard(list);
+        }
         List<BoardDto.BoardResponseDto> responseList = list.stream()
                 .filter(board -> !blockedUsers.contains(board.getUser()))
                 .map(BoardDto.BoardResponseDto::new).toList();
@@ -218,6 +223,19 @@ public class BoardServiceImpl implements BoardService {
     public String getLoginUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
+    }
+
+    /**
+    주차별 LOOK 게시글 고르기
+     */
+    @Override
+    public List<Board> filterLookBoard(List<Board> boards) {
+        LocalDate today = LocalDate.now();
+        int dayValue = today.getDayOfWeek().getValue();
+        LocalDate startDay = today.minusDays((dayValue+1));
+        LocalDate endDay = today.plusDays((7-dayValue));
+        List<Board> weekInBoards = boardRepository.boardInWeek(startDay,endDay);
+        return weekInBoards;
     }
 
 }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +64,11 @@ public class BoardGoodService {
      * 좋아요 기준으로 Look 게시물 상위 3개
      */
     public List<BoardDto.BoardResponseDto> lookLank(){
-        List<Board> looks = boardGoodRepository.findTop3ByBoard_Theme();
+        LocalDate today = LocalDate.now();
+        int dayValue = today.getDayOfWeek().getValue();
+        LocalDate startDay = today.minusDays((dayValue+1));
+        LocalDate endDay = today.plusDays((7-dayValue));
+        List<Board> looks = boardGoodRepository.findTop3ByBoard_Theme(startDay,endDay);
         List<BoardDto.BoardResponseDto> result = looks.stream().map(BoardDto.BoardResponseDto::new).collect(Collectors.toList());
         return result;
     }
