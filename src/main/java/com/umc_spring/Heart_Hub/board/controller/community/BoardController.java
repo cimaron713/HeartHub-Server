@@ -32,7 +32,7 @@ public class BoardController {
     private final BoardGoodService boardGoodService;
     //게시글 작성
 
-    //게시글 작성
+    //게시글 작성(사진O)
     @PostMapping(value = "/articles/write", consumes = "multipart/*")
     public ResponseEntity<ApiResponse<String>> boardWrite(@RequestPart(value = "params",required = false) BoardDto.BoardRequestDto params,
                                                         @RequestPart(value = "files", required = false) MultipartFile[] files,
@@ -44,6 +44,17 @@ public class BoardController {
         log.info("boardImageUploadDto: "+ boardImageUploadDto);
         Long boardId = boardService.boardRegister(params, userDetails.getUsername(), boardImageUploadDto);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId.toString(), CustomResponseStatus.SUCCESS));
+    }
+
+    /**
+     * 게시글 작성(글)
+     */
+    @PostMapping(value = "/articles/write")
+    public ResponseEntity<ApiResponse<String>> boardWrite(@RequestBody BoardDto.BoardRequestDto params,
+                                                          Authentication authentication) throws IOException {
+        UserDetails userDetail = (UserDetails)authentication.getPrincipal();
+        Long boardWriteId = boardService.boardWritingRegister(params, userDetail.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardWriteId.toString(), CustomResponseStatus.SUCCESS));
     }
 
     /*
