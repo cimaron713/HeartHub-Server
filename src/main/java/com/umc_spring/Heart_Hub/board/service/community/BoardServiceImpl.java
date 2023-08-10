@@ -232,7 +232,7 @@ public class BoardServiceImpl implements BoardService {
     public List<Board> filterLookBoard(List<Board> boards) {
         LocalDate today = LocalDate.now();
         int dayValue = today.getDayOfWeek().getValue();
-        LocalDate startDay = today.minusDays((dayValue+1));
+        LocalDate startDay = today.minusDays((dayValue-1));
         LocalDate endDay = today.plusDays((7-dayValue));
         List<Board> weekInBoards = boardRepository.boardInWeek(startDay,endDay);
         return weekInBoards;

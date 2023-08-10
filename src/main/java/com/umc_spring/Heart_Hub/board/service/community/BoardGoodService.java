@@ -66,7 +66,7 @@ public class BoardGoodService {
     public List<BoardDto.BoardResponseDto> lookLank(){
         LocalDate today = LocalDate.now();
         int dayValue = today.getDayOfWeek().getValue();
-        LocalDate startDay = today.minusDays((dayValue+1));
+        LocalDate startDay = today.minusDays((dayValue-1));
         LocalDate endDay = today.plusDays((7-dayValue));
         List<Board> looks = boardGoodRepository.findTop3ByBoard_Theme(startDay,endDay);
         List<BoardDto.BoardResponseDto> result = looks.stream().map(BoardDto.BoardResponseDto::new).collect(Collectors.toList());
