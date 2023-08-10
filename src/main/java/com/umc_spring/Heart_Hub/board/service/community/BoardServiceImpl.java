@@ -92,6 +92,28 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Long boardWritingRegister(BoardDto.BoardRequestDto params, String userName) {
+        User writeUser = userRepository.findByUsername(userName);
+        if(writeUser == null){
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
+        }
+        if(writeUser.getUserImgUrl() == null){
+            writeUser.modifyUserImgUrl(" https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
+        }
+        Board boardWriteRegister = Board.builder()
+                .theme(params.getTheme())
+                .user(writeUser)
+                .content(params.getContent())
+                .status("Y")
+                .likeCount(0)
+                .reportedCount(0).build();
+
+        boardRepository.save(boardWriteRegister);
+
+        return boardWriteRegister.getBoardId();
+    }
+
+    @Override
     public List<String> upload(MultipartFile[] multipartFile, String username) throws IOException {
         List<String> fileUrls = new ArrayList<>();
 
