@@ -115,6 +115,9 @@ public class MyPageService {
         if(user.getUserImgUrl() == null){
             user.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img.png");
         }
+        if(user.getUserMessage() == null){
+            user.modifyUserMessage("");
+        }
         MyPageDto.MyPage result = MyPageDto.MyPage.builder()
                     .user(user)
                     .build();

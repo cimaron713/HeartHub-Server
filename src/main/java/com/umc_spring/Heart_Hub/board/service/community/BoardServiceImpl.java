@@ -59,9 +59,13 @@ public class BoardServiceImpl implements BoardService {
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
+        if(user.getUsername().equals(userName)){
+            throw new CustomException(CustomResponseStatus.USER_NOT_MATCH);
+        }
         if(user.getUserImgUrl() == null){
             user.modifyUserImgUrl(" https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
         }
+
         Board boardRegister = Board.builder()
                 .theme(params.getTheme())
                 .user(user)
@@ -93,27 +97,6 @@ public class BoardServiceImpl implements BoardService {
         return boardRegister.getBoardId();
     }
 
-    @Override
-    public Long boardWritingRegister(BoardDto.BoardRequestDto params, String userName) {
-        User writeUser = userRepository.findByUsername(userName);
-        if(writeUser == null){
-            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
-        }
-        if(writeUser.getUserImgUrl() == null){
-            writeUser.modifyUserImgUrl(" https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
-        }
-        Board boardWriteRegister = Board.builder()
-                .theme(params.getTheme())
-                .user(writeUser)
-                .content(params.getContent())
-                .status("Y")
-                .likeCount(0)
-                .reportedCount(0).build();
-
-        boardRepository.save(boardWriteRegister);
-
-        return boardWriteRegister.getBoardId();
-    }
 
     @Override
     public List<String> upload(MultipartFile[] multipartFile, String username) throws IOException {

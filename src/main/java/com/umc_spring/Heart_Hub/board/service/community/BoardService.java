@@ -12,7 +12,6 @@ import java.util.List;
 public interface BoardService {
 
     Long boardRegister(BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto);
-    Long boardWritingRegister(BoardDto.BoardRequestDto params, String userName);
     List<String> upload(MultipartFile[] multipartFile, String username) throws IOException;
     List<BoardDto.BoardResponseDto> findAll(String theme);
     List<BoardDto.BoardResponseDto> findUserBoards(String userName, String theme);
