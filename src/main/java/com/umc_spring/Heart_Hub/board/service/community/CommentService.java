@@ -56,7 +56,11 @@ public class CommentService {
         List<CommentDto.Response> commentResponse = new ArrayList<>();
         if(!commentResponse.isEmpty()){
             for (CommentDto.Response c : comments) {
-                if (!blockedUsers.contains(userRepository.findByUsername(c.getUserName()))) {
+                User commentUser = userRepository.findByUsername(c.getUserName());
+                if (!blockedUsers.contains(commentUser)) {
+                    if(commentUser.getUserImgUrl().isEmpty()){
+                        commentUser.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
+                    }
                     commentResponse.add(c);
                 }
             }
@@ -72,6 +76,9 @@ public class CommentService {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
+        }
+        if (user.getUserImgUrl().isEmpty()){
+            user.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
         }
         Board board = boardRepository.findById(replyRequest.getBoardId()).orElseThrow(() -> {
             throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);

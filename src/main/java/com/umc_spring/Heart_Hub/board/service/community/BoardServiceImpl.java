@@ -57,13 +57,16 @@ public class BoardServiceImpl implements BoardService {
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
+        if(user.getUserImgUrl().isEmpty()){
+            user.modifyUserImgUrl(" https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
+        }
         Board boardRegister = Board.builder()
                 .theme(params.getTheme())
                 .user(user)
                 .content(params.getContent())
                 .status("Y")
                 .likeCount(0)
-                .build();
+                .reportedCount(0).build();
 
         boardRepository.save(boardRegister);
         if(boardImageUploadDto.getCommunityFiles() != null ){

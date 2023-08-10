@@ -36,6 +36,9 @@ public class MyPageService {
      */
     public MyPageDto.Response myPageDetail(String userName) {
         User user = userRepository.findByUsername(userName);
+        if(user.getUserImgUrl().isEmpty()){
+            user.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img.png");
+        }
         MyPageDto.Response response = MyPageDto.Response
                 .builder()
                 .user(user)
@@ -71,6 +74,15 @@ public class MyPageService {
                     System.err.println(e.getMessage());
                 }
             }
+            else{
+                try {
+                    user.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img.png");
+                }catch (AmazonServiceException e) {
+                    System.err.println(e.getErrorMessage());
+                } catch (SdkClientException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
         }
         userRepository.save(user);
         MyPageDto.Response result = MyPageDto.Response.builder()
@@ -78,6 +90,8 @@ public class MyPageService {
                 .build();
         return result;
     }
+
+
     public String updateImg (MultipartFile mf, String username) throws IOException {
         String fileUrls = "";
 
@@ -97,9 +111,15 @@ public class MyPageService {
      */
     public MyPageDto.MyPage myProfileMenu (String userName){
         User user = userRepository.findByUsername(userName);
+
+        if(user.getUserImgUrl().isEmpty()){
+            user.modifyUserImgUrl("https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img.png");
+        }
         MyPageDto.MyPage result = MyPageDto.MyPage.builder()
-                .user(user)
-                .build();
+                    .user(user)
+                    .myImgUrl(user.getUserImgUrl())
+                    .build();
+
         return result;
     }
 }

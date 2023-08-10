@@ -13,24 +13,29 @@ public class MyPageDto {
         private String userMessage;
         private String userNickName;
     }
+
     @Getter
     @NoArgsConstructor
     public static class Response{
         private String userMessage;
-
+        private String userNickName;
+        private String userImgUrl;
         @Builder
         public Response(User user){
+            this.userNickName = getUserNickName();
             this.userMessage = user.getUserMessage();
+            this.userImgUrl = user.getUserImgUrl();
         }
     }
+
     @NoArgsConstructor
     @Getter
     public static class MyPage{
         private String myImgUrl;
         private String userName;
         @Builder
-        public MyPage(User user){
-            this.myImgUrl = user.getUserImgUrl();
+        public MyPage(User user, String myImgUrl){
+            this.myImgUrl = myImgUrl;
             this.userName = user.getNickname();
         }
     }

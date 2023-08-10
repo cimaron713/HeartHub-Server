@@ -36,6 +36,7 @@ public class BoardDto {
         private List<CommentDto.Response> commentList;
         private List<String> communityImgUrl;
         private LocalDate createdDate;
+        private String userImgUrl;
         @Builder
         public BoardResponseDto(Board board){
             this.boardId = board.getBoardId();
@@ -45,6 +46,7 @@ public class BoardDto {
             this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());
             this.communityImgUrl = board.getCommunity().stream().map(BoardImg::getPostImgUrl).collect(Collectors.toList());
             this.createdDate = board.getCreatedDate();
+            this.userImgUrl = board.getUser().getUserImgUrl();
         }
 
 
