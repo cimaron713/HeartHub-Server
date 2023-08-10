@@ -122,6 +122,8 @@ public class EmailServiceImpl implements EmailService {
         msgg+= "<p>또한 앞으로 4번의 신고를 더 받게 되면 귀하의 계정이 <strong>7일</strong>동안 정지될 수 있음을 경고 드립니다.</p>";
         msgg+= "<p>모든 <strong>HEART HUB</strong> 회원이 즐거운 커뮤니티를 만들기 위해 커뮤니티 규정을 잘 숙지해 주시길 바랍니다. 감사합니다.</p>";
         msgg += "<p>추가 문의가 필요하신 경우 haeun4778@hub.com으로 메일을 보내주세요. 감사합니다.</p>";
+        msgg += "<br>";
+        msgg += "<p>* 이 메일은 발신전용이므로 회신되지 않습니다.</p>";
         msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "<div style='margin:20px;'>";
@@ -143,6 +145,8 @@ public class EmailServiceImpl implements EmailService {
         msgg+= "<p>앞으로 귀하의 게시물이 2번의 신고를 더 받게 되면 계정이 '7일'동안 정지될 수 있음을 경고 드립니다.</p>";
         msgg+= "<p>모든 <strong>HEART HUB</strong> 회원이 즐거운 커뮤니티를 만들기 위해 커뮤니티 규정을 잘 숙지해 주시길 바랍니다. 감사합니다.</p>";
         msgg += "<p>추가 문의가 필요하신 경우 haeun4778@hub.com으로 메일을 보내주세요. 감사합니다.</p>";
+        msgg += "<br>";
+        msgg += "<p>* 이 메일은 발신전용이므로 회신되지 않습니다.</p>";
         msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "<div style='margin:20px;'>";
@@ -164,6 +168,8 @@ public class EmailServiceImpl implements EmailService {
         msgg+= "<p>정지 기간 '7일'이 지나면 자동으로 계정 정지가 풀림을 알려드립니다.</p>";
         msgg+= "<p>모든 <strong>HEART HUB</strong> 회원이 즐거운 커뮤니티를 만들기 위해 커뮤니티 규정을 잘 숙지해 주시길 바랍니다. 감사합니다.</p>";
         msgg += "<p>추가 문의가 필요하신 경우 haeun4778@hub.com으로 메일을 보내주세요. 감사합니다.</p>";
+        msgg += "<br>";
+        msgg += "<p>* 이 메일은 발신전용이므로 회신되지 않습니다.</p>";
         msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "<div style='margin:20px;'>";
