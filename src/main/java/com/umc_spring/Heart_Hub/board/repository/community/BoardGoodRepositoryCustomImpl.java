@@ -7,6 +7,7 @@ import com.umc_spring.Heart_Hub.board.model.community.QBoardGood;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -31,7 +32,7 @@ public class BoardGoodRepositoryCustomImpl implements BoardGoodRepositoryCustom{
     }
 
     @Override
-    public List<Board> findTop3ByBoard_Theme(){
+    public List<Board> findTop3ByBoard_Theme(LocalDate startDate, LocalDate endDate){
         QBoard lankBoard = QBoard.board;
         QBoardGood lankGood = QBoardGood.boardGood;
 
@@ -39,7 +40,7 @@ public class BoardGoodRepositoryCustomImpl implements BoardGoodRepositoryCustom{
                 .leftJoin(lankGood).on(lankBoard.boardId.eq(lankGood.board.boardId))
                 .where(lankGood.status.eq("T"))
                 .groupBy(lankBoard.boardId)
-                .having(lankBoard.theme.eq("L"))
+                .having(lankBoard.theme.eq("L"),lankBoard.createdDate.between(startDate, endDate))
                 .orderBy(lankGood.count().desc())
                 .limit(3)
                 .fetch();
