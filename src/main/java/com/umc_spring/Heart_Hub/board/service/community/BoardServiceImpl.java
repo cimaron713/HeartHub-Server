@@ -51,20 +51,29 @@ public class BoardServiceImpl implements BoardService {
     private final AmazonS3 amazonS3;
 
     /**
-     * 게시글 등록
+     * 유저 찾기
      */
-    @Override
-    public Long boardRegister(BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto) {
+    public User findUser(String userName){
         User user = userRepository.findByUsername(userName);
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
-        if(!user.getUsername().equals(userName)){
-            throw new CustomException(CustomResponseStatus.USER_NOT_MATCH);
-        }
         if(user.getUserImgUrl() == null){
             user.modifyUserImgUrl(" https://hearthub-bucket.s3.ap-northeast-2.amazonaws.com/profile_basic_img_circle.png");
         }
+        return user;
+    }
+
+    /**
+     * 게시글 등록
+     */
+    @Override
+    public Long boardRegister(BoardDto.BoardRequestDto params, String userName, BoardImageUploadDto boardImageUploadDto) {
+        User user = findUser(userName);
+        if(!user.getUsername().equals(params.getUserName())){
+            throw new CustomException(CustomResponseStatus.USER_NOT_MATCH);
+        }
+
 
         Board boardRegister = Board.builder()
                 .theme(params.getTheme())
@@ -94,6 +103,25 @@ public class BoardServiceImpl implements BoardService {
                 System.err.println(e.getMessage());
             }
         }
+        return boardRegister.getBoardId();
+    }
+
+    @Override
+    public Long boardWriteRegister(BoardDto.BoardRequestDto params, String userName) {
+        User n_user = findUser(userName);
+
+        if(!n_user.getUsername().equals(params.getUserName())){
+            throw new CustomException(CustomResponseStatus.USER_NOT_MATCH);
+        }
+        Board boardRegister = Board.builder()
+                .theme(params.getTheme())
+                .user(n_user)
+                .content(params.getContent())
+                .status("Y")
+                .likeCount(0)
+                .reportedCount(0).build();
+
+        boardRepository.save(boardRegister);
         return boardRegister.getBoardId();
     }
 
