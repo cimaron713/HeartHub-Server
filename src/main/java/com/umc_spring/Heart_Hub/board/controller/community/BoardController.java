@@ -32,7 +32,7 @@ public class BoardController {
     private final BoardGoodService boardGoodService;
     //게시글 작성
 
-    //게시글 작성(사진O)
+    //게시글 작성
     @PostMapping(value = "/articles/write", consumes = "multipart/*")
     public ResponseEntity<ApiResponse<String>> boardWrite(@RequestPart(value = "params") BoardDto.BoardRequestDto params,
                                                         @RequestPart(value = "files") MultipartFile[] files,
@@ -46,14 +46,6 @@ public class BoardController {
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId.toString(), CustomResponseStatus.SUCCESS));
     }
 
-    //게시글 작성(사진X)
-    @PostMapping("/articles/only-write")
-    public ResponseEntity<ApiResponse<String>> boardWriteOnly(@RequestBody BoardDto.BoardRequestDto params,
-                                                          Authentication authentication) throws IOException {
-        UserDetails userDetail = (UserDetails)authentication.getPrincipal();
-        Long boardId = boardService.boardWriteRegister(params, userDetail.getUsername());
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardId.toString(), CustomResponseStatus.SUCCESS));
-    }
 
     /*
     게시글 조회

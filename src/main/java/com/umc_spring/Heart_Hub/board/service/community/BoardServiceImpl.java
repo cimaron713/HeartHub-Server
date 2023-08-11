@@ -106,25 +106,6 @@ public class BoardServiceImpl implements BoardService {
         return boardRegister.getBoardId();
     }
 
-    @Override
-    public Long boardWriteRegister(BoardDto.BoardRequestDto params, String userName) {
-        User n_user = findUser(userName);
-
-        if(!n_user.getUsername().equals(params.getUserName())){
-            throw new CustomException(CustomResponseStatus.USER_NOT_MATCH);
-        }
-        Board boardRegister = Board.builder()
-                .theme(params.getTheme())
-                .user(n_user)
-                .content(params.getContent())
-                .status("Y")
-                .likeCount(0)
-                .reportedCount(0).build();
-
-        boardRepository.save(boardRegister);
-        return boardRegister.getBoardId();
-    }
-
 
     @Override
     public List<String> upload(MultipartFile[] multipartFile, String username) throws IOException {
