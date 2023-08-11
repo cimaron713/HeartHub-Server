@@ -59,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
         if(user == null) {
             throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
         }
-        if(user.getUsername().equals(userName)){
+        if(!user.getUsername().equals(userName)){
             throw new CustomException(CustomResponseStatus.USER_NOT_MATCH);
         }
         if(user.getUserImgUrl() == null){
