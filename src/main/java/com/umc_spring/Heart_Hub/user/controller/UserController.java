@@ -53,6 +53,18 @@ public class UserController {
             return ResponseEntity.ok().body(ApiResponse.createSuccess(false, CustomResponseStatus.DUPLICATION_USERNAME));
         }
     }
+    @GetMapping(value = "/check/nickname/{nickname}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ApiResponse<Boolean>> duplicateNicknameCheck(@PathVariable String nickname) {
+        Boolean response = userService.validateDuplicateNickname(nickname);
+        if(!response) {
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
+        } else {
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(false, CustomResponseStatus.DUPLICATION_USERNAME));
+        }
+    }
+
+
 
     @PostMapping(value = "/login")
     @ResponseStatus(HttpStatus.OK)

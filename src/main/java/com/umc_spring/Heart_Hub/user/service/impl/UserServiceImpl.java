@@ -84,8 +84,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean validateDuplicateUsername(String username) {
-        User findUser = userRepository.findByUsername(username);
-        if (findUser != null) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return true; // 존재한다면 true 반환
+        } else {
+            return false; // 존재하지 않으면 false 반환
+        }
+    }
+    @Override
+    public Boolean validateDuplicateNickname(String nickname) {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        if (!user.isEmpty()) {
             return true; // 존재한다면 true 반환
         } else {
             return false; // 존재하지 않으면 false 반환
