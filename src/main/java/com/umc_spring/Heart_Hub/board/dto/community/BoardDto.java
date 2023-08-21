@@ -32,6 +32,7 @@ public class BoardDto {
         private Long boardId;
         private String content;
         private String theme;
+        private Long userId;
         private String userName;
         private String nickName;
         private List<CommentDto.Response> commentList;
@@ -43,6 +44,7 @@ public class BoardDto {
             this.boardId = board.getBoardId();
             this.content = board.getContent();
             this.theme = board.getTheme();
+            this.userId = board.getUser().getUserId();
             this.userName = board.getUser().getUsername();
             this.nickName = board.getUser().getNickname();
             this.commentList = board.getComments().stream().map(CommentDto.Response::new).collect(Collectors.toList());

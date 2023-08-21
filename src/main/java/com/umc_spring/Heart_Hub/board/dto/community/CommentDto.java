@@ -34,6 +34,7 @@ public class CommentDto {
     @Getter
     public static class Response{
         private Long commentId;
+        private Long userId;
         private String userName;
         private String nickName;
         private String content;
@@ -44,6 +45,7 @@ public class CommentDto {
         @Builder
         public Response(Comment comment){
             this.commentId = comment.getCommentId();
+            this.userId = comment.getUser().getUserId();
             this.userName = comment.getUser().getUsername();
             this.nickName = comment.getUser().getNickname();
             this.content = comment.getContent();
