@@ -6,6 +6,7 @@ public interface UserService {
     UserDTO.SignUpRespDto register(UserDTO.SignUpRequestDto request);
     Boolean validateDuplicateEmail(String email);
     Boolean validateDuplicateUsername(String id);
+    Boolean validateDuplicateNickname(String nickname);
     UserDTO.LoginResponse login(UserDTO.LoginRequest request);
     Boolean findUsername(UserDTO.FindUsernameRequest request) throws Exception;
     Boolean findPw(UserDTO.FindPwRequest request) throws Exception;

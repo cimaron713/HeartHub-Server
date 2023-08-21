@@ -7,9 +7,11 @@ import com.umc_spring.Heart_Hub.constant.enums.CustomResponseStatus;
 import com.umc_spring.Heart_Hub.myPage.dto.MyPageDto;
 import com.umc_spring.Heart_Hub.myPage.dto.MyPageImgUploadDto;
 import com.umc_spring.Heart_Hub.myPage.service.MyPageService;
+import com.umc_spring.Heart_Hub.user.model.User;
 import com.umc_spring.Heart_Hub.user.repository.UserRepository;
 import com.umc_spring.Heart_Hub.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user/myPage")
+@Slf4j
 public class MyPageController {
     private final UserService userService;
     private final BoardService boardService;
@@ -47,13 +50,17 @@ public class MyPageController {
     }
 
     @PutMapping(value = "/update",consumes = "multipart/*")
-    public ResponseEntity<ApiResponse<MyPageDto.Response>> myProfileUpdate(@RequestPart(value = "request") MyPageDto.Request request,
+    public ResponseEntity<ApiResponse<Boolean>> myProfileUpdate(@RequestPart(value = "request") MyPageDto.Request request,
                                                                @RequestPart(value = "file") MultipartFile file,
                                                                Authentication authentication){
         String userName = ((UserDetails) authentication.getPrincipal()).getUsername();
         MyPageImgUploadDto myPageImgUploadDto = new MyPageImgUploadDto();
         myPageImgUploadDto.setFiles(file);
-        MyPageDto.Response response = myPageService.myPageProfileUpdate(userName, request, myPageImgUploadDto);
-        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
+        User user = userRepository.findByUsername(userName);
+        if(user.getNickname().equals(request.getUserNickName()) || !userService.validateDuplicateNickname(request.getUserNickName())) {
+            MyPageDto.Response response = myPageService.myPageProfileUpdate(userName, request, myPageImgUploadDto);
+            return ResponseEntity.ok().body(ApiResponse.createSuccess(true, CustomResponseStatus.SUCCESS));
+        }
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(false, CustomResponseStatus.DUPLICATION_NICKNAME));
     }
 }
