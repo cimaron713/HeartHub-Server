@@ -54,7 +54,7 @@ public class CommentService {
 
         List<CommentDto.Response> comments = commentRepository.findByBoardId(board.getBoardId());
         List<CommentDto.Response> commentResponse = new ArrayList<>();
-        if(!commentResponse.isEmpty()){
+        if(!comments.isEmpty()){
             for (CommentDto.Response c : comments) {
                 User commentUser = userRepository.findByUsername(c.getUserName());
                 if (!blockedUsers.contains(commentUser)) {
