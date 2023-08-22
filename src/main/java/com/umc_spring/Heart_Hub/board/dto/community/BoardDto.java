@@ -32,8 +32,6 @@ public class BoardDto {
         private Long boardId;
         private String content;
         private String theme;
-        private String goodStatus;
-        private String heartStatus;
         private Long userId;
         private String userName;
         private String nickName;
@@ -46,8 +44,6 @@ public class BoardDto {
             this.boardId = board.getBoardId();
             this.content = board.getContent();
             this.theme = board.getTheme();
-            this.goodStatus = board.getGoodStatus();
-            this.heartStatus = board.getHeartStatus();
             this.userId = board.getUser().getUserId();
             this.userName = board.getUser().getUsername();
             this.nickName = board.getUser().getNickname();
