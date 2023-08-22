@@ -59,12 +59,13 @@ public class BoardGoodService {
     public BoardGoodDto.goodCheckResponse goodCheck(String userName, Long boardId){
         User user = userRepository.findByUsername(userName);
         Board board = boardRepository.findById(boardId).orElseThrow();
-        BoardGood boardGood = boardGoodRepository.findByUserAndBoard(user, board).orElseThrow();
+
         BoardGoodDto.goodCheckResponse goodCheck;
-        if(boardGood == null){
+        if(boardGoodRepository.findByUserAndBoard(user, board).isEmpty()){
             goodCheck = BoardGoodDto.goodCheckResponse.builder()
-                    .status("F")
-                    .build();
+                        .status("F")
+                        .build();
+
         }
         else{
             goodCheck = BoardGoodDto.goodCheckResponse.builder()

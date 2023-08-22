@@ -60,9 +60,9 @@ public class BoardHeartServiceImpl implements BoardHeartService{
     public BoardHeartDto.heartCheckResponse heartCheck(String userName, Long boardId){
         User user = userRepository.findByUsername(userName);
         Board board = boardRepository.findById(boardId).orElseThrow();
-        BoardHeart boardHeart = boardHeartRepository.findByUserAndBoard(user, board).orElseThrow();
+
         BoardHeartDto.heartCheckResponse heartCheckResponse;
-        if(boardHeart == null){
+        if(boardHeartRepository.findByUserAndBoard(user, board).isEmpty()){
             heartCheckResponse = BoardHeartDto.heartCheckResponse.builder()
                     .status("F")
                     .build();
