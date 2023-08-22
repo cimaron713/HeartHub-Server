@@ -36,7 +36,7 @@ public class CommentGoodService {
         });
 
         if(comment.getParent() != null){
-            return;
+            throw new CustomException((CustomResponseStatus.COMMENT_REPLY_NOT_GOOD));
         }
         if(commentGoodRepository.findByUserAndComment(user, comment).isPresent()){
             //좋아요 안누른 유저만 좋아요하게 에러 처리
