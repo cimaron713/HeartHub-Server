@@ -43,4 +43,12 @@ public class CommentGoodController {
         String cnt = commentGoodService.commentGoodCnt(commentId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(cnt, CustomResponseStatus.SUCCESS));
     }
+
+    @GetMapping("/api/user/board/comment/{commentId}/good/check")
+    public ResponseEntity<ApiResponse<CommentGoodDto.commentCheckResponse>> commentGoodCheck(@PathVariable(value = "commentId") Long commentId,
+                                                                                             Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CommentGoodDto.commentCheckResponse response = commentGoodService.commentGoodCheck(commentId,userDetails.getUsername());
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
+    }
 }

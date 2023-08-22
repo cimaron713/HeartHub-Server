@@ -42,6 +42,7 @@ public class Comment extends BaseEntity  {
 
     @Column(nullable = false, length = 1)
     private String status;
+
     @ColumnDefault(value = "0")
     private int count;
 
@@ -75,7 +76,8 @@ public class Comment extends BaseEntity  {
     public void updateUser(User user){
         this.user = user;
     }
-    public void modifyStatus(String status){
+
+    public void updateStatus(String status){
         this.status = status;
     }
 

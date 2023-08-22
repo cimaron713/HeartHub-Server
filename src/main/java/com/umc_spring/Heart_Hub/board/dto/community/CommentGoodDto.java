@@ -39,4 +39,14 @@ public class CommentGoodDto {
     public static class goodRequest{
         private Long commentId;
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class commentCheckResponse{
+        private String status;
+        @Builder
+        public commentCheckResponse(String status){
+            this.status = status;
+        }
+    }
 }

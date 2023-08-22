@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
 import com.amazonaws.services.kms.model.NotFoundException;
+import com.umc_spring.Heart_Hub.board.dto.community.CommentGoodDto;
 import com.umc_spring.Heart_Hub.board.model.community.Comment;
 import com.umc_spring.Heart_Hub.board.model.community.CommentGood;
 import com.umc_spring.Heart_Hub.board.repository.community.CommentGoodRepository;
@@ -44,10 +45,9 @@ public class CommentGoodService {
         CommentGood commentGood = CommentGood.builder()
                 .comment(comment)
                 .user(user)
-                .status("Y")
+                .status("T")
                 .build();
         commentGoodRepository.save(commentGood);
-        //comment.updateCount(comment.getCount()+1);
         commentRepository.addLikeCount(comment);
 
     }
@@ -74,5 +74,30 @@ public class CommentGoodService {
         String cnt = String.valueOf(goodCount);
         return cnt;
 
+    }
+
+    public CommentGoodDto.commentCheckResponse commentGoodCheck(Long commentId, String userName){
+        User user = userRepository.findByUsername(userName);
+        if(user == null) {
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
+        }
+        Comment comment= commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new CustomException(CustomResponseStatus.COMMENT_NOT_FOUND);
+        });
+        if(comment.getParent() != null){
+            throw new CustomException((CustomResponseStatus.COMMENT_REPLY_NOT_GOOD));
+        }
+        CommentGoodDto.commentCheckResponse response;
+        if(commentGoodRepository.findByUserAndComment(user, comment).isEmpty()){
+            response = CommentGoodDto.commentCheckResponse.builder()
+                    .status("F")
+                    .build();
+        }
+        else{
+            response = CommentGoodDto.commentCheckResponse.builder()
+                    .status("T")
+                    .build();
+        }
+        return response;
     }
 }
