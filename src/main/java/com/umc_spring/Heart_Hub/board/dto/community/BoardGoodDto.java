@@ -33,4 +33,14 @@ public class BoardGoodDto {
             this.status = boardGood.getStatus();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class goodCheckResponse{
+        private String status;
+        @Builder
+        public goodCheckResponse(String status){
+            this.status = status;
+        }
+    }
 }

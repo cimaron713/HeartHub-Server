@@ -31,4 +31,14 @@ public class BoardHeartDto {
             this.status = boardHeart.getStatus();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class heartCheckResponse{
+        private String status;
+        @Builder
+        public heartCheckResponse(String status){
+            this.status = status;
+        }
+    }
 }

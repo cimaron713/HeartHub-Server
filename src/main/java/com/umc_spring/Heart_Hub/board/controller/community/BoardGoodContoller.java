@@ -27,9 +27,17 @@ public class BoardGoodContoller {
     }
 
     @GetMapping("/{boardId}/good/count")
-    public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable Long boardId){
+    public ResponseEntity<ApiResponse<Integer>> goodCount(@PathVariable(value = "boardId") Long boardId){
         int goodCnt = boardGoodService.goodCount(boardId);
         return ResponseEntity.ok().body(ApiResponse.createSuccess(goodCnt,CustomResponseStatus.SUCCESS));
+    }
+
+    @GetMapping("/{boardId}/good/check")
+    public ResponseEntity<ApiResponse<BoardGoodDto.goodCheckResponse>> goodCheck(@PathVariable(value = "boardId") Long boardId,
+                                                         Authentication authentication){
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        BoardGoodDto.goodCheckResponse response = boardGoodService.goodCheck(userDetails.getUsername(), boardId);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
     }
 
 }

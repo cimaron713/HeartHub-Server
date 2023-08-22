@@ -1,8 +1,10 @@
 package com.umc_spring.Heart_Hub.board.service.community;
 
 import com.umc_spring.Heart_Hub.board.dto.community.BoardDto;
+import com.umc_spring.Heart_Hub.board.dto.community.BoardGoodDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardHeartDto;
 import com.umc_spring.Heart_Hub.board.model.community.Board;
+import com.umc_spring.Heart_Hub.board.model.community.BoardGood;
 import com.umc_spring.Heart_Hub.board.model.community.BoardHeart;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardHeartRepository;
 import com.umc_spring.Heart_Hub.board.repository.community.BoardRepository;
@@ -43,11 +45,34 @@ public class BoardHeartServiceImpl implements BoardHeartService{
                     .status("Y")
                     .build();
             boardHeartRepository.save(boardHeart);
+
         }
         else{
             BoardHeart boardHeart = boardHeartRepository.findByUserAndBoard(user,board).orElseThrow();
             boardHeartRepository.delete(boardHeart);
+
         }
+    }
+
+    /**
+     * 스크랩 체크
+     */
+    public BoardHeartDto.heartCheckResponse heartCheck(String userName, Long boardId){
+        User user = userRepository.findByUsername(userName);
+        Board board = boardRepository.findById(boardId).orElseThrow();
+        BoardHeart boardHeart = boardHeartRepository.findByUserAndBoard(user, board).orElseThrow();
+        BoardHeartDto.heartCheckResponse heartCheckResponse;
+        if(boardHeart == null){
+            heartCheckResponse = BoardHeartDto.heartCheckResponse.builder()
+                    .status("F")
+                    .build();
+        }
+        else{
+            heartCheckResponse = BoardHeartDto.heartCheckResponse.builder()
+                    .status("T")
+                    .build();
+        }
+        return heartCheckResponse;
     }
 
     @Override

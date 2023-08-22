@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface BoardHeartService {
     void heartRegister(BoardHeartDto.Request request, String userName);
+    BoardHeartDto.heartCheckResponse heartCheck(String userName, Long boardId);
     List<BoardDto.BoardResponseDto> getHeartBoards(String username);
     List<BoardDto.BoardResponseDto> getHeartMateBoards(String username);
     List<BoardDto.BoardResponseDto> getHeartBoardsByUsername(String username);

@@ -1,6 +1,7 @@
 package com.umc_spring.Heart_Hub.board.controller.community;
 
 
+import com.umc_spring.Heart_Hub.board.dto.community.BoardGoodDto;
 import com.umc_spring.Heart_Hub.board.dto.community.BoardHeartDto;
 import com.umc_spring.Heart_Hub.board.service.community.BoardHeartService;
 import com.umc_spring.Heart_Hub.constant.dto.ApiResponse;
@@ -26,5 +27,11 @@ public class BoardHeartController {
         return ResponseEntity.ok().body(ApiResponse.createSuccessWithNoContent(CustomResponseStatus.SUCCESS));
     }
 
-
+    @GetMapping("/{boardId}/heart/check")
+    public ResponseEntity<ApiResponse<BoardHeartDto.heartCheckResponse>> heartCheck(@PathVariable(value = "boardId") Long boardId,
+                                                          Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        BoardHeartDto.heartCheckResponse response = boardHeartService.heartCheck(userDetails.getUsername(), boardId);
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(response, CustomResponseStatus.SUCCESS));
+    }
 }
