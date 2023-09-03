@@ -21,21 +21,22 @@ public interface CoupleBoardService {
     Long saveBoard(CoupleBoardDto.Request requestDto, CoupleBoardImageUploadDto boardImageUploadDto, String userName) throws IOException;
 
     /**
-     * 게시물 상세 조회
-     * @param postId 게시물 ID
-     * @return 게시물 정보
-     */
-    CoupleBoardDto.Response detailBoard(Long postId);
-
-    /**
-     * 날짜에 따른 게시물 조회
+     * 날짜에 따른 앨범 목록 조회
      * @param createAt
      * @return
      */
     List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt, String username);
 
     /**
-     * 게시물 수정
+     * 앨범 상세 조회
+     * @param postId
+     * @param username
+     * @return
+     */
+    List<CoupleBoardDto.DetailResponse> searchDetailBoard(Long postId, String username);
+
+    /**
+     * 앨범 수정
      * @param postId 게시물 ID
      * @param requestDto 수정 정보
      * @return 게시물 ID
@@ -43,7 +44,7 @@ public interface CoupleBoardService {
     void updateBoard(Long postId, CoupleBoardDto.Request requestDto);
 
     /**
-     * 게시물 삭제
+     * 앨범 삭제
      * @param postId
      */
     void deleteBoard(Long postId);

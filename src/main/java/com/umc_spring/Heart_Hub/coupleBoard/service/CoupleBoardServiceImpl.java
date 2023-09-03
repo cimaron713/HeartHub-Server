@@ -116,17 +116,6 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
     @Transactional(readOnly = true)
     @Override
-    public CoupleBoardDto.Response detailBoard(Long postId) {
-        CoupleBoard coupleBoard = coupleBoardRepository.findById(postId).orElseThrow(() -> {throw new CustomException(CustomResponseStatus.POST_NOT_FOUND);});
-        CoupleBoardDto.Response result = CoupleBoardDto.Response.builder()
-                .board(coupleBoard)
-                .build();
-
-        return result;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public List<CoupleBoardDto.Response> searchBoardList(LocalDate createAt, String username) {
         List<CoupleBoard> boardList = new ArrayList<>();
         User user  = userRepository.findByUsername(username);
@@ -145,6 +134,31 @@ public class CoupleBoardServiceImpl implements CoupleBoardService {
 
         for(CoupleBoard board : boardList) {
             resultList.add(new CoupleBoardDto.Response(board));
+        }
+
+        return resultList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<CoupleBoardDto.DetailResponse> searchDetailBoard(Long postId, String username) {
+        List<CoupleBoard> boardList = new ArrayList<>();
+        User user  = userRepository.findByUsername(username);
+        if(user == null) {
+            throw new CustomException(CustomResponseStatus.USER_NOT_FOUND);
+        }
+
+        boardList.addAll(coupleBoardRepository.findAllByUserAndPostId(user, postId));
+
+        User mate = user.getUser();
+        if(mate != null) {
+            boardList.addAll(coupleBoardRepository.findAllByUserAndPostId(user, postId));
+        }
+
+        List<CoupleBoardDto.DetailResponse> resultList = new ArrayList<>();
+
+        for(CoupleBoard board : boardList) {
+            resultList.add(new CoupleBoardDto.DetailResponse(board));
         }
 
         return resultList;

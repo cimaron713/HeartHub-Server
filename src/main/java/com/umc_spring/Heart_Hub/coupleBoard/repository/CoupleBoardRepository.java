@@ -11,4 +11,5 @@ import java.util.List;
 public interface CoupleBoardRepository extends JpaRepository<CoupleBoard, Long> {
 
     List<CoupleBoard> findAllByUserAndCreatedDate(User user, LocalDate createAt);
+    List<CoupleBoard> findAllByUserAndPostId(User user, Long postId);
 }

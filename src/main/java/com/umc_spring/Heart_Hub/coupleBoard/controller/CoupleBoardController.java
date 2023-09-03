@@ -23,7 +23,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ public class CoupleBoardController {
     }
 
     /**
-     * 게시물 조회 (날짜에 따른)
+     * 해당 날짜에 작성한 앨범 조회
      */
     @GetMapping("/couple-board/{createAt}")
     public ResponseEntity<ApiResponse<List<CoupleBoardDto.Response>>> getBoardsByDate(@PathVariable LocalDate createAt, Authentication authentication) {
@@ -64,6 +63,19 @@ public class CoupleBoardController {
 
         return ResponseEntity.ok().body(ApiResponse.createSuccess(boardList, CustomResponseStatus.SUCCESS));
     }
+
+    /**
+     * 게시물 상세 조회
+     */
+    @GetMapping("/couple-board/detail/{postId}")
+    public ResponseEntity<ApiResponse<List<CoupleBoardDto.DetailResponse>>> getBoardsDetail(@PathVariable Long postId, Authentication authentication) {
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        List<CoupleBoardDto.DetailResponse> boardList = coupleBoardService.searchDetailBoard(postId, username);
+        Collections.sort(boardList, Comparator.comparing(CoupleBoardDto.DetailResponse::getCreateAt));
+
+        return ResponseEntity.ok().body(ApiResponse.createSuccess(boardList, CustomResponseStatus.SUCCESS));
+    }
+
 
     /**
      * 게시물 수정

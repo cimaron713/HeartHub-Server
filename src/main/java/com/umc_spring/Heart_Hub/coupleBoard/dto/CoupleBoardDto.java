@@ -25,6 +25,32 @@ public class CoupleBoardDto {
     @NoArgsConstructor
     public static class Response {
         private Long postId;
+        private LocalDate createAt;
+        private String title;
+        private List<String> imageUrls;
+
+        @Builder
+        public Response(CoupleBoard board) {
+            this.postId = board.getPostId();
+            this.createAt = board.getCreatedDate();
+            this.title = board.getTitle();
+            this.imageUrls = board.getBoardImages().stream()
+                    .map(CoupleBoardImage::getImgUrl)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DetailRequest {
+        private Long postId;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class DetailResponse {
+        private Long postId;
         private Long userId;
         private String status;
         private String title;
@@ -34,7 +60,7 @@ public class CoupleBoardDto {
         private List<String> imageUrls;
 
         @Builder
-        public Response(CoupleBoard board) {
+        public DetailResponse(CoupleBoard board) {
             this.postId = board.getPostId();
             this.userId = board.getUser().getUserId();
             this.status = board.getStatus();
