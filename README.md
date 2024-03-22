@@ -27,13 +27,13 @@ MZ세대 커플들을 겨냥한 커뮤니티 서비스로 커플간의 소통과
 
 ## 📐 System Architecture - Backend
 
-![Untitled](HeartHub%20c58f463630f34a5e8dbae34ddde9cbe1/Untitled.png)
+![Untitled](https://github.com/UMC-HeartHub/HeartHub-Server/assets/121879651/0829c8ec-ee4e-4809-8d1d-937b5231a4bf)
 
 ---
 
 ## 📚 ERD
 
-![Untitled](HeartHub%20c58f463630f34a5e8dbae34ddde9cbe1/Untitled%201.png)
+![Untitled 1](https://github.com/UMC-HeartHub/HeartHub-Server/assets/121879651/e18ac13b-69a4-46dc-8adb-fd7dc1dc0b70)
 
 ---
 
