@@ -13,7 +13,7 @@ MZ세대 커플들을 겨냥한 커뮤니티 서비스로 커플간의 소통과
 - Spring Boot
 - Spring Security
 - JWT
-- jQeury
+- jQuery
 
 ## Tools
 - InteliJ
